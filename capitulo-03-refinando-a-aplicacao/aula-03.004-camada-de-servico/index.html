@@ -1,0 +1,495 @@
+<!--
+
+Aula 03.004. Camada de Servico
+
+1. Bom, vamos, agora, adicionar uma Camada de Servico no nosso Projeto.
+
+2. Essa Camada de Servico, ela vai ficar aqui, entre o Controller nosso e para acessar o Repositorio. Para que que eu vou criar essa Camada?
+
+3. Essa camada sera util para eu colocar regras de negocio la dentro, e eu vou criar ela agora, porque, quando eu for te ensinar, em uma proxima aula, ai, a respeito do Ajax, eu vou ter que fazer uma regrinha ali para alterar o Status do Titulo, de Pendente para Recebido.
+
+4. E isso, essa alteracao, essa regrinha, eu nao quero colocar aqui dentro do Controller, ele nao foi feito para isso. O Controller tem que receber as Requisicoes, por exemplo, o metodo salvar(), aqui, em TituloController, okay?, ele recebe essa Requisicao, no caso, ele vai chamar, aqui, o save(), na camada de servico, 
+
+@RequestMapping(method = RequestMethod.POST)
+public String salvar(@Validated Titulo titulo, Errors errors, RedirectAttributes attributes) {
+    if (errors.hasErrors()) {
+        return CADASTRO_VIEW;
+    }
+    try {
+        >>> this.titulos.save(titulo); <<<
+        attributes.addFlashAttribute("mensagem", "Titulo salvo com sucesso!");
+        return "redirect:/titulos/novo";
+    } catch (DataIntegrityViolationException e) {
+        errors.rejectValue("dataVencimento", null, "Formato de data invalido.");
+        return CADASTRO_VIEW;
+    }
+}
+   
+, que pode conter regras de negocio la dentro. Que regras seriam essas?
+
+5. Ah, poderia validar alguma coisa, enviar um E-mail, alguma coisa desse tipo, essas regras nao devem ficar aqui dentro do Controller. Entao, como exemplo, imagina que voce tivesse que enviar um e-mail depois que voce salvar um Titulo.
+
+6. Voce nao poderia vir aqui e colocar,..., vamos supor que eu tivesse essa classe, aqui, nao eh?, alguma coisa assim, enviadorEmail.enviar, e, aqui, eu passaria o titulo, e o e-mail do cliente, contato@contato.com, alguma coisa assim, nao eh?, eu precisaria enviar o e-mail,
+
+public String salvar(@Validated Titulo titulo, Errors errors, RedirectAttributes attributes) {
+    if (errors.hasErrors()) {
+        return CADASTRO_VIEW;
+    }
+    try {
+        this.titulos.save(titulo);
+
+        >>> enviadorEmail.enviar(titulo, "contato@contato.com"); <<<
+
+        attributes.addFlashAttribute("mensagem", "Titulo salvo com sucesso!");
+        return "redirect:/titulos/novo";
+    } catch (DataIntegrityViolationException e) {
+        errors.rejectValue("dataVencimento", null, "Formato de data invalido.");
+        return CADASTRO_VIEW;
+    }
+}
+
+, isso daqui nao eh legal voce colocar aqui,
+
+
+public String salvar(@Validated Titulo titulo, Errors errors, RedirectAttributes attributes) {
+    ...
+        this.titulos.save(titulo);
+
+        >>> enviadorEmail.enviar(titulo, "contato@contato.com"); <<<
+    ...
+}
+
+, porque ja eh uma regra de negocio, ou seja, apos salvar um titulo, eu tenho que enviar um e-mail, e voce colocar isso daqui,
+
+public String salvar(@Validated Titulo titulo, Errors errors, RedirectAttributes attributes) {
+    ...
+        this.titulos.save(titulo);
+
+        >>> enviadorEmail.enviar(titulo, "contato@contato.com"); <<<
+    ...
+}
+
+, nao eh legal, beleza? Entao, isso daqui nao fica bom, eh melhor voce colocar isso em uma camada de Servicos.
+
+7. O Controller tem que: 1. Receber as Requisicoes,
+
+public String salvar(>>> @Validated Titulo titulo <<<, Errors errors, RedirectAttributes attributes) {
+    ...
+        this.titulos.save(titulo);
+    ...
+}
+
+, 2. Passar para uma outra Camada,
+
+public String salvar(@Validated Titulo titulo, Errors errors, RedirectAttributes attributes) {
+    ...
+        >>> this.titulos.save(titulo); <<<
+    ...
+}
+
+, para trabalhar, fazer as Regras de Negocio, salvar em banco de dados, etc. 3. Depois, continua com regras de navegacao,
+
+public String salvar(@Validated Titulo titulo, Errors errors, RedirectAttributes attributes) {
+    ...
+        attributes.addFlashAttribute("mensagem", "Titulo salvo com sucesso!");
+        return "redirect:/titulos/novo";
+    ...
+}
+
+, para preencher dados que a View vai precisar. Entao, repare que, aqui, eu vou preenchendo dados que a View vai precisar, nao eh?, a 'mensagem' para a View.
+
+public String salvar(@Validated Titulo titulo, Errors errors, RedirectAttributes attributes) {
+    ...
+        >>> attributes.addFlashAttribute("mensagem", "Titulo salvo com sucesso!"); <<<
+        return "redirect:/titulos/novo";
+    ...
+}
+
+, e retorno alguma coisa la, que a gente vai direcionar para uma View. Aqui, no caso, eh um redirect para essa URL, 'redirect:/titulos/novo', que vai cair em uma View depois,
+
+public String salvar(@Validated Titulo titulo, Errors errors, RedirectAttributes attributes) {
+    ...
+        attributes.addFlashAttribute("mensagem", "Titulo salvo com sucesso!"); <<<
+        >>> return "redirect:/titulos/novo"; <<<
+    ...
+}
+
+8. Bom, entao, eu vou criar essa camada de Servico, aqui,
+
+public String salvar(@Validated Titulo titulo, Errors errors, RedirectAttributes attributes) {
+    ...
+        >>> this.titulos.save(titulo); <<<
+    ...
+}
+
+, apesar de algumas coisas, como, por exemplo, o excluir, talvez, o salvar() nao, mas o excluir() vai ter so uma linha la dentro, mas eh legal, porque, se eu precisar adicionar alguma regra de negocio, ja vai estar pronta.
+
+9. Beleza? Entao, vamos la. Como eh que eu crio essa camada?
+
+10. Essa camada nada mais eh que uma classe a mais que eu vou colocar entre, aqui, o Controller, TituloController.java, e o Repositorio, ou seja, Titulos.java.
+
+11. Ah, Normandes, entao, eu tenho que usar 100% a camada de Servico, aqui, em TituloController, eu nao posso ter esse cara aqui, em TituloController?,
+
+public class TituloController {
+    ...
+
+    @Autowired
+    >>> private Titulos titulos; <<<
+
+    ...
+}
+
+12. Nao, nao eh assim, tambem. Se voce for ter alguma regra a mais, eh legal colocar na Camada de Servico. Se voce for acessar o Repositorio, aqui, direto, principalmente, para uma consulta simples, eu deixaria ele aqui, no Controller. Entao, por exemplo, no metodo pesquisar(), aqui,
+
+	@RequestMapping
+	public ModelAndView pesquisar() {
+		List<Titulo> todosTitulos = titulos.findAll();
+		ModelAndView mv = new ModelAndView("PesquisaTitulos");
+		mv.addObject("titulos", todosTitulos);
+		return mv;
+    }
+
+, eu vou deixar o titulos, aqui, so para fazer esse findAll(),
+
+	@RequestMapping
+	public ModelAndView pesquisar() {
+		List<Titulo> todosTitulos = >>> titulos.findAll(); <<<
+		ModelAndView mv = new ModelAndView("PesquisaTitulos");
+		mv.addObject("titulos", todosTitulos);
+		return mv;
+    }
+    
+, nao estou fazendo nada com 'todosTitulos', aqui, depois, eu so, simplesmente, recupero ele e coloco, aqui, para a View, nao eh?, entao, eu vou deixar ainda o titulos aqui,
+
+	@RequestMapping
+	public ModelAndView pesquisar() {
+		List<Titulo> todosTitulos = >>> titulos.findAll(); <<<
+		ModelAndView mv = new ModelAndView("PesquisaTitulos");
+		mv.addObject("titulos", todosTitulos);
+		return mv;
+    }
+
+, para esse findAll(), por enquanto.
+
+13. Okay? Entao, vamos, aqui, criar essa Camada de Servicos. Eu vou criar, aqui, uma nova classe, vou colocar no pacote .service, e vou chamar ela de CadastroTituloService, ou seja, eh o servico para o Cadastro de Titulos.
+
+14. Existe uma anotacao, aqui, no Spring, para avisar que isso eh um Servico. Eh essa anotacao, aqui, oh, @Service,
+
+import org.springframework.stereotype.Service;
+
+@Service
+public class CadastroTituloService {
+
+}
+
+15. Se a gente olhar, aqui, na documentacao, JavaDoc, da interface Service, ela indica que essa classe eh um Servico, eh um cara para indicar, para a gente falar assim, oh, 'Olha, essa classe, realmente, faz parte,..., tem regras de negocio ai dentro'.
+
+16. Okay? E isso transforma, tambem, essa classe em um componente do Spring. E transformar esse cara em um componente significa que eu posso injetar ele em outras classes, okay?
+
+17. Entao, quando eu uso, aqui, o @Service, eu vou conseguir colocar, aqui, assim, oh, @Autowired private CadastroTituloService cadastroTituloService, assim, eu vou conseguir injetar, aqui,
+
+public class TituloController {
+
+    ...
+
+    @Autowired
+    private CadastroTituloService cadastroTituloService;
+
+    ...
+}
+
+18. Se eu nao colocar esse @Service aqui,
+
+>>> @Service <<<
+public class CadastroTituloService {
+
+}
+
+, ele vai falar assim, 'Olhe,', quando eu tentar injetar aqui,
+
+public class TituloController {
+
+    ...
+
+    >>> @Autowired <<<
+    private CadastroTituloService cadastroTituloService;
+
+    ...
+}
+
+, ele vai falar, 'Eu nao conheco componente, aqui, para eu poder injetar'. O Spring nao vai conseguir injetar. Entao, eu preciso anotar, aqui, com @Service,
+
+import org.springframework.stereotype.Service;
+
+>>> @Service <<<
+public class CadastroTituloService {
+
+}
+
+19. No minimo, eu devo anotar a classe com @Component,
+
+import org.springframework.stereotype.Component
+
+>>> @Component <<<
+public class CadastroTituloService {
+
+}
+
+20. Mas, como essa eh uma classe de servico, entao, eu vou anotar, aqui, com @Service.
+
+21. Bom, e, aqui, agora, nessa classe, eu posso injetar o Repositorio, ou seja, Titulos,
+
+public class CadastroTituloService {
+
+    @Autowired
+    private Titulos titulos;
+}
+
+22. Okay? E posso criar, aqui, por exemplo, o metodo salvar(), que recebe um Titulo, como parametro,
+
+public class CadastroTituloService {
+
+    @Autowired
+    private Titulos titulos;
+
+    public void salvar(Titulo titulo) {
+             
+    }
+}
+
+23. E, aqui, eu vou usar o titulos, invocando o metodo save(), passando a entidade titulo,
+
+public class CadastroTituloService {
+
+    @Autowired
+    private Titulos titulos;
+
+    public void salvar(Titulo titulo) {
+        this.titulos.save(titulo);            
+    }
+}
+
+24. E, ai, aqui, em TituloController, eu vou usar esse cara,
+
+@Controller
+@RequestMapping("/titulos")
+public class TituloController {
+    ...
+
+    @Autowired
+    >>> private CadastroTituloService cadastroTituloService; <<<
+
+    ...
+
+}
+
+, no lugar de titulos, aqui,
+
+    @RequestMapping(method = RequestMethod.POST)
+    public String salvar(@Validated Titulo titulo, Errors errors, RedirectAttributes attributes) {
+        ...
+
+        try {
+
+            // this.titulos.save(titulo);
+            >>> this.cadastroTituloService.salvar(titulo); <<<
+
+        }
+        
+        ...
+    }
+
+25. Bom, vamos ver o que que eu posso melhorar, aqui, so nesse cara, aqui, no metodo salvar(), em CadastroTituloService.
+
+26. Eu nao vou ter nenhuma regra especifica, aqui,
+
+public class CadastroTituloService {
+
+    @Autowired
+    private Titulos titulos;
+
+    public void salvar(Titulo titulo) {
+        this.titulos.save(titulo);            
+    }
+}
+
+, para validar nesse titulo, mas eu posso passar essa Excecao, aqui, no TituloController,
+
+	@RequestMapping(method = RequestMethod.POST)
+	public String salvar(@Validated Titulo titulo, Errors errors, RedirectAttributes attributes) {        
+        ... 
+		try {
+			/** this.titulos.save(titulo); **/
+			this.cadastroTituloService.salvar(titulo);
+			
+			attributes.addFlashAttribute("mensagem", "Titulo salvo com sucesso!");
+			return "redirect:/titulos/novo";
+		} catch (>>> DataIntegrityViolationException e <<< ) {
+            ...
+		}
+    }
+    
+, la para esse metodo salvar(), em CadastroTituloService.java.
+
+27. Entao, eu vou fazer o seguinte, eu vou pegar esse cara, aqui,
+
+	@RequestMapping(method = RequestMethod.POST)
+	public String salvar(@Validated Titulo titulo, Errors errors, RedirectAttributes attributes) {        
+        ... 
+		try {
+			/** this.titulos.save(titulo); **/
+			this.cadastroTituloService.salvar(titulo);
+			
+			attributes.addFlashAttribute("mensagem", "Titulo salvo com sucesso!");
+			return "redirect:/titulos/novo";
+		} catch (>>> DataIntegrityViolationException e <<< ) {
+            ...
+		}
+    }
+
+, e, ao inves de eu deixar assim como esta, em CadastroTituloService.java, eu vou fazer algo assim, oh, catch(), pegando essa excecao DataIntegrityViolationException e, aqui, eu vou lancar IllegalArgumentException(), falando, aqui, 'Formato de data invalido',
+
+@Service
+public class CadastroTituloService {
+
+    @Autowired 
+    private Titulos titulos;
+
+    public void salvar(Titulo titulo) {
+        try {
+            this.titulos.save(titulo);
+        } catch (DataIntegrityViolationException e) {
+            throw new IllegalArgumentException("Formato de data invalido.");    
+        }
+    }
+}
+
+, ou seja, eu sei, nao eh?, que, se ele lancar essa excecao, para esse caso aqui, de DataIntegrityViolationException, vai ser por causa do 'Formato de data invalido'.
+
+28. E, ai, aqui, entao, em TituloController, no metodo salvar(), eu posso capturar IllegalArgumentException,
+
+	@RequestMapping(method = RequestMethod.POST)
+	public String salvar(@Validated Titulo titulo, Errors errors, RedirectAttributes attributes) {        
+        ... 
+		try {
+			/** this.titulos.save(titulo); **/
+			this.cadastroTituloService.salvar(titulo);
+			
+			attributes.addFlashAttribute("mensagem", "Titulo salvo com sucesso!");
+			return "redirect:/titulos/novo";
+		} catch (>>> IllegalArgumentException e <<<) {
+            ...
+		}
+    }
+
+, e, aqui, a mensagem eu posso pegar de la do Servico,
+
+	@RequestMapping(method = RequestMethod.POST)
+	public String salvar(@Validated Titulo titulo, Errors errors, RedirectAttributes attributes) {        
+        ... 
+		try {
+			/** this.titulos.save(titulo); **/
+			this.cadastroTituloService.salvar(titulo);
+			
+			attributes.addFlashAttribute("mensagem", "Titulo salvo com sucesso!");
+			return "redirect:/titulos/novo";
+		} catch (IllegalArgumentException e) {
+            errors.rejectValue("mensagem", null, >>> e.getMessage() <<< );  
+            ...
+		}
+    }
+
+, se eu quiser fazer algo assim.
+
+29. Okay? Oh, entao, eu passei essa regra de capturar a excecao de dados, DataIntegrityViolationException, que faz parte do pacote DAO do Spring, que esta mais relacionado a parte de banco de dados, ou seja, mais baixo nivel. Entao, eu capturei aqui,
+
+@Service
+public class CadastroTituloService {
+
+    @Autowired 
+    private Titulos titulos;
+
+    public void salvar(Titulo titulo) {
+        try {
+            this.titulos.save(titulo);
+        } catch (>>> DataIntegrityViolationException e <<< ) {
+            throw new IllegalArgumentException("Formato de data invalido.");    
+        }
+    }
+}
+
+, e lancei uma excecao mais alto nivel, ou seja, IllegalArgumentException, para a Camada de Controller, aqui,
+ 
+	@RequestMapping(method = RequestMethod.POST)
+	public String salvar(@Validated Titulo titulo, Errors errors, RedirectAttributes attributes) {        
+        ... 
+		try {
+			/** this.titulos.save(titulo); **/
+			this.cadastroTituloService.salvar(titulo);
+			
+			attributes.addFlashAttribute("mensagem", "Titulo salvo com sucesso!");
+			return "redirect:/titulos/novo";
+		} catch (>>> IllegalArgumentException e <<< ) {
+            errors.rejectValue("mensagem", null, e.getMessage());  
+            ...
+		}
+    }
+
+, poder trabalhar.
+
+30. Que mais aqui? Eu vou passar o excluir(). Eu vou tirar, aqui, oh, esse delete(), aqui, em TituloController,
+
+@RequestMapping(value = "{codigo}", method = RequestMethod.DELETE)
+public String excluir(@PathVariable Long codigo, RedirectAttributes attributes) {
+    >>> this.titulos.delete(codigo); <<<
+    
+    ...
+}
+
+, e vamos colocar ele la em CadastroTituloService.java,
+
+@RequestMapping(value = "{codigo}", method = RequestMethod.DELETE)
+public String excluir(@PathVariable Long codigo, RedirectAttributes attributes) {
+    // this.titulos.delete(codigo);
+    this.cadastroTituloService.excluir(codigo);
+    
+    ...
+}
+
+31. Beleza, nao existe esse metodo em CadastroTituloService.java, vamos criar esse metodo la.
+
+32. E, aqui, em CadastroTituloService.java, eu vou colocar this.titulos.delete(codigo);
+
+    public void excluir(codigo) {
+        this.titulos.delete(codigo);
+    }
+
+33. Okay? Por enquanto eh isso daqui que eu queria te mostrar, ta vendo?, a gente separar essa camadinha. Como eu disse, na pesquisa, aqui, 
+
+	@RequestMapping
+	public ModelAndView pesquisar() {
+		List<Titulo> todosTitulos = titulos.findAll();
+		ModelAndView mv = new ModelAndView("PesquisaTitulos");
+		mv.addObject("titulos", todosTitulos);
+		return mv;
+    }
+    
+, eu posso deixar assim, em TituloController.java, nao teria problema. Mas, agora, eu ja tenho uma Camada de Servicos, se eu precisar adicionar regras, aqui, no salvar(), ou no excluir(), vamos supor, toda vez que eu excluir alguma cobranca, eu quero notificar outro sistema, alguma coisa, eu vou fazer isso aqui dentro do Servico, eu nao vou fazer isso no Controller.
+
+34. Beleza? Para a gente separar bem as regras, ai.
+
+35. Fechado? Bom, era isso daqui, vamos ver, acho que a aplicacao continua funcionando, nao eh? Vai continuar funcionando por que? Eu injetei, aqui, em TituloController, CadastroTituloService, com Autowired, mas eu anotei CadastroTituloService, aqui, com @Service, entao, eh para continuar funcionando.
+
+36. A aplicacao ja subiu, vamos cadastrar um registro, aqui, vamos colocar, aqui, 'Receber emprestimo Joao', Data de Vencimento '15/01/2016', Valor '100,00', Salvar.
+
+37. Salvou, vamos voltar, aqui, para a pesquisa, ta, aqui, o Joao. Eu posso editar, entao, nao sao 100 reais, sao 150 reais, Salvar, Voltar para pesquisa, atualizou para 150 reais. Posso excluir, 'Titulo excluido com sucesso'. Entao, oh, a aplicacao continua funcionando com a camada de servico.
+
+38. Beleza?
+
+39. Fim da Aula 03.004. Camada de Servico.
+
+
+
+
+
+-->

@@ -1,0 +1,179 @@
+<!--
+
+Aula 03.002. Plugin para Calendario
+
+1. Vamos, agora, colocar o componente de calendario aqui no nosso sisteminha, aqui, no cadastro, nao eh?, porque ficar digitando, aqui, toda vez, 10/01/2016, por exemplo, eh ruim, nao eh?
+
+2. E mesmo porque, eu posso digitar um valor assim, '12132132', e mandar salvar e isso daqui vai dar errado.
+
+3. Eu vou, ate, te mostrar como a gente pode fazer para tratar esse erro aqui tambem.
+
+4. Okay? Entao, vamos la. Eu vou usar, aqui, o componente, se eu digitar, aqui, no Google, 'bootstrap datapicker', https://bootstrap-datepicker.readthedocs.io/en/latest/, nos vamos usar esse camarada, aqui, para colocar o componente ali, eh um carinha feito com Javascript, CCS, tambem, e, ai, eh bem simples utiliza-lo.
+
+5. A gente vai baixar ele agora, baixar 3 arquivos ali, a gente coloca no nosso projeto e a gente pode usar esses metodos, varias propriedades, varias opcoes, aqui, dele, ou seja, eh um carinha bem legal, ele tem um Online Demo, aqui, https://eternicode.github.io/bootstrap-datepicker/, voce pode brincar, tambem, para ver, aqui, oh, voce vai configurando, aqui, clica, aqui, ve como eh que ele vai ficar.
+
+6. Nem sempre funciona bem, nao, mas ta ali. Clicar em Edit on GitHub, https://github.com/uxsolutions/bootstrap-datepicker/blob/master/docs/index.rst. Vamos vir aqui, oh, eu vou baixar ele, a gente vem aqui em bootstrap-datapicker, https://github.com/uxsolutions/bootstrap-datepicker, vem, aqui, na pasta 'dist', nos vamos baixar, aqui, o CSS, vamos baixar o standalone, o min, clicar em bootstrap-datepicker.standalone.min.css, vamos clicar no botao Raw, https://raw.githubusercontent.com/uxsolutions/bootstrap-datepicker/master/dist/css/bootstrap-datepicker.standalone.min.css. Vamos salvar esse cara, e, ai, nos vamos salvar na pasta Downloads mesmo, por enquanto.
+
+7. Vamos voltar, aqui, na pasta dist, js, nos vamos salvar o arquivo bootstrap-datepicker.min.js, https://github.com/uxsolutions/bootstrap-datepicker/blob/master/dist/js/bootstrap-datepicker.min.js, na pasta Downloads.
+
+8. Vamos voltar em https://github.com/uxsolutions/bootstrap-datepicker/tree/master/dist/locales, ele tambem funciona em Portugues, se eu baixar esse cara aqui, oh, bootstrap-datepicker.pt-BR.min.js, https://raw.githubusercontent.com/uxsolutions/bootstrap-datepicker/master/dist/locales/bootstrap-datepicker.pt-BR.min.js, salvar na pasta Downloads, ele vai aparecer la, Domingo, Segunda, Terca, por ai vai.
+
+9. Beleza? Entao, com esses arquivos ai, vamos copiar eles, agora, la para dentro do Projeto, aqui, na pasta js. Vou pegar os 2 arquivos JS's, aqui, bootstrap-datepicker.min.js e bootstrap-datepicker-pt-BR.min.js e vamos coloar na pasta js do Prjeto, no Eclipse.
+
+10. E vou pegar o arquivo CSS, bootstrap-datepicker.standalone.min.css, e vou colar na pasta css do nosso Projeto.
+
+11. Bom, e, ai, a gente precisa configurar esse cara, ou seja, LayoutPadrao.html, para ler esses arquivos. Ai, aqui, no CSS, eu posso colocar, aqui, embaixo, bootstrap-datepicker.standalone.min.css,
+
+    <link rel="stylesheet" href="/css/boostrap-datepicker.standalone.min.css" />
+
+12. Ai, eu vou colocar o Javascript tambem, vamos colocar, aqui, abaixo do Boostrap,
+
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/bootstrap-datepicker.min.js"></script>
+    <script src="/js/bootstrap-datepicker.pt-BR.min.js"></script>
+	<script src="/js/cobranca.js"></script>
+
+13. Okay? So colocar nessa ordem, ai, salvar.
+
+14. Bom, eu ja estou com o CSS e com os Javascripts aqui, disponiveis, para mim poder usar no Projeto.
+
+15. Vamos la na Pagina de Cadastro, agora, e, aqui na Pagina de Cadastro, nos vamos usar no input, Data de Vencimento, 
+
+    <input type="text" class="form-control" id="dataVencimento" th:field="*{dataVencimento}" />
+
+, vamos comecar a configurar ele aqui.
+
+16. Eu consigo configurar o datapicker de varias formas. Uma delas eh atraves de atributos 'data-',
+
+<input type="text" class="form-control" id="dataVencimento" th:field="*{dataVencimento}" 
+    data-/>
+
+17. Entao, vou comecar aqui, oh, data-provide="datepicker",
+
+<input type="text" class="form-control" id="dataVencimento" th:field="*{dataVencimento}" 
+    data-provide="datepicker" />
+
+18. O que mais? Qual que eh o formato?
+
+<input type="text" class="form-control" id="dataVencimento" th:field="*{dataVencimento}" 
+    data-provide="datepicker" data-date-format="" />
+
+19. Eh o dia/mes/ano,
+
+<input type="text" class="form-control" id="dataVencimento" th:field="*{dataVencimento}" 
+    data-provide="datepicker" data-date-format="dd/mm/yyyy" />
+
+20. Qual que eh a lingua? Entao, data-date-language,
+
+<input type="text" class="form-control" id="dataVencimento" th:field="*{dataVencimento}" 
+    data-provide="datepicker" data-date-format="dd/mm/yyyy" data-date-language="pt-BR" />
+
+21. Que mais? Eu quero que, na hora que eu selecionar, ele ja feche, data-date-autoclose,
+
+<input type="text" class="form-control" id="dataVencimento" th:field="*{dataVencimento}" 
+    data-provide="datepicker" data-date-format="dd/mm/yyyy" data-date-language="pt-BR" 
+    data-date-autoclose="true" />
+
+22. Eu quero que ele destaque o dia de hoje, data-date-today-highlight,
+
+<input type="text" class="form-control" id="dataVencimento" th:field="*{dataVencimento}" 
+    data-provide="datepicker" data-date-format="dd/mm/yyyy" data-date-language="pt-BR" 
+    data-date-autoclose="true" data-date-today-highlight="true" />
+
+23. Onde eu aprendi isso? Como eh que eu sei todas essas propriedades? Vai, aqui, no bootstrap-datepicker, em Onlinde Docs, https://bootstrap-datepicker.readthedocs.io/en/latest/, eh so vir, aqui, nas Opcoes, https://bootstrap-datepicker.readthedocs.io/en/latest/options.html, e, ai, ele tem todas as opcoes, e, ai, ele explica que voce pode usar tanto via 'data-', como via propriedades de Javascript, tem as duas formas, ai, eh so ir olhando, aqui, na documentacao, ou configurar via 'data-'
+
+24. Okay? Bom, acho que sao essas aqui que eu gostaria de colocar no projeto, vamos voltar, aqui, na tela de Cadastro de Pesquisa, dar um Refresh na Pagina, quando eu cliar, aqui, em Data de Vencimento, eh para aparecer, ai, o componente, oh.
+
+25. Ja aparece o mes, ta vendo, oh, ja aparece em Portugues, os dias da semana, o dia de hoje ja esta selecionado, entao, se voce clicar aqui, ele ja vai colocando outros dias para mim.
+
+26. Okay? E ele ajuda, tambem, a gente evitar colocar valores de calendarios invalidos aqui, no input, por exemplo, '435636535', ele troca para o dia de hoje, ao sair do input. Se eu digitar alguma coisa errada aqui, ele nao vai deixar, ta vendo? ele tenta atrapalhar.
+
+27. Antes, aqui, deixa eu colocar a data de hoje, normal, vamos salvar um cara que eu recebi, aqui, vamos supor, recebi, hoje, o Condominio do Apto 1, no dia de hoje, ele pagou 100 reais, ja pagou, Recebido. Salvar.
+
+28. Vamos voltar la na pesquisa, olha la. O Apto 1 esta Pago, esta Recebido.
+
+29. Vamos tentar cadastrar um cara, agora, 'Teste erro', eu vou tentar colocar, aqui, alguma coisa assim, oh, uma data invalida, por exemplo, '08/12/234523', Valor '123', Status Pendente. Se eu salvar isso daqui, agora, vai ver que vai dar um erro. Ele lanca essa excecao aqui, oh, org.hibernate.exception.DataException. E, ai, nos vamos dar uma olhada aqui, no Servidor, para ver mais detalhes disso. Oh, deu um erro la no MySQL, na hora que ele tentou truncar os dados,
+
+com.mysql.jdbc.MysqlDataTruncation: Data truncation: Incorrect date value: '34343-12-08' for column 'data_vencimento' at row 1
+
+, okay? ele fala, aqui, para mim, que nao conseguiu, e, ai, a gente pode tratar esse tipo de erro, aqui, com o Spring MVC. Okay? Vamos dar uma olhada como a gente pode fazer isso?
+
+30. Vamos fazer o seguinte, oh. Eu venho la no TituloController, no metodo salvar(), aqui, no titulos.saver(titulo);, eu vou fazer o seguinte, oh, eu vou colocar isso em volta de um try / catch, 
+
+	@RequestMapping(method = RequestMethod.POST)
+	public String salvar(@Validated Titulo titulo, Errors errors, RedirectAttributes attributes) {
+		if (errors.hasErrors()) {
+			return CADASTRO_VIEW;
+        }
+        try {
+            this.titulos.save(titulo);
+            attributes.addFlashAttribute("mensagem", "Titulo salvo com sucesso!");
+            return "redirect:/titulos/novo";
+        } catch (DataIntegrityViolationException e) {
+        }
+	}
+
+, e a excecao que o Spring lanca, aqui, para mim, para eu poder trata-la, quando existe uma violacao de integridade no banco, a excecao eh DataIntegrityViolationException.
+
+31. Entao, quando ele tentou salvar, e eu coloquei um valor invalido, isso daqui que vai acontecer, okay? Entao, o que que eu posso fazer, aqui, agora? Eu vou adicionar um errors.rejectValue(), eu vou falar o seguinte, eu quero que a dataVencimento, errorCode null, e coloco a mensagem aqui, oh, 'Formato de data invalido', e retorno CADASTRO_VIEW,
+
+        try {
+            this.titulos.save(titulo);
+            attributes.addFlashAttribute("mensagem", "Titulo salvo com sucesso!");
+            return "redirect:/titulos/novo";
+        } catch (DataIntegrityViolationException e) {
+            errors.rejectValue("dataVencimento", null, "Formato de data invalido.");
+            return CADASTRO_VIEW;
+        }
+
+, ou seja, volta para a mesma View que ele estava, so que, agora, eu adicionei para a Data de Vencimento, eu adicionei a mensagem 'Formato de data invalido.'
+
+32. Posso salvar, aqui, e vamos tentar simular la novamente. Vamos la, '/titulos/novo', vou colocar, aqui, 'Teste erro', colocar uma data aqui, 08/01/2018, o Valor 100, mas eu vou tentar colocar um valor invalido, aqui. Colocamos um valor invalido. Se eu tentar salvar agora, eh exibido a mensagem 'Formato de data invalido', no alto da Pagina.
+
+33. Capturei a excecao e mostrei aqui, na Pagina. Entao, agora, oh, o componente de calendario ja esta me ajudando bastante. Bom, aqui, ele esta indo para cima, e, ai, nesse caso aqui, ele eh cortado, nao eh? Entao, vamos fazer o seguinte, vamos coloca-lo, mostrando-o para baixo, nao eh? como eh que eu faco isso?
+
+34. Nao lembro. Ai, a gente tem que vir aqui, oh, no bootstrap datepicker, no Google, a gente vem aqui, https://bootstrap-datepicker.readthedocs.io/en/latest/, nas Options, tem, aqui, alguma coisa relacionada a posicao, orientation, https://bootstrap-datepicker.readthedocs.io/en/latest/options.html#orientation. Entao, eu vou colocar bottom, o default eh auto, entao, eu vou tentar colocar bottom.
+
+35. Entao, eh, vamos colocar la, oh, em CadastroTitulo.html, vai ser data-date-orientation, e eu vou tentar colocar essa opcao 'bottom',
+
+<input type="text" class="form-control" id="dataVencimento" th:field="*{dataVencimento}" 
+    data-provide="datepicker" data-date-format="dd/mm/yyyy" data-date-language="pt-BR"
+    data-date-autoclose="true" data-date-today-highlight="true" data-date-orientation="bottom" />
+
+, para ele mostrar sempre para baixo.
+
+36. Okay? Vamos ver aqui, o que vai acontecer? '/titulos/novo', Valor, aqui, o Calendario esta vindo para baixo, nesse momento, vou colocar, aqui, uma data invalida, em Data de Vencimento, e vou manda salvar. Agora, quando eu cliquei no campo Data de Vencimento, apareceu o calendario para baixo.
+
+37. Entao, ele nao esta aceitando a data invalida, mas, ai, eu posso apagar e colocar uma data correta e, agora, eu consigo salva-la, com sucesso. 
+
+38. Beleza? Entao, como eh que a gente pode fazer, aqui, para adicionar o componente? Eu baixei aquele la, eu escolhi aquele componente, configurei-o atraves, aqui, dos 'data-'s,
+
+<input type="text" class="form-control" id="dataVencimento" th:field="*{dataVencimento}" 
+    data-provide="datepicker" data-date-format="dd/mm/yyyy" data-date-language="pt-BR"
+    data-date-autoclose="true" data-date-today-highlight="true" data-date-orientation="bottom" />
+
+39. Okay? Ele eh ativado, aqui, via 'data-', esse componente, eu li isso na documentacao, para ele me falar que eh ativado via 'data-', e, aqui, no metodo salvar(),
+
+	@RequestMapping(method = RequestMethod.POST)
+	public String salvar(@Validated Titulo titulo, Errors errors, RedirectAttributes attributes) {
+		if (errors.hasErrors()) {
+			return CADASTRO_VIEW;
+		}
+		try {
+			this.titulos.save(titulo);
+			attributes.addFlashAttribute("mensagem", "Titulo salvo com sucesso!");
+			return "redirect:/titulos/novo";
+		} catch (DataIntegrityViolationException e) {
+			errors.rejectValue("dataVencimento", null, "Formato de data invalido.");
+			return CADASTRO_VIEW;
+		}
+	}
+
+, eu capturo a excecao. Se a excecao lancada, aqui, for uma violacao nos dados, la, nao eh?, que eu tentei salvar, no caso, aqui, eu sei que sao os dados, eu adiciono errors.rejectValue(), para a Data de Vencimento, e falo, 'Formato de data invalido.'.
+
+40. Beleza?
+
+41. Fim da Aula 03.002. Plugin para Calendario.
+
+-->

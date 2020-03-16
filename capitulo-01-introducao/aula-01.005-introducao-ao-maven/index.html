@@ -1,0 +1,79 @@
+<!-- 
+
+Aula 01.005. Introducao ao Maven
+
+1. Vamos falar, agora, sobre o Maven.
+
+2. Esta aula aqui vai ser dividida em duas, na verdade, por que?
+
+3. Porque ja existe uma aula no nosso blog, em https://blog.algaworks.com/comecando-com-apache-maven-em-projetos-java, que eh essa pagina aqui, que existe aqui um video, que nos podemos assistir, que vai nos ensinar como comecar com o Apache Maven, em Projetos Java. E o legal, eh que o instrutor nos ensina, nesse video, como nos podemos importar um projeto existente do GitHub para dentro do Eclipse, eh a mesma coisa do STS.
+
+4. Okay? entao, voce vai conseguir baixar, entao, esse Projeto que nos vamos desenvolver nesse workshop. 'Ah, eu quero ja baixar esse projeto e executar aqui, para eu ver ele funcionando.'
+
+5. Beleza, nesse video aqui, o instrutor nos ensina como ns fazemos para baixar e importar esse projeto la do GitHub, usando o Maven, ai, no Eclipse.
+
+6. Beleza? Eh so assistir essa aula aqui, tem alguns detalhes a mais do Maven, ali, tambem.
+
+7. Mas, aproveitando que o instrutor ja esta aqui, nesta aula, o instrutor ira falar sobre o Maven aqui tambem.
+
+8. A parte mais legal, que o instrutor acha do Maven, eh o gerenciamento das dependencias do Projeto.
+
+9. O que que eh isso? O arquivo principal, central, do Maven, eh esse aqui, oh, pom.xml.
+
+10. Esse arquivinho quando o nosso Projeto tem esse arquivinho aqui, significa que ele pode estar usando o Maven, para gerenciar, e, ai, olha so, a parte que o instrutor esta falando sobre o gerenciamento das dependencias do Projeto. Nessa parte, aqui, oh, do XML, 
+
+<dependencies>
+    ...
+</dependencies>
+
+, existem varias entradas, oh, 
+
+<dependency>
+    ...
+</dependency>
+<dependency>
+    ...
+</dependency>
+    ...
+
+, aqui, e o que esses <dependecy>'s dizem?
+
+11. Eles dizem o seguinte, oh, que eu quero, eu preciso, aqui, dessa biblioteca deste projeto, aqui, disponivel dentro deste meu Projeto aqui, e disponivel no Classpath deste Projeto, disponivel, aqui, para o Eclipse, para eu poder usar.
+
+12. Entao, vamos dar uma olhada, essa primeira dependencia, aqui, ela tem um <groupId>, e <artifactId>, e tem uma versao tambem. A versao, eu estou herdando, ai, a questao do Spring Boot, depois, o instrutor vai falar sobre ele.
+
+13. Mas, sao tres propriedades que a gente precisa prestar atencao, em uma dependencia do Maven, o 'groupId', 'artifactId', e a versao.
+
+14. Okay? Entao, aqui, eu estou falando, nessa 'dependency' aqui,
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+
+, que eu preciso, no meu Projeto, do Spring Data JPA, eu preciso dele.
+
+15. O que que o Maven vai fazer? Ele vai la na Internet, no Repositorio Central dele, e voce tem acesso, eh https://search.maven.org, eh o Repositorio Central do Maven, eh aqui que ele vem buscar as dependencias.
+
+16. Entao, por exemplo, oh, se eu pegar esse artifactId aqui, oh, 
+
+    spring-boot-starter-data-jpa
+
+, e mandar pesquisar, nos vamos ver que ele vai achar, oh, seria essa versao, aqui, oh, 2.0.2.RELEASE que ele esta usando.
+
+17. Ele ja mostra aqui, oh, a dependencia. Entao, ele veio aqui, baixou, isso aqui eh um JAR, nao eh?, ele vai baixar esse JAR, se voce quiser baixar aqui, na mao, voce consegue tambem, oh, mas ele baixou esse JAR aqui e colocou la nas dependencias do Eclipse para mim, aqui, oh, Maven Dependencies, nesse cantinho, 'Package Explorer', voce ve todas as dependencias que o meu Projeto esta usando, oh, todos os JAR's, que o Maven foi la na Internet e baixou e colocou disponivel aqui para a gente.
+
+18. E uma coisa legal, 'Ah, Normandes, entao, toda vez que ele acessar, ele vai baixar da Internet, se eu criar um outro Projeto, ele vai baixar tudo de novo da Internet?'
+
+19. Nao, ele baixa e salva dentro do seu computador, ele vai criar uma pastinha, ai, e vai salvar esses JAR's dentro do seu computador, e, da proxima vez que ele precisar, ele vai olhar: 'Eu ja baixei?', 'Ja', entao, nao precisa nem ir na Internet baixar novamente.
+
+20. Entao, aqui, oh, sao varias dependencias que a gente precisa para desenvolver esse Projeto.
+
+21. O instrutor vai falar sobre elas a medida que a gente avanca no curso.
+
+22. Devemos, tambem, assistir a outra aula sobre Comecando com Apache Maven, se nao conhecermos muito bem o Maven.
+
+23. Fim da Aula 01.005. Introducao ao Maven.
+
+
+-->

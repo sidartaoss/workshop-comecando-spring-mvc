@@ -1,0 +1,236 @@
+<!--
+
+Aula 02.001. Criando o Projeto
+
+1. Bom, no primeiro capitulo, a gente fez uma introducao, nos conversamos sobre algumas coisas importantes, nao eh?, a gente conversou sobre o Spring, sobre um Framework Action-Based, sobre o nosso ambiente de desenvolvimento, sobre o Maven, sobre o Spring Boot, nao eh?, o instrutor nos mostrou o projeto que nos vamos desenvolver, e, chega de conversa, vamos, a partir desse capitulo, vamos colocar a mao na massa mesmo, para nos criarmos aquele projetinho que o instrutor nos mostrou de cobrancas de titulos.
+
+2. Okay? Entao, vamos la. Quando voce abrir, ai, o Spring Tool Suite, o ambiente nosso de desenvolvimento, a nossa IDE, voce vai chegar em uma tela parecida com essa dai, com um Dashboard, aqui, do Spring, nos mostrando, aqui, as ultimas noticias dos posts do blog la do Spring, se voce clicar, voce consegue ler la, e tal, so que o instrutor costuma isso daqui, o instrutor prefere ficar entrando la pelo Browser.
+
+3. Okay? Bom, e, ai, eu estou aqui, entao, no ambiente, e, ai, nesta aula, agora, o instrutor vai nos mostrar duas formas de a gente criar o projeto. Uma usando aqui, o proprio STS, okay?, e uma outra que eh importando o projeto a partir de uma ferramenta que o Spring desenvolveu para iniciar um novo projeto, vai ver que eh bem facinho as duas formas de fazer.
+
+4. Bom, vamos comecar. Vamos comecar importando o projeto.
+
+5. O instrutor vai nos mostrar como eh que a gente faz para importa-lo primeiro. Entao, para isso, eu vou vir aqui no Browser, em start.spring.io, e, ai, ele vai cair nessa pagina aqui, SPRING INITALIZR, okay?, eh uma forma de a gente comecar o nosso projeto com o Spring Boot.
+
+6. Beleza? Entao, eu vou falar, 'Eu quero gerar um Projeto Maven, com Java, que eh o que a gente vai usar, com o Spring Boot, na versao 2.1.0', que eh a ultima versao liberada para Producao, entao, 2.1.1 ainda esta SNAPSHOT, ou seja, ainda nao foi liberada, ainda estao fazendo testes, etc., entao, nos vamos usar a 2.1.0.
+
+7. Project Metadata. Nos vamos definir, aqui, os Meta-Dados da nossa Aplicacao.
+
+8. Se eu clicar nesse link, aqui, Switch to the full version, a gente vai ver aqui, oh, mais opcoes para a gente criar o nosso Projeto.
+
+9. Entao, vamos la. Ao inves de eu colocar, ao inves de eu deixar aqui, em Group, 'com.example, eu vou deixar aqui, oh, 'com.algaworks'. Okay?, esse vai ser o grupo do nosso projeto. Lembra la no Maven, se voce assistiu a introducao da aula do Maven, la, existe um Group, e um Artifact, do Maven. O Group, normalmente, identifica a empresa, e, aqui, em Artifact, o nome do projeto, normalmente.
+
+10. Entao, eu vou colocar, aqui, em Artifact, 'cobranca', que eh o nome do nosso projeto. Okay?
+
+11. Aqui, em Name, 'cobranca'. Description, se quiser adicionar alguma descricao, o instrutor nao vai colocar nada, nao.
+
+12. O nome do pacote, Package Name, entao, vai ficar, 'com.algaworks.', ai, o instrutor, normalmente, coloca o nome do sistema, ou seja, 'com.algaworks.cobranca'. Em Packaging, ele vai se um 'WAR', a Versao do Java 1.8, a Linguagem, que eh o Java.
+
+13. Em Dependencies, se voce ja sabe tudo o que voce quer, voce pode ir pesquisando aqui, entao, se voce colocar web, ai, ele ja vai mostrando, aqui, oh, entao, eu quero o desenvolvimento web com Tomcat e com Spring MVC, mas o instrutor vai deixar esse campo vazio e vai nos mostrando, a partir das opcoes em checkbox, em Web, aqui embaixo.
+
+14. Entao, eu quero selecionar a opcao Web,... 
+
+15. Isso daqui para que?
+
+16. Eu vou selecionando, aqui, o que eu quero que o meu projeto ja tenha. Ai, ele ja vai me entregar um projeto, um zip de um projeto Maven, que eh so importar para dentro do Eclipse.
+
+17. Okay?
+
+18. Entao, olha aqui, eu vou precisar da opcao 'Web' selecionada, o que mais que eu vou precisar?
+
+19. Vamos descendo, aqui, de dados, em Data, eu vou precisar selecionar 'JPA', em Template Engines, eu vou precisar selecionar Thymeleaf, nos vamos usar o Thymeleaf como Template Engine. O que mais? Vamos descendo.
+
+20. Banco de dados, 'Database'. Vamos comecar, aqui, com o H2, que eh um banco em memoria, e so depois a gente configura isso no MySQL. 
+
+21. Okay? O que mais? DevTools, em 'Core', selecionamos o DevTools. Nao, nao vamos selecionar e o instrutor vai deixar para nos mostrar mais para a frente.
+
+22. O Tomcat ja esta na opcao 'Web', 'Full-stack web development with Tomcat and Spring MVC'.
+
+23. Entao, so a parte Web, a parte de Banco de dados com JPA, a parte de visualizacao, com Thymeleaf, e o Banco de Dados, em memoria, H2, so para a gente comecar. Okay? Bom, o instrutor acha que eh isso daqui, Vamos gerar aqui o Projeto, oh, ou seja, clicar no botao Generate Project, e ele ja vai gerar o zip, aqui, para mim.
+
+24. Se eu extrair o arquivo cobranca.zip, ele gerou, entao, a pasta cobranca, e eh so eu importar esse projeto no STS, ja vai gerar todos os arquivos ali, para eu comecar com esse projeto.
+
+25. Entao, eu posso vir, agora, aqui, no Spring Tools Suite e fazer um File / Import... / Maven / Existing Maven Projects. Navego ate a pasta cobranca, 
+
+C:\Users\SEMPR\Downloads\cobranca
+
+, vou ate a pasta cobranca, que eh onde esta a raiz do pom.xml, o STS ja vai reconhecer o projeto, e posso dar um Finish.
+
+26. Se eu importar la, onde ele esta la, o projeto vai ficar la na pasta Downloads, os arquivos nao sao importados para dentro do seu Workspace, entao, se voce quiser fazer isso, voce pode copiar o projeto para dentro do Workspace. Para eu copiar ele para dentro do Workspace, eu copio aqui, oh, cobranca, ai, eu venho aqui, dentro do meu Workspace, eu posso colar aqui e, na hora de importar, eu posso vir em Import... / Existing Maven Projects, e navego ate o meu Workspace, onde esta a pasta 'cobranca', e dou um Finish.
+
+27. O Import do instrutor foi mais rapido, porque ja tinha todas as dependencias do Maven prontas. Mas, se voce for em Window / Show View / Other... / Progress, vai abrir essa Guia aqui, e, ai, ele vai te mostrar, aqui, que ele esta baixando um monte de coisas da Internet. Okay? Entao, eu estou aqui, ja, com o projeto pronto, oh, funcionando.
+
+28. Ele vai criar, aqui, oh, esse CobrancaApplication.java, nos vamos conversar mais detalhes sobre isso daqui ainda, mas esse cara, aqui, oh, ja tem um metodo main, se voce executar esse cara aqui, ja eh o projeto do Spring Boot rodando.
+
+29. Nao vai ter nenhuma telinha, nao tem nada aqui para ele rodar, mas ele consegue subir. Para voce testar, voce pode vir aqui, oh, Run As / Spring Boot App. Entao, com essa classe aberta, CobrancaApplication, voce vem aqui, oh, Run As / Spring Boot App, ele vai mostrar aqui no Console, a Aplicacao subindo, beleza, ja estou com a Aplicacao rodando.
+
+30. Como o instrutor nos disse, se voce acessa-la aqui, localhost:8080/, voce nao vai ver nada. Por que? Vai dar um erro, na verdade, retornou um 404, porque ele nao encontrou nada mapeado aqui na barra, okay?, mas subiu a Aplicacao.
+
+31. Se quiser parar a nossa Aplicacao, eh so clicar nesse botao Vermelhinho, aqui, no Eclipse.
+
+32. Beleza? Bom, essa eh uma das formas da gente criar o projeto. Entao, se voce nao esta usando o STS, esta usando o Eclipse normal, ou alguma outra IDE, voce pode usar o Spring Initalizr, para criar o seu projeto.
+
+33. Ou, entao, primiramente, vamos apagar o projeto, aqui, no Eclipse.
+
+34. Como eu estou usando o STS, eu posso vir aqui, oh, New / Spring Starter Project, e, ai, eh a mesma ideia. Eu vou la dar um nome, oh, 'cobranca', eu ja fiz uma vez, entao, ele ja preencheu aqui, oh, eh um novo projeto, Tipo Maven, a versao do Java: 1.8, Pacote, um WAR, Linguagem Java, Grupo 'com.algaworks', Artifact: 'cobranca', Versao 1.0.0-SNAPSHOT, posso tirar essa descricao aqui, o pacote 'com.algaworks.cobranca'. Vamos dar um Next aqui, ai, ele ja vai mostrando, aqui, tambem, oh, a versao do Spring Boot, 2.1.0, vou usar JPA, vou usar o Thymeleaf, vou usar a Web e eu ia usar o H2, ali, nao eh?, Database H2.
+
+35. Beleza, selecionamos o que a gente precisa, a gente ja pode dar um Finish.
+
+36. Ele vai gerar, ai, as coisas, e ja criar o projeto para mim. Okay? Ja foi, foi mais rapido, porque eu ja tenho as dependencias, e esta ai o projeto, da mesma forma, oh, CobrancaApplication.java, da mesma forma, se eu rodar, iniciar esse projeto, Run As / Spring Boot App, tambem vai subir da mesma forma, que o outro subiu. Okay, se eu tentar inicializa-lo, aqui, vai dar o mesmo erro, nao eh?, porque a gente nao abriu o barra, /, entao, a gente vai, passo-a-passo, ensinando como eh que a gente vai fazer isso, daqui a pouco.
+
+37. Mas, so nos mostrar, entao, as duas formas. O que ele fez?
+
+38. Ele gerou toda a estrutura do projeto e, principalmente, aqui, oh, o pom.xml, nao eh, ele ja deixou, aqui, configurado, para mim, oh, vamos la, vamos dar uma passada aqui, oh, o nome do nosso projeto, nao eh?, que contem o Group Id, o Artifact Id, e a versao, 
+
+	<groupId>com.algaworks</groupId>
+	<artifactId>cobranca</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    
+39. O empacotamento, war,
+
+    <packaging>war</packaging>
+    
+, nome e descricao aqui, 
+
+	<name>cobranca</name>
+    <description></description>
+    
+, nao sao obrigatorios.
+
+40. Ele coloca, como parent, ja o Spring Boot,
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.1.0.RELEASE</version>
+		<relativePath/> <!-- lookup parent from repository
+	</parent>
+
+
+41. Por que ele coloca como parent o Spring Boot?
+
+42. Para ele aproveitar um monte de coisa que ja esta configurado aqui,
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.1.0.RELEASE</version>
+		<relativePath/> <!-- lookup parent from repository
+	</parent>
+
+Beleza? Entao, eu nao preciso colocar versao, aqui, por exemplo, do spring-boot-starter-data-jpa,
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        
+, porque ja esta definido aqui nesse pom parent, nesse cara que ele esta herdando,
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.1.0.RELEASE</version>
+		<relativePath/> <!-- lookup parent from repository
+    </parent>
+    
+43. Okay? Entao, ele herda as versoes, ele ja coloca as versoes aqui, que vao ser compativeis para todos esses frameworks que voce quiser usar.
+
+44. Okay? Definiu aqui tambem properties, olha so, definiu, a gente esta colocando, aqui, que eh para usar UTF-8, para a gente nao ter problema de codificacao nos nossos arquivos.
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+	</properties>
+
+45. Java, versao 1.8, a gente definiu aqui, tambem,
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<java.version>1.8</java.version>
+	</properties>
+
+46. E, ai, a gente vem para as dependencias.
+
+47. Entao, as dependencias que eu selecionei, o JPA, 
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        
+, o Thymeleaf,
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+        
+, falei que eh um projeto web, entao, nessa dependencia aqui,
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        
+, ele ja coloca la, oh, Spring MVC, e mais um monte de coisas que ele precisa para funcionar.
+
+48. Okay? Falei do banco de dados, 
+
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>runtime</scope>
+        </dependency>
+        
+, o h2, nos vamos usa-lo por enquanto, so para a gente comecar mais rapido, depois, a gente colocar o MySQL. 
+
+49. Falei que quero usar o Tomcat,
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-tomcat</artifactId>
+			<scope>provided</scope>
+        </dependency>
+        
+, entao, ele ja colocou a dependencia do Tomcat aqui, tambem.
+
+50. Toda vez que voce cria um projeto, ele ja comeca, tambem, a falar em iniciar os testes para voce, okay? Apesar de a gente nao fazer testes nesse projeto automatizados, porque nao eh o objetivo aqui, o objetivo eh voce comecar a ja criar aquele projetinho, ele ja deixa alguma coisa pronta para voce comecar nos testes tambem,
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+        </dependency>
+        
+51. E configura, aqui, o plugin do Spring Boot para o Maven,
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
+52. Okay?
+
+53. Bom, esse daqui eh o mais basico possivel do pom.xml para a gente comecar esse projeto web com Spring Boot, esse cara aqui ja esta pronto para a gente desenvolver.
+
+54. Para aquele projeto final nosso, a diferenca que esta aqui eh a respeito do bancod de dados, eh a respeito so aqui, 
+
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>runtime</scope>
+        </dependency>
+        
+, entao, ao inves de usar o h2, nos vamos usar o MySQL, mas, o resto ja esta configurado para a gente criar aquele projeto que o instrutor nos mostrou no capitulo anterior. Okay?
+
+55. Bem, simples, nao eh?, bem facil comecar, eh so a gente comecar ja a desenvolver a aplicacao, nao tem que ficar configurando um monte de coisas, nao.
+
+56. Fim da Aula 02.001. Criando o Projeto.
+
+-->

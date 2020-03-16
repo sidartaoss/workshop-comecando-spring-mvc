@@ -1,0 +1,129 @@
+<!-- 
+
+Aula 03.001. Componente Tooltip
+
+1. Agora, vamos comecar a dar uma refinada no nosso projeto, para o projeto ficar mais bonitinho, mais cheio de detalhes que estao faltando, que sao importantes, aqui, para a gente.
+
+2. Okay? Por exemplo, eu quero colocar, aqui, na Tela de Pesquisa de Titulos, um componentezinho do Bootstrap, e, quando eu colocar o Mouse em cima do icone do lapizinho de Edicao, ele me fale que isso daqui eh para edicao, que o icone de excluir eh para exclusao.
+
+3. E, ai, nos vamos usar esse cara, aqui, oh, tooltip, do Bootstrap, https://getbootstrap.com/docs/3.3/javascript/#tooltips, que eh aparecer esse carinha, aqui.
+
+4. Okay? E ai, nos vamos usar, aqui, oh, ele da algumas formas para a gente usar, ele fala para a gente usar com o data-toggle, so que, se eu usar o data-toggle, eu nao vou conseguir, por que?
+
+5. Deixa eu te mostrar aqui, oh, em PesquisaTitulos.html.
+
+6. Nao vou conseguir usar em todos os componentes. Por que?
+
+7. Porque eu ja estou usando, aqui, no modal,
+
+<a class="btn btn-link btn-xs" >>> data-toggle="modal" <<< data-target="#confirmacaoExclusaoModal"
+        th:attr="data-codigo=${titulo.codigo}, data-descricao=${titulo.descricao}">
+    <span class="glyphicon glyphicon-remove"></span>
+</a>
+
+8. Okay? Entao, ao inves de eu usar com o data-toggle, eu vou coloca um outro, aqui, 
+
+<a class="btn btn-link btn-xs" data-toggle="modal" data-target="#confirmacaoExclusaoModal"
+        th:attr="data-codigo=${titulo.codigo}, data-descricao=${titulo.descricao}">
+    <span class="glyphicon glyphicon-remove"></span>
+</a>
+
+, eu vou usar um outro atributo, eu vou usar o seguinte, olha so, eu vou colocar, aqui, primeiro, eu tenho que colocar o 'title', para falar, 'Esse aqui eh o Editar',
+
+<a class="btn btn-link btn-xs" th:href="@{/titulos/{codigo}(codigo=${titulo.codigo})}" title="Editar">
+    <span class="glyphicon glyphicon-pencil"></span>
+</a>
+
+, okay? E eu vou fazer o seguinte, oh, rel="", ai, sim, eu vou colocar "tooltip", e, aqui, eu vou colocar onde eu quero que ele fique, data-placement="top",
+
+<a class="btn btn-link btn-xs" th:href="@{/titulos/{codigo}(codigo=${titulo.codigo})}" title="Editar" rel="tooltip" data-placement="top">
+    <span class="glyphicon glyphicon-pencil"></span>
+</a>
+
+, eu quero que ele fique em cima.
+
+9. Se voce olhar aqui, oh, na documentacao, posso colocar a esquerda, em cima, embaixo, ou a direita, eu vou colocar em cima, vamos usar, aqui, o data-placement="top".
+
+10. Okay? Coloquei esse cara, aqui, vamos colocar, vamos fazer algo parecido para o icone de excluir,
+
+<a class="btn btn-link btn-xs" 
+data-toggle="modal" data-target="#confirmacaoExclusaoModal"
+th:attr="data-codigo=${titulo.codigo}, data-descricao=${titulo.descricao}"
+title="Excluir" rel="tooltip" data-placement="top">
+    ...
+</a>
+
+11. So salvar isso daqui ja esta funcionando, Normandes?
+
+12. Nao.
+
+13. Ainda nao. Quer ver? Vamos voltar, aqui, na Tela de Pesquisa e vamos colocar o mouse em cima. Voce vai ver que nao esta, ainda, do jeito que aparece la na pagina de documentacao do Bootstrap, nao eh? Esta bem diferente desse desenhozinho, aqui, na documentacao.
+
+14. Por que?
+
+15. Isso precisa ser ativado via JavaScript.
+
+16. Olha so a recomendacao, aqui, na documentacao,
+
+
+Opt-in functionality
+For performance reasons, the Tooltip and Popover data-apis are opt-in, meaning you must initialize them yourself.
+
+One way to initialize all tooltips on a page would be to select them by their data-toggle attribute:
+
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
+
+
+17. Ou, seja, 'voce precisa inicializa-los'. Entao, a gente inicializa eles com Javascript,
+
+
+  $('[data-toggle="tooltip"]').tooltip()
+
+
+18. Como eu nao usei o data-toggle, aqui, oh, porque eu ja estava usando o data-toggle, eu vou fazer de outra forma, vamos la?
+
+19. Nos vamos fazer assim, oh, ai, eu vou te mostrar uma outra coisa, aqui, do jQuery, em cobranca.js, que eh o seguinte, oh, eu vou fazer o seguinte, oh, toda vez que a pagina acabar de carregar, eu vou precisar executar algumas funcionalidades. 
+
+20. Okay? Quando acabou de carregar a pagina, eu quero fazer isso.
+
+21. Como eh que eu faco isso com jQuery?
+
+22. Eu coloco uma funcao dentro do componente, do objeto do jQuery,
+
+$(function () {
+
+});
+
+23. Okay? So fazer isso daqui.
+
+24. E ai, para eu executar, entao, toda vez que ele carregar a Pagina, ele vai procurar os componentes que sao 'tooltip',
+
+$(function() {
+    $('[rel="tooltip"]')
+});
+
+, okay? Entao, oh, procure os componentes que sao rel="tooltip", e faca o tooltip(), chame a funcao tooltip(),
+
+$(function() {
+    $('[rel="tooltip"]').tooltip();
+});
+
+25. So isso.
+
+26. Pronto. Vamos ver aqui? Recarregar a Tela de Pesquisa de Titulos.
+
+27. A chave fica dentro da aspas simples,
+
+$(function() {
+    $('>>>[<<< rel="tooltip"]').tooltip();
+});
+
+28. Okay, colocando o mouse em cima, o tooltip ja esta funcionando, la, Editar e Excluir.
+
+29. Ta vendo? Sao coisas simples, que deixam o sistema com uma carinha mais legal. 
+
+30. Fim da Aula 03.001. Componente Tooltip.
+
+-->

@@ -1,0 +1,237 @@
+<!-- 
+
+Aula 03.009. Prototipo da Caixa de Pesquisa
+
+1. Vamos, agora, implementar a Pesquisa de Titulos.
+
+2. Aqui, toda vez que a gente entra nessa Tela de Pesquisa de Titulos, a gente esta mostrando todos os Titulos.
+
+3. Certo? Eu vou colocar, e, ai, deixa eu mostrar, aqui, a Tela do slide anterior, das aulas passadas, eu quero colocar essa caixinha, aqui, oh, e colocar, 'Qual titulo voce esta procurando?'.
+
+4. E colocar um carinha para a gente poder pesquisar.
+
+5. Entao, imagina que,..., eu comecei, aqui, com exemplos de Condominio, nao eh?, Condominio Apto 101, pensando assim, oh, eu recebo, aqui, os Condominios da galera, aqui, do predio, entao, eu deixaria eles, mas, voce poderia estar fazendo o sistema para controle seu, nao eh?, interno, ai, emprestimos, receber inscricoes de campeonatos, alguma coisa assim, nao eh?, de pessoas, e, ai, voce quer pesquisar, voce quer colocar, aqui, um testinho que, na hora que voce digitar, voce vai pesquisar.
+
+6. Eu vou pesquisar apenas pela Descricao. Entao, o que eu colocar aqui, por exemplo, se eu colocar 101, eu quero que apareca a linha, aqui, apenas, ou todos os Condominios do Apto 101, tudo que tiver 101, apareca.
+
+7. Okay? Essa eh a ideia, aqui.
+
+8. Entao, nesta aula, nos vamos colocar essa caixinha, aqui, na tela, beleza?
+
+9. Entao, vamos la, vamos desenhar isso daqui.
+
+10. Vamos voltar aqui, eh na tela PesquisaTitulos.html, okay?
+
+11. Eu vou colocar logo, aqui, dentro do panel-body, porque eu quero que fique, aqui, dentro do panel-body, ou seja, logo acima, aqui, dessa tabela, okay? Entao, vai ficar aqui logo acima da tabela,
+
+    <div class="panel-body">
+
+        >>> <<<
+
+        <table clas="table table-bordered table-striped">
+            ...
+        </table>
+        ...
+    </div>
+
+12. Bom, essa caixinha, essa caixinha que a gente vai colocar, esse campo input aqui, ela tem que submeter algo para o formulario.
+
+13. Entao, a gente vai submeter alguma coisa, vai submeter,..., aquele input faz parte de um formulario, entao, a primeira coisa que eu vou colocar, aqui, eh um formulario,
+
+    <div class="panel-body">
+
+        <form>
+
+        </form>
+
+        <table class="table table-bordered table-striped">
+            ...
+        </table>
+        ...
+    </div>
+
+, okay? O metodo que ele vai enviar eh via GET, por que?
+
+14. Pesquisa, eu quero fazer uma pesquisa, ali, vai ser via GET, 
+
+    <div class="panel-body">
+
+        <form method="GET">
+
+        </form>
+
+        <table class="table table-bordered table-striped">
+            ...
+        </table>
+        ...
+    </div>
+
+e os parametros vao aparecer na URL. Entao, aqui, http://localhost:8080/titulos, eh para aparecer algo desse tipo assim, oh, http://localhost:8080/titulos?descricao=101, seria eu pesquisando todos os Titulos que tem 101 na Descricao. 
+
+15. Por que que eu faco, aqui, via GET essa pesquisa? Porque, se eu copiar essa URL, aqui, eu posso mandar para outra pessoa, por email, e ela vai receber, na hora que ela colocar la, clicar, ela vai conseguir abrir a mesma pesquisa.
+
+16. Imagina se tivesse varios campos aqui, nao eh?, 
+
+    http://localhost:8080/titulos?descricao=101&dataVencimento&status ...
+
+, e por ai vai.
+
+17. Mas vamos fazer, aqui, apenas da Descricao.
+
+18. Okay? Essa aqui eh a ideia, aparecer algo assim,
+
+    http://localhost:8080/titulos?descricao=101
+
+, quando a gente submeter isso. Quem vai submeter, eu nao vou,..., logicamente, a gente nao vai ter que ficar escrevendo aqui,
+
+    http://localhost:8080/titulos?>>> descricao=101 <<<
+
+, quem vai submeter eh o formulario que a gente vai adicionar aqui, agora.
+
+19. Entao, vai ser via GET, okay?, vamos deixar assim, por enquanto, 
+
+    <form method="GET">
+
+    </form>
+
+, para a gente so desenhar, depois, a gente coloca o 'action', para onde que ele vai.
+
+20. Entao, vamos la, ah, esse aqui eh um formulario, vamos colocar, aqui, class="form-horizontal",
+
+    <form method="GET" class="form-horizontal>
+        <div class="form-group">
+
+        </div>
+    </form>
+
+, estou usando, baseado no que tem la na documentacao do Bootstrap.
+
+21. Eu vou pegar 4 colunas para colocar esse input meu.
+
+22. Entao, 'col-sm-4',
+
+    <form method="GET" class="form-horizontal">
+        <div class="form-group">
+            <div class="col-sm-4">
+
+            </div>
+        </div>
+    </form>
+
+, entao, sao 4 colunas. Ai, agora, para eu fazer aquele campinho, de colocar um input e, depois, um botaozinho com a lupinha, eh uma div com a classe 'input-group',
+
+    <form method="GET" class="form-horizontal">
+        <div class="form-group">
+            <div class="col-sm-4">
+                <div class="input-group">
+
+                </div>
+            </div>
+        </div>
+    </form>
+
+, okay? E, aqui, dentro, eu posso colocar os dois elementos, que vai ser o 'input', e tambem sera um span,
+
+    <form method="GET" class="form-horizontal">
+        <div class="form-group">
+            <div class="col-sm-4">
+                <div class="input-group">
+                    <input></input>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+    </form>
+
+, okay? Entao, o input eh onde eu vou digitar, e o 'span' eh para ser o desenho da lupinha.
+
+23. Vamos fazer o desenho da lupinha, aqui, primeiro?
+
+24. Entao, class="input-group-btn", eh assim que esta falando la na documentacao, <button type="submit", que vai enviar o formulario, class="btn btn-default", e, para colocar o iconezinho da pesquisa, eh esse carinha aqui, oh, a lupinha, o desenho dela, eh esse cara, aqui, <i class="glyphicon glyphicon-search">,
+
+    <form method="GET" class="form-horizontal">
+        <div class="form-group">
+            <div class="col-sm-4">
+                <div class="input-group">
+                    <input></input>
+                    <span class="input-group-btn">
+                        <button type="submit" class="btn btn-default">
+                            <i class="glyphicon glyphicon-search"></i>
+                        </button>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </form>
+
+25. Beleza? Vamos ver o que que isso aparece aqui, na Pagina Html?
+
+26. Oh, esta aparecendo assim, o campo de input separado do botao de pesquisar, ainda esta estranho.
+
+27. O que que esta faltando, aqui?
+
+28. Esta faltando o input, aqui, eh, esta faltando o input, eu terminar, colocar a classe dele, oh, o botaozinho de pesquisar esta aqui.
+
+29. No input, vamos colocar as classes, aqui, para ele. Entao, eh a classe 'form-control', Acho que eh so isso,
+
+    <form method="GET" class="form-horizontal">
+        <div class="form-group">
+            <div class="col-sm-4">
+                <div class="input-group">
+                    <input class="form-control"></input>
+                    <span class="input-group-btn">
+                        <button type="submit" class="btn btn-default">
+                            <i class="glyphicon glyphicon-search"></i>
+                        </button>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </form>
+
+30. Eh, ai, ja apareceu ai, oh, o botaozinho mais o input, mais arrumado. Vamos colocar um placeholder aqui?
+
+31. Placeholder eh aquele texto que fica aqui no fundo e, quando eu comeco a digitar, ele some.
+
+32. Entao, vamos colocar aqui, 
+
+    <input class="form-control" placeholder="Qual titulo voce esta procurando?"></input>
+
+, vamos ver? Recarregar a Pagina Html.
+
+33. Olha la, ja fica ali no fundo. E, quando eu comecar a digitar, o texto some, por exemplo, 101.
+
+34. Okay?
+
+35. Vou colocar, aqui, tambem, quando eu acessar essa tela, eu ja quero que ali, o campo de pesquisa, fique com foco, porque, se eu quiser pesquisar, eu ja estou aqui pronto para digitar.
+
+36. Entao, eh so a gente colocar, autofocus = "autofocus",
+
+    <input class="form-control" placeholder="Qual titulo voce esta procurando?"
+        autofocus="autofocus"></input>
+
+37. Salvei aqui, oh, deu Refreshzinho na tela, ta vendo, oh?, toda vez, oh, vou dar um <Enter> aqui, voce vai ver que o mouse, o cursor ja vai para la, para o campo de Pesquisa.
+
+38. Que mais que a gente pode coloca aqui?
+
+39. Eu acho que eh isso, nao eh?
+
+40. Para esse desenhozinho da tela, aqui, esta tudo certo.
+
+41. Na proxima aula, a gente coloca esse cara para enviar a Requisicao para o TituloController, aqui, porque a nossa pesquisa, hoje, o metodo pesquisar() nao esta recebendo ninguem,
+
+    @RequestMapping
+    public ModelAndView pesquisar() {
+        List<Titulo> todosTitulos = this.titulos.findAll();
+        ModelAndView mv = new ModelAndView("PesquisaTitulos");
+        mv.addObject("titulos", todosTitulos);
+        return mv;
+    }
+
+, e, ai, nos vamos receber um filtro, aqui, e modificar, ao inves de a gente fazer um findAll(), eu vou te explicar uma coisa muito legal, que, no Spring Data JPA, tem tambem.
+
+42. Beleza? Entao, esta aula era para desenhar esse Campo de Pesquisa.
+
+43. Fim da Aula 03.009. Prototipo da Caixa de Pesquisa.
+
+-->

@@ -1,0 +1,44 @@
+<!-- 
+
+Aula 03.008. Status Selecionado na Edicao
+
+1. Nesta aula, a gente vai corrigir so um bugzinho pequeno, que aconteceu quando eu venho editar, aqui, um Titulo.
+
+2. Entao, aqui, o Status esta Recebido. Quando eu clicar, aqui, em Editar, ele esta vindo como Pendente.
+
+3. Nao eh? Ele deveria vir, ja selecionado o Recebido. E, ai, eu te pergunto, voce consegue identificar, ai, qual que eh esse problema?
+
+4. Nao eh? Eu ja te expliquei como a gente faz para manter os valores no formulario. Entao, foi isso, eu esqueci de fazer o do status.
+
+5. Da um pause, ai, no video e tenta corrigir voce.
+
+6. Voce conseguiu?
+
+7. Bom, se voce nao conseguiu, quer ver aqui, deixa eu corrigir, quando eu fiz aqui, oh, ta faltando eu colocar, na tela de CadastroTitulo.html, olha so, para manter os valores, a gente tem que usar o 'th:field', nao eh?
+
+8. E eu nao coloquei o 'th:field' aqui, oh, no status,
+
+<select class="form-control" name="status" >>> th:field="*{status}" <<<>
+    <option th:each="status : ${todosStatusTitulo}" th:value="${status}" th:text="${status.descricao}"></option>							
+</select>
+
+9. Entao, faltou isso daqui. Agora, sim, ele vai conseguir manter os valores la no formulario. Quer ver?
+
+10. Vamos dar uma olhada aqui, oh, Voltar para pesquisa, esse cara esta Recebido. Se eu clicar aqui, agora, vai ficar la, na Tela de Cadastro de Titulos, como Recebido.
+
+11. Okay? Entao, eu posso voltar para Pendente, por exemplo, Voltar aqui para pesquisa, esta Pendente. Vamos Receber ele. Recebido, vou em Editar, o Status continua como Recebido. Se eu voltar ele para Pendente, Salvar, Voltar para pesquisa, se eu Editar, agora, vai estar Pendente, tambem.
+
+12. Okay? Se eu salvar para Recebido, ai, sim, ele vai ficar Recebido, e sempre vai ficar, agora, o Status correto, porque tinha faltado, eu tinha esquecido de colocar isso daqui,
+
+<select class="form-control" name="status" >>> th:field="*{status}" <<<>
+
+...							
+</select>
+
+, e so percebi na ultima aula.
+
+13. Fim da Aula 03.008. Status Selecionado na Edicao.
+
+
+
+-->

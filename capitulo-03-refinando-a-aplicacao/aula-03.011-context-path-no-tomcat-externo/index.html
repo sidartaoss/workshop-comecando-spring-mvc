@@ -1,0 +1,335 @@
+<!-- 
+
+Aula 03.011. Context Path no Tomcat Externo
+
+1. Bom, o nosso sistema esta funcionando, rodando, ali, com Spring Boot, dentro do STS, do Eclipse, Vamos so dar uma conferida aqui, oh, se eu salvar, ele esta validando, entao, eu tenho que colocar, aqui, 'Receber Pedro', por exemplo, mandar Salvar, ele mantem os dados no formulario, nao eh?
+
+2. A gente tem o componente calendario, a gente consegue digitar, aqui, um Valor, 100,23, por exemplo, Salvar, Voltar para pesquisa, vamos ver aqui, oh, ficou Pendente, eu posso clicar em Editar, voltar para Edicao, atualizar, o Valor, por exemplo, para 100,50, por exemplo, Voltei aqui na pesquisa, a Edicao foi feita.
+
+3. Eu posso Receber, aqui, usando Ajax, okay?, eu posso Excluir um Titulo, nao eh? A nossa Pesquisa, aqui, esta funcionando, mantendo o valor.
+
+4. Beleza. Entao, voce fala assim, 'Ah, legal. O sistema esta funcionando, acho que esta sem nenhum bugzinho, aqui, agora, beleza, vamos fazer o deploy dele no Tomcat externo.'
+
+5. Ai, o que que eu fiz aqui, oh. Eu tenho, esse cara, aqui, eh um Tomcat. Eu tenho, aqui, um Tomcat, eu tenho, aqui, o deploy de um Tomcat, e esse Tomcat, eu vou colocar, aqui, dentro da pasta webapps o WAR que eu vou gerar, agora, la, pelo STS. Entao, eu vou gerar o WAR, eu vou jogar aqui, no Tomcat/webapps, e, ai, a gente vai ver o que que vai acontecer, vamos ver se a gente consegue acessar o sisteminha.
+
+6. Beleza? Vamos voltar, aqui, no STS, vamos parar esse Tomcat, aqui, no STS, nao eh?, porque, se eu tentar subir os dois juntos, vou ter problema. Entao, garanta, ai, que voce nao esta com o Tomcat, aqui, nao eh?, o seu Projeto iniciado, aqui, com o Spring Boot, porque, senao, vai dar problema la, eles nao conseguirao usar a mesma porta.
+
+7. Deixa eu ver aqui, para eu gerar esse WAR, eu vou clicar, aqui, oh, nesse icone de setinha, no STS, Run Configurations..., ou, entao, eu posso clicar, aqui, na raiz do projeto, com o botao direito, Run As / Maven build...
+
+8. Ai, o que que eu posso fazer? Eu posso renomear, aqui, 'cobranca - war', so para eu saber que eh para gerar o war, e eu posso, em Goals, dar um 'clean package', por exemplo. E mandar dar o Run, aqui.
+
+9. Ele vai, executar, ai, compilar o Projeto, etc, etc. Beleza, executou, ai, a compilacao, nao eh?, finalizou, aqui, com sucesso. Se voce der um F5 ou clicar com o botao direito / Refresh, aqui, na pasta target, no Projeto, no STS, voce vai ver que ele gerou, aqui, um monte de coisas e, entre elas, cobranca-1.0.0.SNAPSHOT.war, que eh o carinha que a gente pode usar para colocar la.
+
+10. So que, se eu colocar esse cobranca-1.0.0.SNAPSHOT.war, eu vou ter que usar esse 1.0.0-SNAPSHOT la no Tomcat, nao eh?, como Context-Path, na hora que eu colocar http://localhost:8080/cobranca, ai, eu tenho que colocar esse caminho todo,
+
+    http://localhost:8080/cobranca-1.0.0-SNAPSHOT
+
+11. Entao, o que que eu posso fazer?
+
+12. Eu posso vir aqui, no pom.xml e, aqui, em <build>,
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+, eu posso vir aqui e colocar aqui, oh,
+
+    <build>
+        <finalName>${project.artifactId}</finalName>
+        <plugins>
+            ...
+        </plugins>
+    </build>
+
+13. Esse cara, aqui,
+
+    <groupId>com.algaworks</groupId>    
+    >>> <artifactId>cobranca</artifactId> <<<
+    <version>1.0.0-SNAPSHOT</version>
+
+, ele vai colocar 'cobranca' no lugar.
+
+14. Entao, ele vai montar o WAR com o nome do 'artifactId'.
+
+15. Okay? So salvar aqui, e fazer a mesma coisa. Agora que eu ja fiz uma vez o build, esta salvo aqui, no Eclipse, no Icone da Setinha, na Barra de Ferramentas.
+
+16. Beleza, executou com sucesso, se eu der um F5 aqui, na pasta 'target', agora, ja ficou a 'cobranca.war'.
+
+17. Okay? Entao, o que que eu vou fazer, aqui, agora?
+
+18. Vamos pegar aqui, oh, eu estou na pasta do Projeto, target / cobranca.war, CTRL + C aqui, vem aqui na pasta do Tomcat, CTRL + V na pasta webapps.
+
+19. O Tomcat, para fazer a instalacao dele, eh muito simples, eh so dar um unzip, eu estou, aqui, com a Versao 8.0.27, tem a versao 9, aqui, no site do Tomcat, mas, ainda nao esta 100% liberada, entao, vamos usar a versao 8. Ai, voce pode baixar, ai, a versao zip.
+
+20. Eu estou na versao 0.27, mas voce pode baixar a versao 0.30, que nao tem nenhum problema. Pode baixar, ai, o zip eh so extrair esse zip ai, qualquer sistema operacional, ou no Linux, no Windows, no Mac, voce pode baixar o zip, e eh so extrair ele.
+
+21. Dentro da pastinha bin, no Linux, a gente vai usar o startup.sh, ou no Mac, e, no Windows, nos vamos o startup.bat.
+
+22. Beleza? Oh, entao, copiei cobranca.war para a pasta Tomcat/webapps. Vamos pegar, aqui, agora, o Console e, aqui, eu vou entrar dentro da pastinha onde esta o Tomcat/bin, e vou executar aqui, oh, startup.bat.
+
+23. Ai, ele vai iniciar o arquivinho de Log, que fica dentro da pasta logs. E, aqui, eu posso usar um programinha chamado 'tail'. No Windows, nao tem esse programinha. No Windows, teria que abrir com um bloco de notas, alguma coisa assim. Mas, no Linux ou no Mac, voce pode fazer um tail -f catalina.out, para ver a mensagem aqui, oh, se, realmente, fez o deploy do projeto e, aqui, toda vez que for atualizando, aqui, vai incrementando sozinho, aqui, as linhas, okay?
+
+24. No Windows, se voce quiser, da uma olhadinha, voce vem na pastinha logs, dentro da instalacao do Tomcat, tem uma pastinha logs, ai, aqui dentro, tem esse catalinha.out, que voce pode usar para ver ele.
+
+25. Beleza? Se voce estiver no Linux ou Mac, voce da um tail -f catalina.out, e deixa ai, para voce ficar vendo, se der algum erro.
+
+26. Okay? Bom, e, ai, eu vou tentar acessar, agora, o Projeto. So para voce ver que esta instalado o Tomcat, se eu acessar http://localhost:8080, a gente tem que cair na telinha do Tomcat, okay? 
+
+27. Se eu fizer, agora, localhost:8080/titulos, que era o que a gente estava fazendo para pesquisar os titulos, ou '/titulos/novo', para cair na Tela de Cadastro, olha so o que vai acontecer, 404,
+
+HTTP Status 404 - /cobranca/
+
+Olha so, deu um 404 do Tomcat, ou seja, o Tomcat nao encontrou nada desse cara aqui. O Tomcat fala, 'Olha, nao sei o que que eh voce, nao.'
+
+28. Porque, no Tomcat, quando eu fiz o deploy assim, do jeito que eu usei, eu fiz o deploy do war, dentro de webapps, o Tomcat adiciona, aqui, o nome do WAR com o Context-Path, ou seja, 'cobranca'. Entao, esse cara aqui, 'cobranca', eu tenho que acessar esse Projeto atraves de cobranca/alguma-coisa. Entao, aqui, oh, o Projeto esta dentro de '/cobranca', ai, sim, ai, eu vou conseguir acessar. Se eu digitar '/cobranca' apenas, voltando, pensando, aqui, nos meus Controllers, eu tenho algum Controller que esta tratando a barra, '/', esta tratando eu digitar so isso aqui,
+
+    http://localhost:8080/cobranca >>> / <<<
+
+, na raiz?
+
+29. Nao tem. Entao, olha so o que vai acontecer,
+
+Whitelabel Error Page
+This application has no explicit mapping for /error, so you are seeing this as a fallback.
+
+Tue Dec 11 22:10:52 BRST 2018
+There was an unexpected error (type=Not Found, status=404).
+No message available
+
+30. Mas, agora, eh um 404 retornado de quem?
+
+31. Do nosso Projeto.
+
+32. O Projeto cobranca que a gente fez. Ta certo? Entao, ele nao encontrou, ele fala assim, oh, 'Nao tem essa barra mapeada, nao tem nenhum Controller para essa barra.'
+
+33. Okay? Entao, se eu colocar http://localhost:8080/cobranca/titulos, e, ai, a gente vai arrumar isso aqui, eu vou colocar, quando ele digitar barra, '/', ele redirecionar para '/titulos', por exemplo.
+
+34. Okay? Entao, se eu digitar, aqui, agora, '/cobranca/titulos', o que que vai acontecer?
+
+35. Veio para ca, mas olha so que coisa estranha. Se eu olhar nessa tela, vamos olhar essa tela, ele trouxe os dados do banco de dados, concorda? Estao todos os dados aqui. Mas, da uma pensada comigo. Cade a imagem? Cade o CSS, nao eh?, as coisas que deveriam..., olha so, 'Tem certeza de que deseja apagar o titulo?', ele ate esta mostrando, aqui, nao eh? Por que? Ele nao conseguiu carregar o Bootstrap, os JavaScripts, nenhum, nenhum. 
+
+36. Se eu mandar mostrar, aqui, no Console do Chrome DevTools, olha so o que que ele fez de erros. Quando eu tento acessar essa pagina, deixa eu limpar aqui, e fazer novamente, vamos dar um <Enter> aqui, na URL, http://localhost:8080/cobranca/titulos, ele vai tentar fazer uma Requisicao, quando eu acesso uma pagina, ai, quando cai aqui, o Browser vai tentar fazer uma Requisicao em todos os outros recursos. Entao, ele vai tentar baixar o CSS, o bootstrap-data-picker, style, jQuery, por ai vai, vai tentar baixar todos esses caras, mas todos retornaram 404, Not Found.
+
+37. Por que que nao conseguiu encontrar? Olha so onde ele ta tentando baixar, oh, 
+
+    http://localhost:8080/css/bootstrap.min.css
+
+, como a gente nao esta mais executando o nosso projeto em barra, '/', a gente esta com o Context-Path, no caso do Tomcat, aqui, '/cobranca', ele nao vai conseguir colocar. Okay?
+
+38. Ai, voce vai falar para mim, assim, 'Ueh, Normandes, entao, a gente tem que colocar esse Context-Path, ou seja, "/cobrancao"?'
+
+39. Sim, temos que colocar esse Context-Path para funcionar, sim. Mas, e na hora que eu tiver usando no Spring Boot? Bom, o Spring Boot a gente ja nao precisa. Ueh, entao, como eh que eu faco?
+
+40. Ai que ta. A gente tem que deixar isso de uma forma dinamica. A gente nao precisa ficar fixo, igual a gente fez no desenvolvimento desse Projeto.
+
+41. Entao, vamos revisar todos os links, aqui, para a gente colocar aquele '@' do Thymeleaf, porque ele ja resolve isso para a gente, tambem.
+
+42. Entao, vamos la, oh. Eu vou vir aqui na pasta 'templates', vamos resolver, primeiro, todos esse links quebrados, aqui, oh, de CSS, Javascript, e de imagens, em LayoutPadrao.html.
+
+43. Vamos dar uma olhada aqui. Eh bem simples para eu resolver isso. Ao inves de eu trabalhar com 'href' direto, eu vou trabalhar com 'th:href' e, no valor, eu vou usar o '@', abre chaves e fecha chaves,
+
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+
+44. Esse carinha, aqui, do Thymeleaf,
+
+    <link rel="stylesheet" th:href=" >>> @{ <<< /css/bootstrap.min.css}" />
+
+, ele ja vai reconhecer, ele ja falar, 'Tem o Context-Path aqui, que ele ja esta executando?'. Tem. Entao, ele ja vai adicionar, automaticamente, o Context-Path para a gente, na hora de fazer o download desses caras.
+
+45. Entao, se eu estiver executando sem o Coontext-Path, ou com Context-Path, nao vai fazer diferenca nenhuma, porque ele vai saber colocar, aqui, para a gente,
+
+    <link rel="stylesheet" th:href=" >>> @{ <<< /css/bootstrap.min.css}" />
+
+, vai montar a URL corretamente para a gente. 
+
+46. Muito legal, nao eh? Entao, eh so a gente desenvolver assim, desde o inicio. Eu quis deixar para mostrar para voce agora porque a gente fez o deploy no Tomcat agora. Okay?
+
+47. Entao, vamos adicionar, aqui, no JS, a mesma coisa, 'th:src', @{...},
+
+    <script th:src="@{/js/jquery.min.js}"></script>
+
+48. Nao pode esquecer de colocar a tag do Thymeleaf, aqui, esse eh um atributo do Thymeleaf, 'th:src', se voce deixar so 'src', nao vai funcionar, esse eh um erro bem comum, com o pessoal que comeca a trabalhar com o Thymeleaf, as vezes esquece de colocar um 'th', e acha que ele ja vai reconhecer, nao vai.
+
+49. Voce tem que colocar o 'th' aqui, na frente,
+
+<script >>> th <<< :src="@{/js/jquery.min.js}"></script>
+
+, okay?
+
+50. Vou salvar, aqui. Deixa eu mandar gerar esse WAR de novo.
+
+51. O que mais esta faltando? No Layout de navegacao, aqui, em Cabecalho.html, eh a imagem, nao eh? Vamos colocar, aqui, 'th:src',
+
+    <img alt="AlgaWorks" th:src="@{/images/logo-algaworks.png}" />
+
+52. Eh so colocar o arquivo WAR na pasta Tomcat/webapps, que o Servidor faz o redeploy.
+
+53. Recarregar a Pagina Html, http://localhost:8080/cobranca/titulos. Ja colocou tudo certinho.
+
+54. Mas eh so isso, sera que o resto esta tudo funcionando? Voce vai ver que nao. Por que? Olha so, o link para 'Novo titulo', vamos inspecionar ele aqui. O link para 'Novo titulo', olha la, '<a class="btn btn-link aw-link-panel" >>> href="/titulos/novo" <<< >Novo titulo</a>'
+
+55. Entao, quando eu clicar aqui, em 'Novo titulo', ele vai tentar redirecionar para '/titulos/novo', ou seja, nao existe essa Pagina. Nao existe esse Projeto 'titulos' la nesse Tomcat. Olha la, em http://localhost:8080/titulos/novo, vai dar um 404,
+
+ HTTP Status 404 - /titulos/novo
+
+ , do Tomcat. Entao, vamos, agora, a gente ja entendeu o motivo, vamos passar em todas essas paginas, nossas, aqui, e tirar onde eu coloquei o link direto, como aqui, oh, em CadastroTitulo.html,
+
+    <div class="clearfix">
+        <h1 class="panel-title aw-titulo-panel">Novo titulo</h1>
+        <a class="btn btn-link aw-link-panel" href="/titulos">Voltar para pesquisa</a>
+    </div>
+
+, vamos passar para 'th:href', e coloca o @{...},
+
+    <div class="clearfix">
+        <h1 class="panel-title aw-titulo-panel">Novo titulo</h1>
+        <a class="btn btn-link aw-link-panel" th:href="@{/titulos}">Voltar para pesquisa</a>
+    </div>
+
+56. Entao, o certo, certo, mesmo, eh voce ja comecar a desenvolver colocando a '@' sempre, nao eh? Porque, ai, voce nao vai cometer, se voce esquecer, depois, nao eh?, algum erro. Aqui, corre o risco de eu passar algum e esquecer de atualizar. Mas acho que, nesta pagina, aqui, do CadastroTitulo.html, eu tenho esse href, aqui, de Voltar, na Pagina de Cadastro, e eh so, que eh para voltar para a Pesquisa, e vou ter, aqui, no action,
+
+    <form class="form-horizontal" method="POST" action="/titulos" th:object="${titulo}">
+    ...
+    </form>
+
+, ja vamos colocar o action, aqui, entao, porque, se eu tentar submeter para '/titulos', ele nao vai encontrar, tem que submeter para onde? Para '/cobranca/titulos', nao eh? Entao, 'th:action="@{/titulos}"',
+
+    <form class="form-horizontal" method="POST" 
+            th:action="@{/titulos}" th:object="${titulo}">
+    ...
+    </form>
+
+57. Entao, ele vai tambem identifica o Context-Path e colocar, aqui, no action, tambem.
+
+58. Vamos la.
+
+59. O DialogoConfirmacaoExclusao.html, tem um th:attr, aqui, tambem,
+
+    <form tr:attr="data-url-base=@{/titulos}" method="POST">
+        ...
+    </form>
+
+60. Agora, em PesquisaTitulos.html. No action, 
+
+    <form method="GET" class="form-horizontal" 
+        th:action="@{/titulos}" th:object="${filtro}">
+    ...
+    </form>
+
+, e vamos olhar aqui, nesses links, aqui, embaixo. Aqui, a gente ja colocou alguns. Uma das funcoes do '@{...}', aqui, dessa expressao do Thymeleaf,
+
+<a class="btn btn-link btn-xs" th:href="@{/titulos/{codigo}(codigo=${titulo.codigo})}" 
+        title="Editar" rel="tooltip" data-placement="top">
+...
+</a>
+
+, eh a gente poder montar links dinamicos, nao eh?, entao, ele permite a gente fazer isso. E a outra eh ja adicionar, entao, o Context-Path. Para esse cara, aqui, ja vai estar funcionando, entao.
+
+61. Okay. Eu imagino que eh isso. Vamos mandar gerar de novo o WAR.
+
+62. E, ai, a gente faz o mapeamento da barra, '/', direcionar para a barra de pesquisa, tambem, entao. Copiar o WAR e colar em Tomcat/webapps. O Tomcat vai fazer o re-deploy dele.
+
+63. '/http://localhost:8080/cobranca/' nao existe. Depois, a gente vai mapear isso. Clicando em 'Novo titulo', apareceu,
+
+HTTP Status 404 - /titulos/novo
+
+64. Em PesquisaTitulos, esqueci de alterar em,
+
+    <a class="btn btn-link aw-link-panel" th:href="@{/titulos/novo}">Novo titulo</a>
+
+65. Entao, o que eu costumo fazer quando eu estou desenvolvendo, aqui? Eu sempre, eu comecei o link, eu ja coloco o '@' e a chaves, '{}'.
+
+66. Okay? Mas acho legal voce ver esses erros acontecendo, nao eh?, para sentir, ver, descobrir qual que eh o problema.
+
+67. Oh, acho que nao esqueci mais nenhum, nao.
+
+68. Agora, vamos fazer o build do WAR, copiar para a pasta 'webapps', no Tomcat, e esperar o re-deploy do WAR.
+
+69. Vamos, agora, tentar mais uma vez, '/cobranca/titulos'. Agora, acessamos, se eu clicar, aqui, em 'Novo titulo', ele ja colocou, eu consigo ver pelo link aqui, embaixo, no Browser, no cantinho esquerdo inferior, eu coloco o mouse em cima, aparece ali.
+
+70. Ele vai mandar para '/cobranca/titulos/novo'. Se eu voltar para a Pesquisa, esta funcionando. Entao, deixa eu cadastrar um aqui, 'Condominio apto 501', '12/06/2016', '250,00', 'Pendente', clicar em Salvar. Oh, salvou com sucesso. 
+
+71. Se eu mandar salvar sem nada, esta validando. Voltar para a Pesquisa, Editar, o link de edicao esta funcionando, o link de exclusao, entao, vamos testar o link de exclusao, esta excluindo. E Receber, tambem esta recebendo, aqui.
+
+72. Entao, acho que a gente resolveu. A Pesquisa, nao eh?, vamos pesquisar, aqui, no Input de Pesquisa, o 301. Esta funcionando, tambem.
+
+73. Entao, beleza, a gente conseguiu resolver o problema do Path, colocando o '@' em todos eles, e nao esquecendo de colocar esse 'th', aqui, em 'th:href'.
+
+74. Okay? E, ai, se eu vier aqui, no Tomcat, agora, e parar ele. Vamos subir a aplicacao, agora, pelo Spring Boot, dentro do STS.
+
+75. Vamos ver se a gente continua com a aplicacao funcionando.
+
+76. Beleza, subiu a aplicacao. Agora, eu tenho que tirar '/cobranca', ali, do Path, e executar em '/titulos'. Ai, sim, esta funcionando. Se eu clicar em Novo titulo, oh, esta tudo funcionando, eu posso editar, posso Salvar, vou editar aqui, alterar o Status, para Pendente, Receber, Pesquisar, aqui, 301. Entao, esta tudo funcionando. Agora, sem o Context-Path, aqui, que o Tomcat adiciona pra gente.
+
+77. Nao eh? Entao, deixou funcionando em qualquer situacao.
+
+78. E ai, vamos so mapear, aqui, se eu digitar, no Browser, barra, '/', ou seja, http://localhost:8080 >>> / <<<, eu caiu, aqui, no 404, do nosso Projeto. Entao, se eu digitar '/', eu vou mapear, eu vou te ensinar, aqui, a mapear para ele sempre enviar para a tela de Pesquisa. Okay?
+
+79. Nos poderiamos criar uma classe Controller, que mapeasse para uma pagina de boas vindas, '/home', por exemplo, 
+
+@Controller
+@RequestMapping("/home")
+public class OutroController {
+
+    ...
+}
+
+80. Mas, eu vou colocar, aqui, uma pequena customizacao, mais uma, aqui, do Spring Boot, em CobrancaApplication.java, que eh o seguinte. Eu posso criar uma classe, aqui, dentro, uma classe estatica, que vai estender de uma outra classe, chamada de WebMvcConfigurerAdapter. E, nessa classe, eu vou adicionar um 'redirect-view-controller', que, toda vez que eu mandar para '/', eu falo para onde que eu quero que ela va.
+
+81. Entao, olha so, como eu faco isso,
+
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+
+    public static class MvcConfig extends WebMvcConfigurerAdapter {
+
+    }
+
+, eu vou chama-la de MvcConfig, por exemplo, e ela vai estender de WebMvcConfigurerAdapter.
+
+82. Eu preciso anotar essa classe com @Configuration, 
+
+    @Configuration
+    public static class MvcConfig extends WebMvcConfigurerAdapter {
+
+    }
+
+okay? E, aqui, eu vou sobrescrever esse metodo aqui, oh, addViewControllers(),
+
+    public void addViewControllers(ViewControllerRegistry registry) {
+
+    }
+
+83. Okay? Eu vou adicionar esse cara, aqui. E, nesse registro, eu vou falar o que eu te expliquei agora, registry.addRedirectViewController(). Se o cara passar uma barra, para onde eu quero que ele va?
+
+    registry.addRedirectViewController("/", );
+
+84. Eu quero que ele va para '/titulos',
+
+    registry.addRedirectViewController("/", "/titulos");
+
+85. Okay? So isso daqui. So colocar esse cara. Vamos testar aqui, no Spring Boot, mesmo, ele ja reiniciou.
+
+86. Testar com http://localhost:8080/, ele ja foi la para '/titulos', ou seja, ficou como 'http://localhost:8080/titulos'.
+
+87. Vamos testar no Tomcat?
+
+88. Vamos fazer o build, para gerar o WAR, aqui. Em seguida, vamos copiar para a pasta 'webapps', no Tomcat, e iniciar o Tomcat.
+
+89. Vamos testar, agora, no Tomcat, '/titulos' nao existe mais, nao eh? Se eu tentar acessar 'http://localhost:8080/titulos', o Tomcat vai responder com 404.
+
+90. Mas, se eu acessar '/cobranca', ele ja vai acessar a pagina, ou seja, http://localhost:8080/cobranca/titulos, ta vendo?
+
+91. Entao, eu tentei colocar, aqui, '/cobranca', que eh o barra, '/', ele redireciona para '/titulos', na Pagina de Pesquisa. 
+
+92. Okay? Essa era a ideia que eu queria mostrar para voce do "@{...}", na expressao, o quanto ele eh importante a gente colocar esse 'th' nas url's. Entao, em action, em href, em src, use sempre essa expressaozinha, aqui, com 'th' e @{...}, de link, do Thymeleaf, para ele resolver questoes de Context-Path, para voce. Vai funcionar em qualquer lugar, com ou sem Context-Path.
+
+93. Fim da Aula 03.011. Context Path no Tomcat Externo.
+
+
+
+-->

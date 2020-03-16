@@ -1,0 +1,73 @@
+<!-- 
+
+    Aula 01.001. Introducao ao Workshop
+
+1. Ola, seja mutio bem-vindo ao Workshop 'Comecando com Spring MVC'. O nome do instrutor eh Normandes, ele eh um dos instrutores da AlgaWorks, e vai ficar conosco durante todo esse Workshop.
+
+2. O instrutor ira falar um pouquinho do que que a gente vai ver neste Workshop, que nao eh somente Spring MVC, a gente tambem vai ver o Spring IOC, o Spring Data, Bootstrap, jQuery, Thymeleaf, e ate o Spring Boot, que facilita bastante a nossa vida para trabalhar com o Spring, o instrutor tem certeza de que nos vamos ficar fas.
+
+3. No ambiente de Desenvolvimento, nos vamos utilizar o Spring Tool Suite, que eh um Eclipse tunado, para a gente trabalhar com o Spring, tambem eh bem legal comecar o projeto la no Spring Tools Suite, vamos ver que eh bem facil, o instrutor chama-o de STS, que eh o apelido dele, que aparece aqui.
+
+4. Nos vamos aprender um pouco sobre o Maven, tambem, para gerenciar as dependencias do nosso Projeto, e a gente vai trabalhar, tambem, com o Live Reload, que eh um carinha, assim, muito bom, depois que o instrutor descobriu-o, trabalhar com aplicacoes Web eh muito facil, porque voce faz uma alteracao, ele ja mostra, eh o live reload, ou seja, faz uma atualizacao ao vivo, e voce ja vai vendo aquilo ali no Browser acontecendo, eh bem legal trabalhar com ele.
+
+5. Para o Servidor rodar a nossa aplicacao, vai ser o Apache Tomcat, e o instrutor vai utilizar o MySQL como banco de dados.
+
+6. Vamos dar uma olhadinha na telinha que a gente vai desenvolver.
+
+7. Com isso tudo que o instrutor nos falou, vamos ver o que que a gente vai desenvolver.
+
+8. Eh um sisteminha de Cadastro de Titulos. Eh um CRUD de Titulos.
+
+9. O que que eh um Titulo?
+
+10. Titulo seria, imagina que eu tenho uma loja, aqui, onde o instrutor mora, no Condominio, o instrutor recebe as parcelas do pessoal que vai pagando. Entao, ele poderia colocar na descricao, por exemplo, de um Titulo, 'Boleto do Apartamento 101', a Data do Vencimento, dia 10, o Valor, R$ 150,00, qual que eh o Status?, esta Pendente ou eu ja recebi esse Valor?
+
+11. Tah certo? Entao, eh um Cadastro de um Titulo que tem um Status, que tem um Valor, tem uma Data de Vencimento, para a gente trabalhar com ele, okay?
+
+12. Entao, essa ai eh a telinha de Cadastro.
+
+13. Nessa telinha, o instrutor ira nos mostrar como a gente coloca um componente Calendario, ali, para a gente facilitar a selecao do ano, ali, tambem, tem, no campo do Valor, tem a mascara para nos irmos digitando o Valor, ele ja ir formatando aquilo ali.
+
+14. Olha so a Telinha de Pesquisa.
+
+15. Entao, voce vai pesquisar o Titulo, entao, aparece ai, o numero do Titulo, a Data de Vencimento, o valor, o status, se ele esta Recebido, ou Pendente, e, ali, tem alguns icones, tem um icone ali, do lapizinho, que eh para a gente Editar esse Titulo, o X para a gente Excluir.
+
+16. Se o Titulo esta Pendente, aparece esse icone aqui, que eh o icone para a gente Receber o Titulo. Eu clicando nesse icone, o instrutor ira nos mostrar isso via Ajax, como eh que a gente poe fazer isso via Ajax, ele vai por tras aqui e Recebe esse Titulo e ja altera aqui o Status de Pendente para Recebido.
+
+17. E, aqui, no campo de input, voce pode fazer uma pesquisa, entao, voce coloca aqui a Descricao do titulo e, ai, voce vai filtrar isso tambem.
+
+18. Okay? quando voce clicar ali no Excluir, vai aparecer, ai, um Modalzinho para confirmar essa exclusao.
+
+19. E, tambem, como o instrutor esta usando Bootstrap, o instrutor ja desenvolveu essa Aplicacao, e a gente vai desenvolver isso daqui do zero, juntos, eh Responsivo, entao, ai, oh, o instrutor esta usando o proprio Chrome, o instrutor vai nos mostrar como eh que a gente faz para visualizar assim, e, ai, o instrutor esta simulando na tela de um iPhone 5.
+
+20. Entao, na tela de um iPhone 5, vai aparecer dessa forma o cadastro de um novo Titulo.
+
+21. Quais sao os Pre-requisitos para a gente fazer esse curso, aqui?
+
+22. O instrutor precisa que nos saibamos ja Java e Orientacao a Objetos.
+
+23. O instrutor nao vai ficar entrando em detalhes, o que eh uma classe, o que eh um objeto, o instrutor ja supoe que nos saibamos isso tambem.
+
+24. O instrutor precisa, tambem, que nos conhecamos um pouco de Html. O instrutor, tambem, nao vai fica explicando o que eh uma tag Html, nao, a gente vai desenvolver tudo do zero, mas o instrutor nao vai ficar explicando todos os detalhes, o que que eh um input?, o que que eh um botao do tipo submit?
+
+25. Um pouquinho de Javascript e jQuery.
+
+26. Okay? O instrutor nao precisa que nos sejamos especialistas em Javascript, nem jQuery, porque o que a gente vai usar, aqui, eh bem simples, para esse sistema, mas, pelo menos, uma nocaozinha disso vai nos ajudar tambem.
+
+27. Nocoes de Desenvolvimento Web tambem eh legal. Saber que tem um Servidor, saber que o Browser, a gente envia dados do Browser para o Servidor, okay?, isso eh legal, tambem, eh interessante.
+
+28. Como estudar?
+
+29. Neste Workshop, nos vamos assistir os videos, o instrutor vai desenvolver esse sistema, as telas que o instrutor nos mostrou, passo-a-passo, e nos vamos assistir esse video 1, 2, 3 vezes, quantas vezes nos precisarmos, para nos conseguirmos entender, okay?, o que o instrutor esta tentando explicar ali.
+
+30. Eh legal, tambem, nos fazermos o que o instrutor esta fazendo.
+
+31. Neste Workshop, eh um Workshop que nos estamos desenvolvendo esse sistema, eh um sistema pequeno, da para nos irmos desenvolvendo, enquanto nos vamos estudando, nos vamos digitando, ali, junto com o instrutor, para tentarmos desenvolver nos mesmos e, ai, nos passarmos pelos problemas, dar um errinho, descobrir como eh que resolve, 'Ah, eu digitei isso aqui errado, faltou aquilo ali', entao, nos desenvolvendo, vai nos ajudar muito, o instrutor sempre faz isso, quando esta estudando alguma coisa, uma tecnologia, o instrutor pensa em um sisteminha que o instrutor quer criar, e, ai, o instrutor vai desenvolvendo aquilo ali, o instrutor mesmo, digitando, para aquilo fixar na cabeca.
+
+32. Nos tambem temos acesso ao codigo-fonte desse Workshop, se nos acessarmos https://github.com/algaworks, la, tem todos os codigos-fontes dos projetos que os instrutores dao aula, entao, la, nos vamos poder pegar esse codigo, para eventuais correcoes em nossos codigos.
+
+33. Suporte.
+
+34. Fim da Aula 01.001. Introducao ao Workshop.
+
+-->

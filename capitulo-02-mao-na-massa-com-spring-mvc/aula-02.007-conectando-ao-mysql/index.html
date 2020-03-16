@@ -1,0 +1,126 @@
+<!-- 
+
+Aula 02.007. Conectando ao MySQL
+
+1. Agora, vamos dizer tchau para o H2. Eh um banco legal para a gente fazer os testes, ali, nao eh?, voce viu que, rapidinho, a gente ja comecou a fazer testes, mas, vamos partir para o MySQL, que da para a gente usar em Producao, se a gente quiser.
+
+2. Entao, vamos la. Eh bem facil a gente conectar o MySQL, aqui. A primeira coisa que eu vou fazer eh tirar a dependencia, aqui, do H2 do pom.xml.
+
+3. Beleza? Nao vamos usar mais esse carinha, entao, eu sumo com ele daqui, e adiciono a dependencia do MySQL,
+
+    <dependency>
+        <groupId>mysql</groupdId>
+        <artifactId>mysql-connector-java</artifactId>
+    </dependency>
+
+, do conector do MySQL, na verdade, nao eh? Entao, o groupId, mysql, artifactId, mysql-connector-java. Okay? So isso.
+
+4. Bom, so isso, assim?
+
+5. Calma, calma.
+
+6. Ja estamos, aqui, com o conector, para ser possivel conectar no MySQL. Eu ja estou, aqui, com o MySQL, instalado, no meu computador, okay?, ja iniciei o MySQL, tambem.
+
+7. Beleza? Entao, voce instala, ai, o MySQL, na sua maquina, no seu Windows, se eh Linux, se eh Mac, eh bem simples instalar o MySQL, nos primeiros capitulos, nas primeiras aulas do primeiro capitulo, o instrutor mostrou onde nos baixamos o MySQL, mas eh bem simples. E, ai, ele ja esta iniciado, aqui. E eu vou adicionar um banco de dados.
+
+8. Vamos adicionar um banco de dados, uma instancia dele. Eu vou chamar de 'cobranca', sao todas as cobrancas, la, que eh o nome do meu Projeto, eh 'cobranca', entao, sao as cobrancas. Database Encoding, UTF-8, okay?, para funcionar acento, porque a gente esta no Brasil.
+
+9. O importante eh trocar para UTF-8, aqui, no Encoding, que vai dar certo. A gente adiciona-o, aqui, pronto, estou com o banco 'cobranca', aqui, funcionando.
+
+10. Como que eu faco, agora, para a minha aplicacao, no pom.xml, eu nao preciso mexer mais nada. Como eh que faco, agora, para a minha aplicacao saber conectar la no MySQL?
+
+11. Eu vou precisar criar la, o XML, o persistence.xml? Bom, para a minha aplicacao conectar no MySQL, eu vou precisar criar persistence.xml, essas coisas?
+
+12. Nao.
+
+13. Nao vou precisar. Aqui, no application.properties, lembra desse arquivinho?, eu tenho configuracoes, aqui, para falar isso, para passar a URL de conexao, Usuario e Senha.
+
+14. Beleza? Como eu estou usando o STS, eu tenho o auto-complete aqui, nesse cara.
+
+15. Entao, oh, se eu colocar, 
+
+spring.datasource
+
+nao eh?, ele ja vai completando ali, oh, o STS vai me lembrando, oh,
+
+spring.datasource.url=
+
+, ai, eu consigo passar, aqui, a URL de conexao.
+
+16. A URL  de conexao do MySQL eh: 'jdbc:mysql://localhost'
+
+, se eu quiser passar a porta, eh 3306, a default, nao eh?, se eu quiser, eu nao preciso passar a porta,
+
+'jdbc:mysql://localhost/cobranca'
+
+, entao, fica, 
+
+    spring.datasource.url=jdbc:mysql://localhost/cobranca
+
+, foi isso que eu chamei o meu banco la.
+
+17. 'spring.datasource.username=root', 
+
+18. 'spring.datasource.password=admin'
+
+19. Porque foi assim, que eu defini.
+
+20. Okay? Eu que defini assim.
+
+21. Se voce criar um usuario diferente, voce tem mais experiencia com MySQL, quiser criar um usuario, dar permissao, fica a vontade, o instrutor esta usando o usuario 'root' e a senha 'root' tambem.
+
+22. As vezes, voce nao criou com senha, mas voce pode, ate, omitir essa propriedade, aqui,
+
+    'spring.datasource.password='
+
+, que deve funcionar.
+
+23. Okay? Bom, sera que eh so isso daqui? Vamos inicar e ver se vai dar certo?
+
+24. Vamos tentar cadastrar um novo titulo, e vamos ver se a gente vai precisar adicionar alguma nova propriedade aqui, em application.properties.
+
+25. Oh, iniciou a aplicacao, vamos, aqui, em '/titulos/novo', vamos colocar, aqui, Descricao 'Cobrança no MySQL', pode ser que de errado, aqui, com o cedilha, mas, nos corrigimos em uma outra aula, ainda.
+
+26. Data de Vencimento '10/01/2016', Valor '100.12', Status 'Pendente', clicar em 'Salvar'.
+
+27. Deu erro.
+
+28. Por que que ele deu erro? Agora, deu erro 500, deu erro no Servidor.
+
+29. Entao, se deu erro no Servidor, entao, eu tenho o meu log, aqui, mais facil.
+
+30. Olha la, 'Table "cobranca.titulo" doesn't exist'.
+
+31. , porque essa tabela nao foi criada la.
+
+32. Quando eu estou no H2, ele cria essa tabela automaticamente, para mim. No MySQL, nao.
+
+33. Entao, o que que eu posso fazer aqui?
+
+34. Eu posso mandar o Spring criar as tabelas para mim, ele ja vai dar o comando, na verdade, nao eh o Spring, nao eh?, ele vai dar o comando para o Hibernate criar essa tabela para mim.
+
+35. Entao, 'spring.jpa.hibernate.ddl-auto=update'
+
+36. Ou seja, toda operacao que tiver no meu Model, que estiver diferente do banco de dados, ele vai fazer essa alteracao. No caso, nao existe a tabela Titulo, entao, ele vai criar essa tabela Titulo para mim.
+
+37. Vamos ver?
+
+38. Parei, vou subir, novamente, aquiu, a aplicacao, vamos dar uma olhada, aqui, '/titulos/novo', Descricao 'Cobranca no MySQL', para a gente testar com acento, se der errado, depois, a gente corrige, Data de Vencimento '10/01/2016', Valor '100.23', Status 'Pendente', e vamos Salvar.
+
+39. Salvou. VAmos consultar no MySQL, agora?
+
+40. Aqui, oh, eu posso dar um Refresh Tables, que vai aparecer a tabelinha, aqui, oh, que foi criada. 'select * from cobranca.titulo', okay?, dar um Run, aqui, oh, tudo certo, Descricao 'Cobrança no MySQL'. Persistiu 10023,00, ou seja, o MySQL nao entendeu o ponto, quando nos informamos, na tela, 100.23.
+
+41. Vamos colocar um novo teste, aqui, Descricao 'Novo Teste', Data de Vencimento '11/01/2016', Valor 100,23. Eh virgula, e nao ponto, porque o ponto ele vai achar que eh separador de milhar, por isso, aquele numero estranho, e Status Pendente. Salvei.
+
+42. Vamos consultar, aqui, no MySQL Workbench, agora, sim, Valor '100.23', nesse novo teste.
+
+43. Beleza?
+
+44. Bom, acho que era isso daqui que o instrutor queria nos mostrar sobre a conexao. Entao, o MySQL esta instalado, a conexao esta configurada, adicionei, aqui, no pom.xml, a definicao do conector, para a gente conseguir conectar nele, e defini, aqui, em application.properties, o update para o hibernate criar as tabelas, as colunas, la, se eu tiver alguma alteracao de coluna, o hibernate vai conseguir atualizar o MySQL para mim.
+
+45. Beleza? 
+
+46. Fim da Aula 02.007. Conectando ao MySQL.
+
+-->

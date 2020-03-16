@@ -1,0 +1,1241 @@
+<!-- 
+
+Aula 02.016. Implementando a Exclusao
+
+1. Vamos, agora, implementar a exclusao.
+
+2. Bom, exclusao vai dar um pouquinho mais de trabalho, para a gente implementar, nao porque eh mais complicado, essas coisas, mas, eh que a parte visual, eu vou colocar algumas coisas a mais.
+
+3. Beleza?
+
+4. Eu vou usar, primeiro, vamos, aqui, no Bootstrap, JavaScript, https://getbootstrap.com/docs/3.3/javascript/, e eu vou usar esse carinha, aqui, oh, o Modal, https://getbootstrap.com/docs/3.3/javascript/#modals.
+
+5. E, ai, so para te mostrar o exemplo, aqui, eh uma caixinha, esse modal, eu vou usar para confirmacao. Entao, eu vou dar um exemplo, aqui, quando eu clico, oh, abre uma nova caixinha, aqui, nao eh?, que eh o modal, e, aqui, eu vou colocar uma informacao, 'Voce tem certeza de que deseja pagar o titulo,...?', e coloca a Descricao do Titulo, alguma coisa assim, e, ai, um botao 'Sim', e um 'Cancel', nao eh?, se a gente mudar de ideia.
+
+6. Okay? Oh, tem o Small, tem o Large, beleza?
+
+7. Tem varios tipos, oh, o Modal tem bastante coisas, ai, ele tem jeito de tirar animacao, tambem usar colunas, no Grid System, tambem eh possivel usar, okay? 
+
+8. Eh possivel variar o conteudo, aqui dentro, oh, da modal, baseado no botao que eu estou criando, okay?, e do botao que eu estou chamando, e eh isso que nos vamos fazer.
+
+9. Ai, a gente precisa usar um pouquinho de JavaScript, aqui. Beleza?
+
+10. Entao, oh, cheguei nessa parte, aqui, quando eu clico nesse botao, eh o mesmo modal, so que, se eu clicar nesse botao, ele vai colocar esse '@mdo' aqui, se eu clicar nesse outro botao, ele vai mandar @'fat', beleza?
+
+11. Se eu clicar nesse aqui, ele vai mostrar o @'getbootstrap', ta vendo?
+
+12. Entao, eh isso que eu vou fazer, beleza, para a gente, quando clicar aqui, vai aparecer o Xzinho, aqui, quando eu clicar no X, vai abrir o Modal, e eu vou colocar uma mensagem do tipo, 'Voce tem certeza que quer apagar o "Condominio Apto 300"'?, no Titulo, ele ele coloca esse nome aqui, 'Condominio Apto 300'.
+
+13. E eh isso que eu quero que apareca, se eu clicar no outro, tem que aparecer essa outra descricao, 'Condominio Apto 102'.
+
+14. Ai, ele explica, na documentacao do Bootstrap, como faz, aqui, https://getbootstrap.com/docs/3.3/javascript/#modals-related-target, 
+
+$('#exampleModal').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) // Button that triggered the modal
+  var recipient = button.data('whatever') // Extract info from data-* attributes
+  // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+  // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+  var modal = $(this)
+  modal.find('.modal-title').text('New message to ' + recipient)
+  modal.find('.modal-body input').val(recipient)
+})
+
+, e eh usando JavaScript.
+
+15. Beleza? Eu preciso do bootstrap.js no meu sistema, eu ja coloquei, aqui, no Projeto, no Eclipse, o jQuery, tambem, a gente baixou o jQuery, na aula passada, e, agora, que a gente vai precisar mesmo desses caras.
+
+16. E, ai, eu vou criar, aqui, na pasta js do Projeto, tambem, um novo arquivo, que eu vou chama-lo de cobranca.js, que eh o nosso arquivo customizado de JavaScript.
+
+17. E nos vamos criar essa parte, aqui, da documentacao do Bootstrap, 
+
+$('#exampleModal').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) // Button that triggered the modal
+  var recipient = button.data('whatever') // Extract info from data-* attributes
+  // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+  // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+  var modal = $(this)
+  modal.find('.modal-title').text('New message to ' + recipient)
+  modal.find('.modal-body input').val(recipient)
+})
+
+, logico, nao eh igualzinho, nao eh?, mas eh inspirado em como a documentacao do Bootstrap explicou para a gente fazer.
+
+18. Okay?
+
+19. Entao, vamos la.
+
+20. A primeira coisa que eu vou fazer eh adicionar o botaozinho, aqui, na Tela de Pesquisa, o Xzinho, para, quando a gente clicar, ele abrir o Modal, nao excluir direto, mas abrir o Modal.
+
+21. Entao, eu vou la em PesquisaTitulos.html, vamos la, aqui, na coluna, 
+
+<td class="text-center">
+<a class="btn btn-link btn-xs" th:href="@{/titulos/{codigo}(codigo=${titulo.codigo})}">
+    <span class="glyphicon glyphicon-pencil"></span>
+</a>
+</td>
+
+, e vai ser um outro link, aqui, com span, class, deixa eu pegar, aqui, na documentacao, qual que ela eh, esta em Components, https://getbootstrap.com/docs/3.3/components/, o Xzinho.
+
+22. O nome dele eh 'glyphicon glyphicon-remove',
+
+<td class="text-center">
+<a class="btn btn-link btn-xs" th:href="@{/titulos/{codigo}(codigo=${titulo.codigo})}">
+    <span class="glyphicon glyphicon-pencil"></span>
+</a>
+<a class="btn btn-link btn-xs">
+    <span class="glyphicon glyphicon-remove"></span>
+</a>
+</td>
+
+23. 'btn-xs' para ser um botaozinho pequeno. Vamos ver se o botaozinho apareceu la na tela de Pesquisa, pelo menos.
+
+24. Beleza, o botaozinho de Excluir esta sendo exibido, nao esta fazendo nada, ainda, ele ja esta ali.
+
+25. Entao, quando eu clicar, eu quero abrir o Modal.
+
+26. Vamos comecar, bem devagarzinho, nao eh?, para a gente ver as coisas acontecendo aos poucos.
+
+27. Bom, eu vou colocar, logo aqui embaixo, oh, dessa div, vamos comecar a colocar o modal aqui,
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            ...
+        </div>
+        <div class="panel-body">
+            ...
+        </div>
+
+
+        >>> <<<
+
+    </div>
+
+, e, depois, a gente tira isso e faz um include. Se bem que a gente ja pode fazer isso, nao eh? Acho que a gente ja sabe como eh que faz isso, nao eh? Entao, eu vou criar, aqui, na pasta templates, um novo arquivo, DialogoConfirmacaoExclusao.html.
+
+28. E, ai, deixa eu copiar, por exemplo, de Mensagem.html,
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:th="http://www.thymeleaf.org"
+		xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+</html>
+
+29. Beleza. Aqui, a gente vai implementar o Dialogo de Confirmacao, e a gente, simplesmente, inclui-o, aqui, em PesquisaTitulos.html, vamos colocar uma div, aqui,
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            ...
+        </div>
+        <div class="panel-body">
+            ...
+        </div>
+
+
+        <div layout:include="DialogoConfirmacaoExclusao"></div>
+
+    </div>
+
+30. Beleza?
+
+31. Bom, uma das formas que o Bootstrap faz para fazer aparecer o Modal, aqui, eh usando algumas atributos data, que eu posso colocar no nosso elemento.
+
+32. Entao, por exemplo, se eu colocar, aqui,
+
+<a class="btn btn-link btn-xs">
+    <span class="glyphicon glyphicon-remove"></span>
+</a>
+
+, oh, data-toggle="modal" data-target="", e colocar o ID do meu modal, por exemplo, #confirmacaoExclusaoModal, so colocar isso daqui, 
+
+<a class="btn btn-link btn-xs" data-toggle="modal" data-target="#confirmacaoExclusaoModal">
+    <span class="glyphicon glyphicon-remove"></span>
+</a>
+
+e, aqui, no meu Modal, em DialogoConfirmacaoExclusao.html, eu vou comecar a cria-lo, aqui.
+
+33. Vamos la, oh, 
+
+    <div class="modal fade" 
+
+, vou implementando, de acordo com o que esta na documentacao, aqui, em JavaScript / Modal, https://getbootstrap.com/docs/3.3/javascript/#modals.
+
+34. Okay? Eh so ir olhando, aqui, e vendo, mais ou menos, como ele faz, oh, 'modal fade', eh so ir seguindo essa sequencia, aqui.
+
+35. O ID, entao, eu vou colocar exatamente esse, 'confirmacaoExclusaoModal', sem o jogo-da-velha, ali,
+
+    <div class="modal fade" id="confirmacaoExclusaoModal">
+
+    </div>
+
+, vamos colocar aqui, tabIndex="-1", por enquanto, eh isso daqui,
+
+    <div class="modal fade" id="confirmacaoExclusaoModal" tabIndex="-1">
+
+    </div>
+
+, vamos ver, eu quero ver o modal aparecendo,
+
+    <div class="modal fade" id="confirmacaoExclusaoModal" tabIndex="-1">
+        <div class="modal-dialog">
+
+        </div>
+    </div>
+
+, okay?, vamos colocar, aqui, um div 'modal-content',
+
+    <div class="modal fade" id="confirmacaoExclusaoModal" tabIndex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+            </div>
+        </div>
+    </div>
+
+, conteudo do modal, o que que vai aparecer nele. E, ai, div 'modal-header', vai ser o cabecalho desse Modal,
+
+    <div class="modal fade" id="confirmacaoExclusaoModal" tabIndex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+, e, aqui, eu vou colocar, por exemplo, um botao,
+
+    <div class="modal fade" id="confirmacaoExclusaoModal" tabIndex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"></button
+                </div>
+            </div>
+        </div>
+    </div>
+
+, esse cara eh o botao que fecha o modal. E tambem vou colocar um titulo, aqui, 'modal-title',
+
+    <div class="modal fade" id="confirmacaoExclusaoModal" tabIndex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"></button
+                    <h4 class="modal-title">Voce tem certeza?</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+
+, beleza?
+
+36, Abaixo de 'modal-header', outro div, 'modal-body', vai ser o corpo do modal. Aqui, por exemplo, pode ter um span, aqui, ai, eu vou substituir isso aqui via Javascript, depois, 'Tem certeza que deseja apagar o titulo?', e, ai, a gente vai colocar o nome do titulo,
+
+    <div class="modal fade" id="confirmacaoExclusaoModal" tabIndex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"></button
+                    <h4 class="modal-title">Voce tem certeza?</h4>
+                </div>
+
+                <div class="modal-body">
+                    <span>Tem certeza que deseja apagar o titulo?</span>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+37. E, no 'modal-footer', la embaixo, eu vou colocar um botao, data-dismiss="modal", para a gente fechar o modal, esse eh o botao-link Cancelar,
+
+<div class="modal fade" id="confirmacaoExclusaoModal" tabIndex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"></button
+                <h4 class="modal-title">Voce tem certeza?</h4>
+            </div>
+
+            <div class="modal-body">
+                <span>Tem certeza que deseja apagar o titulo?</span>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-link" data-dismiss="modal">Cancelar</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+38. E tambem vou colocar, aqui, um botao de submit, e, aqui, vai ser o "Excluir", de verdade,
+
+<div class="modal fade" id="confirmacaoExclusaoModal" tabIndex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"></button
+                <h4 class="modal-title">Voce tem certeza?</h4>
+            </div>
+
+            <div class="modal-body">
+                <span>Tem certeza que deseja apagar o titulo?</span>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-link" data-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-primary">Excluir</button>
+            </div> 
+
+        </div>
+    </div>
+</div>
+
+39. Esse cara, aqui, vai submter o formulario.
+
+40. Qual formulario? 
+
+41. Nos nao criamos o formulario, aqui, deixa eu colocar, eu vou colocar aqui, oh, dentro do dialogo do modal, 'modal-dialog',
+
+<div class="modal fade" id="confirmacaoExclusaoModal" tabIndex="-1">
+    <div class="modal-dialog">
+        <form></form>
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"></button
+                <h4 class="modal-title">Voce tem certeza?</h4>
+            </div>
+
+            <div class="modal-body">
+                <span>Tem certeza que deseja apagar o titulo?</span>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-link" data-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-primary">Excluir</button>
+            </div> 
+
+        </div>
+    </div>
+</div>
+
+, e nos vamos adicionar 'modal-content' dentro desse formulario,
+
+<div class="modal fade" id="confirmacaoExclusaoModal" tabIndex="-1">
+    <div class="modal-dialog">
+        <form>            
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"></button
+                    <h4 class="modal-title">Voce tem certeza?</h4>
+                </div>
+
+                <div class="modal-body">
+                    <span>Tem certeza que deseja apagar o titulo?</span>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Excluir</button>
+                </div> 
+            </div>
+        </form>
+    </div>
+</div>
+
+, vai ter o action='', vamos para '/titulos', metodo, normalmente, o metodo, aqui, deveria ser o 'DELETE', mas eu ja tive problemas com isso daqui em formulario, entao, eu coloco, aqui, POST, e o Spring, ele consegue reconhecer que eu quero fazer um DELETE, que, na hora em que eu mapear, la no meu Controller, eu vou colocar que o metodo eh o DELETE, entao, eu ponho, aqui, um input type hidden, name '_method', value 'DELETE',
+
+<div class="modal fade" id="confirmacaoExclusaoModal" tabIndex="-1">
+    <div class="modal-dialog">
+        <form action="/titulos" method="POST">
+            <input type="hidden" name="_method" value="DELETE" />            
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"></button
+                    <h4 class="modal-title">Voce tem certeza?</h4>
+                </div>
+
+                <div class="modal-body">
+                    <span>Tem certeza que deseja apagar o titulo?</span>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Excluir</button>
+                </div> 
+            </div>
+        </form>
+    </div>
+</div>
+
+42. Isso aqui,
+
+<input type="hidden" name="_method" value="DELETE" />
+
+, significa que eu posso mapear, la, no meu Controller, com o metodo 'DELETE'. Nos ja vamos chegar la, mas, ai, eu tenho que colocar, aqui, o name como '_method'. Porque, se voce colocar 'DELETE', aqui, no formulario, 
+
+    <form action="/titulos" method="DELETE"></form>
+
+, ele nao aceita, nao funciona bem. Pode ser que funcione em alguma versao de um Browser, e tal, tem alguns truques, ai, via JavaScript, mas, ai, eu prefiro fazer assim, deixo, aqui, 'POST',
+
+    <form action="/titulos" method="POST"></form>
+
+, e adiciono esse '_method', aqui, coloco 'DELETE', e mapeio, la, no Controller, como 'DELETE',
+
+<input type="hidden" name="_method" value="DELETE" />
+
+43. Okay? Bom, eu acho que eh isso daqui, salvei, o ID eh o mesmo ID que esta em PesquisaTitulos.html, 
+
+<a class="btn btn-link btn-xs" data-toggle="modal" data-target="#confirmacaoExclusaoModal">
+    <span class="glyphicon glyphicon-remove"></span>
+</a>
+
+, entao, eu acredito que deva aparecer o modal, quando eu clicar aqui no Xzinho, na Tela de Pesquisa. Vamos ver?
+
+44. Viu como eh bem simples? Oh, o botao Cancelar fecha a Modal. Nao tem o botao em cima da Modal, para fecha-la. Entao, na verdade, em DialogoConfirmacaoExclusao, vamos tirar esse botao, aqui,
+
+<div class="modal-header">
+    <h4 class="modal-title">Voce tem certeza?</h4>
+</div>
+
+45. Aqui, quando eu clico fora, o Modal esta fechando, oh, ai, se eu nao quiser, se eu quiser que o cara sempre tenha que clicar no Cancelar, la embaixo? Entao, eu posso vir aqui e colocar..., acho que, se eu apertar ESC tambem, a Modal sumiu. Se eu nao quiser que isso apareca, eu posso colocar, aqui, oh, data-keyboard="false", e data-backdrop="static",
+
+    <div class="modal fade" id="confirmacaoExclusaoModal" tabIndex="-1" data-keyboard="false" data-backdrop="static">
+
+    </div>
+
+46. Se eu colocar isso daqui, ai, eu venho aqui, na Pagina de Pesquisa, clico no Xzinho, apareceu o Modal, vou pressionar ESC, nao esta saindo, e eu posso clicar, aqui, de fora do Modal, que tambem nao sai, oh, ta vendo? Entao, o Bootstrap eh um cara muito bom, nao eh? Tem que ir lendo esses carinhas, todos, aqui, na documentacao, para ir aprendendo. O instrutor confessa que nao sabe essas coisas todas, de cabeca, claro, o instrutor tem que, sempre que vai usar, eu quero usar o Modal, eu venho aqui, na documentacao, vou dando uma lida na documentacao, para eu aprender novamente, o instrutor nao sabe tudo de cor, nao.
+
+47. Okay? Entao, o Modal esta aparecendo, aqui. Beleza? Se eu clicar, aqui, em 'Excluir', ele nao vai fazer nada, porque eu nao fiz o mapeamento do 'DELETE', no Controller.
+
+48. Deixa eu ver se ele esta enviando alguma coisa, aqui, em Network, no Chrome DevTools, clicar no botao Excluir, eh, ele nao esta fazendo nada, ele esta fazendo um POST, la, esta passando _method DELETE, mas, como nao esta mapeado, ele nao esta nem se importando com isso.
+
+49. Beleza, entao, vamos mapear o metodo 'DELETE', para '/titulos', no nosso TituloController.
+
+50. Okay?, vamos, aqui, embaixo, 
+
+@RequestMapping(method = RequestMethod.DELETE)
+public void excluir() {
+
+}
+
+51. Entao, eu quero receber, aqui, sempre quando for DELETE, eh que eu quero cair no metodo excluir(). Como que eh, normalmente, a URL de uma exclusao, tentando seguir as boas praticas, ai?
+
+52. Eh receber, tambem, como eu recebi, aqui,
+
+	@RequestMapping("{codigo}")
+	public ModelAndView edicao(@PathVariable("codigo") Titulo titulo) {			
+			ModelAndView mv = new ModelAndView(CADASTRO_VIEW);
+			mv.addObject(titulo);
+			return mv;
+	}
+
+, o codigo, para edicao(), so que o metodo em DELETE, ao inves de ser GET, como eh o caso aqui,
+
+	@RequestMapping(method = RequestMethod.DELETE)
+	public void excluir() {
+		
+	}
+
+, eu vou receber via DELETE.
+
+53. Entao, eu posso fazer isso aqui, oh, @RequestMapping(value = {codigo}, method = RequestMethod.DELETE). Entao, se eu estiver recebendo o codigo, no PATH, ali, via DELETE, eu vou cair nesse metodo, aqui,
+
+    @RequestMapping(value = {codigo}, method = RequestMethod.DELETE)
+    public void excluir() {
+
+
+    }
+
+54. E esse codigo, eu vou receber aqui, oh, 
+
+    @RequestMapping(value = {codigo}, method = RequestMethod.DELETE)
+    public void excluir(@PathVariable Long codigo) {
+
+    }
+    
+55. Aqui, eu nao vou converter, direto, para Titulo, porque eu ja posso excluir um titulo a partir do codigo. Eu posso usar, aqui, oh, tem um delete(), aqui, oh, ele ja recebe o ID, direto,
+
+    @RequestMapping(value = {codigo}, method = RequestMethod.DELETE)
+    public void excluir(@PathVariable Long codigo) {
+        titulos.delete(codigo);
+    }
+
+, eu ja consigo excluir esse cara, aqui, direto. Beleza?
+
+56. Entao, eu posso fazer isso e eu vou retornar, aqui, um ModelAndView, 
+
+    @RequestMapping(value = {codigo}, method = RequestMethod.DELETE)
+    public ModelAndView excluir(@PathVariable Long codigo) {
+        titulos.delete(codigo);
+    }
+
+, ou vamos retornar uma String, por enquanto,
+
+    @RequestMapping(value = "{codigo}", method = RequestMethod.DELETE)
+    public String excluir(@PathVariable Long codigo) {
+        titulos.delete(codigo);
+
+        return "redirect:/titulos";
+    }
+
+, para ele refazer a pesquisa.
+
+57. Entao, por enquanto, eh isso daqui.
+
+58. Beleza? Depois, a gente adiciona mensagens, para confirmar a exclusao, mas so vamos ver se isso aqui vai funcionar.
+
+59. E, aqui, na confirmacao da exclusao, em DialogoConfirmacaoExclusao.html, vamos apagar o primeiro registro, de codigo 1,
+
+    		<form action="/titulos/1" method="POST">
+                ...
+            </form>
+
+, vou colocar, aqui, ele submeter fixo para a URL 'titulos/1', okay?, so para a gente ver se ele vai apagar no banco de dados, vai fazer o Refreshzinho aqui, na tela de Pesquisa.
+
+60. Vou clicar, aqui, no Xzinho do Registro de Codigo 1, vai aparecer o formulario de Confirmacao, se eu inspecionar esse cara, mostrar o codigo-fonte dele, aqui, olha aqui, para voce ver, oh, ele vai fazer um POST, na verdade, vai ser um DELETE, la, para o Spring, em '/titulos/1', ou seja, eu vou tentar apagar o Titulo de Codigo 1,
+
+        <form action="/titulos/1" method="POST">
+			<input type="hidden" name="_method" value="DELETE">
+            ...
+		</form>
+
+61. Vamos tentar clicar em Excluir, depois, ele vai fazer um Redirect, e eh para sair esse cara, aqui, de codigo 1.
+
+62. Okay, funcionou. Beleza? Posso dar um Refresh, aqui, oh, entao, sumiu. Entao, a minha exclusao funcionou.
+
+63. A exclusao esta funcionando. Se eu clicar aqui, no Xzinho, ele vai tentar apagar o de codigo 1 de novo, porque eu ainda nao deixei esse cara aqui dinamico,
+
+        <form action=" >>> /titulos/1 <<< " method="POST">
+			<input type="hidden" name="_method" value="DELETE">
+            ...
+		</form>
+
+64. Nao eh? E nos vamos fazer isso via Javascript. Por que via Javascript? Eu preciso pegar o codigo de cada uma dessas linhas, aqui, na Tela de Pesquisa, para passar, la, para o formulario, na Tela Modal, nao eh?, entao, eu preciso editar esse cara,
+
+    <form action=" >>> /titulos <<< " method="POST">
+        ...
+    </form>
+
+, e preciso colocar, aqui,
+
+    <div class="modal-body">
+        >>> <span>Tem certeza que deseja apagar o titulo?</span> <<<
+    </div>
+
+, ao inves de deixar essa mensagem fixa, eu vou passar, aqui, tambem, a descricao do Titulo.
+
+65. Beleza? Entao, 'Voce tem certeza que deseja apagar o "Condominio Apto 102?"', vai ser alguma coisa assim.
+
+66. Okay? Entao, vamos la, vamos implementar isso aqui. 
+
+67. No TituloController.java, depois, a gente mexe, aqui, para adicionar a mensagem.
+
+68. Agora, nos vamos mexer, mesmo, eh na cobranca.js.
+
+69. Toda vez que o Modal aparecer, um evento Javascript eh lancado e eu posso adicionar uma funcao nele.
+
+70. Okay? E eu vou fazer isso usando jQuery.
+
+71. Como eh que eu faco isso? Esse evento eh lancado automaticamente, ai, pelo Bootstrap.
+
+72. Okay? Entao, eu vou fazer o seguinte, eu pego o ID, aqui, oh, confirmacaoExclusaoModal, e vou fazer assim, oh,
+
+$('#confirmacaoExclusaoModal')
+
+, coloco, aqui, o ID, no Bootstrap, e eu falo o seguinte, 'Toda vez que "show.bs.modal" acontecer, eu quero executar uma funcao que recebe, aqui, um evento como parametro',
+
+$('#confirmacaoExclusaoModal').on('show.bs.modal', function(event) {
+
+});
+
+73. O 'on' eh, ao exatamente, eh, ao esse evento acontecer,
+
+    'show,bs.modal'
+
+, eu quero executar essa funcao,
+
+$('#confirmacaoExclusaoModal').on('show.bs.modal', >>> function(event) <<< {
+
+});
+
+, que eu passo, aqui, como parametro.
+
+74. Como eh que voce aprendeu isso, Normandes, como eh que voce descobriu esse nome, 'show.bs.modal'?
+
+75. Vamos, la, na documentacao, https://getbootstrap.com/docs/3.3/javascript/#modals.
+
+76. O Modal, se a gente olhar aqui, oh, ele estava falando, aqui, oh,
+
+$('#exampleModal').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) // Button that triggered the modal
+  var recipient = button.data('whatever') // Extract info from data-* attributes
+  // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+  // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+  var modal = $(this)
+  modal.find('.modal-title').text('New message to ' + recipient)
+  modal.find('.modal-body input').val(recipient)
+})
+
+, ta vendo? Estou fazendo exatamente da mesma forma que ele faz.
+
+77. Okay? Entao, vamos la, vamos continuar, aqui. E, ai, o que que eu quero fazer aqui?
+
+78. Eu quero editar, entao, esse '/titulos', aqui, 
+
+    <form action="/titulos" method="POST">
+        ...
+    </form>
+
+, para concatenar com o codigo, beleza? entao, eu preciso pegar o codigo.
+
+79. Como eh que eu vou pegar o codigo, aqui?
+
+80. O que que eu posso fazer? Eu posso usar um truque, aqui. Que truque que eu posso usar?
+
+81. No botao, aqui, que eu clicar, em PesquisaTitulos.html,
+
+<a class="btn btn-link btn-xs" data-toggle="modal" data-target="#confirmacaoExclusaoModal">
+    <span class="glyphicon glyphicon-remove"></span>
+</a>
+
+, se eu adicionar, aqui, no botao, que eu clicar, alguns atributos extras, eu posso pegar esses atributos la no Javascript.
+
+82. Por exemplo, eu vou adicionar, aqui, um 'data-codigo', por exemplo, com isso daqui, oh, data-codigo="${titulo.codigo}"
+
+<a class="btn btn-link btn-xs" data-toggle="modal" data-target="#confirmacaoExclusaoModal" data-codigo="${titulo.codigo}">
+    <span class="glyphicon glyphicon-remove"></span>
+</a>
+
+83. Okay? Ai, la no Javascript, vai ser possivel acessar esse codigo, aqui, esse data-codigo para recuperar esse codigo, que eh o codigo que eu estou pegando aqui, ou seja, "${titulo.codigo}".
+
+84. Okay? A mesma coisa que a gente fez, aqui, para edicao.
+
+85. Bom, so que, se eu colocar isso aqui,
+
+
+<a class="btn btn-link btn-xs" data-toggle="modal" data-target="#confirmacaoExclusaoModal" >>> data-codigo="${titulo.codigo} <<< ">
+    ...
+</a>
+
+, o Thymeleaf nao vai entender. Vai falar, 'O que que eh esse cara, aqui?', simplesmente, nao sabe, nao eh?, porque a gente precisa colocar, aqui, tudo tem que ser via 'th', nao eh? So que voce nao pode inventar o que voce quiser aqui, depois,
+
+<a class="btn btn-link btn-xs" data-toggle="modal" data-target="#confirmacaoExclusaoModal" >>> th:asdfas <<< data-codigo="${titulo.codigo}">
+    ...
+</a>
+
+, eu nao posso colocar, aqui, 'th:data-codigo', achando que vai funcionar. Nao vai. o Thymeleaf nao vai entender.
+
+86. Para eu adicionar um atributo qualquer extra, aqui, nessa tag, 'th', eu vou fazer o seguinte, eu vou colocar 'th:attr', e, ai, eu abro, coloco, aqui, entre aspas duplas, ai, eu posso tirar aspas duplas aqui de dentro, th:attr="data-codigo=${titulo.codigo}",
+
+<a class="btn btn-link btn-xs" data-toggle="modal" data-target="#confirmacaoExclusaoModal" th:attr="data-codigo=${titulo.codigo}">
+    ...
+</a>
+
+87. Quando o Thymeleaf estiver avaliando esse cara, aqui, o 'th:attr', ele simplesmente tira esse cara, aqui, o 'th:attr', e vai deixar 'data-codigo=', e vai avaliar essa expressao, aqui, "${titulo.codigo}", tambem. Entao, vai ficar data-codigo=5, data-codigo=6, data-codigo=7, em cada linha, vai ser um valor diferente.
+
+88. Okay? Entao, vamos la. Vamos salvar, aqui.
+
+89. Vamos voltar, aqui, em cobranca.js.
+
+90. E como eh que eu faco, aqui, no Javascript, para pegar esse cara?
+
+91. Eh bem simples. Primeiro, eu preciso pegar o botao. Entao, eu vou pegar o botao, aqui, o button, la, que eu cliquei,
+
+$('confirmacaoExclusaoModal').on('show.bs.modal', function(event) {
+
+});
+
+, para eu pega-lo, eu vou usar, aqui, oh, esse evento que eu recebi,
+
+$('confirmacaoExclusaoModal').on('show.bs.modal', function(event) {
+    var button = $(event.relatedTarget)
+});
+
+, $event.relatedTarget, ou seja, quem disparou o evento, qual botao que disparou o evento?
+
+91. Ai, aqui, eu posso colocar, em uma variavel, oh, codigoTitulo = button.data('codigo');
+
+
+$('confirmacaoExclusaoModal').on('show.bs.modal', function(event) {
+    var button = $(event.relatedTarget)
+
+    var codigoTitulo = button.data('codigo');
+});
+
+
+92. Esse botao, aqui, 
+
+$('confirmacaoExclusaoModal').on('show.bs.modal', function(event) {
+    var >>> button <<< = $(event.relatedTarget)
+
+    var codigoTitulo = button.data('codigo');
+});
+
+, eh uma variavel que ela eh do jQuery, ela uma variavel do tipo do jQuery, entao, eu posso usar essa funcao data(), do jQuery, para recuperar os atributos do tipo data daquele botao, ou seja, button. No caso, la, vai ter o codigo.
+
+93. So para a gente ver isso aparecendo, eu vou colocar um alerta, aqui, oh, alert(codigoTitulo);
+
+$('confirmacaoExclusaoModal').on('show.bs.modal', function(event) {
+    var >>> button <<< = $(event.relatedTarget)
+
+    var codigoTitulo = button.data('codigo');
+
+    alert(codigoTitulo);
+});
+
+94. So para voce ver. Na hora que aparecer o Modal, vai aparecer o codigo daquele titulo.
+
+95. Vamos ver, aqui, na Tela de Pesquisa, clicar no botao de Excluir, era para aparecer o alert().
+
+96. Vamos ver o que que aconteceu, aqui. Nao apareceu porque eu nao adicionei esse arquivo cobranca.js na minha Pagina ainda, nao eh?, como eh que ele vai saber?
+
+97. Entao, vamos, aqui, em LayoutPadrao.html, no final de todos, aqui, vamos adicionar, aqui, cobranca.js,
+
+	<script src="/js/jquery.min.js"></script>
+	<script src="/js/bootstrap.min.js"></script>	        
+    <script src="/js/cobranca.js"></script>
+
+, senao, nao vai aparecer, nao eh?, nunca vai executar aquele cara, nao eh?
+
+98. Beleza. Vamos executar, aqui, mais uma vez, na Tela de Pesquisa, clicar no Xzinho, deve aparecer o alert com o codigo.
+
+99. Okay, esta aparecendo o alert com o codigo.
+
+100. Beleza, entao, esta aparecendo, aqui, o codigoTitulo, em cobranca.js, e eu ja consigo, entao, agora, editar, por exemplo, esse action, aqui, do formulario, na Pagina DialogoConfirmacaoExclusao.html,
+
+    <form action=">>> /titulos <<<" method="POST">
+        ...
+    </form>
+
+, para colocar ele com esse codigo, aqui, de cobranca.js,
+
+$('#confirmacaoExclusaoModal').on('show.bs.modal', function(event) {
+	var button = $(event.relatedTarget);
+	
+	>>> var codigoTitulo = button.data('codigo'); <<<
+	
+});
+
+, no final,
+
+    <form action="/titulos >>> <<<" method="POST">
+        ...
+    </form>
+
+101. Entao, vamos la. Como eh que eu vou fazer isso daqui? Eu vou pegar o Modal, e, a partir do Modal, eu vou encontrar o formulario.
+
+102. Entao, eu vou fazer isso daqui, oh, var modal = $(this), a partir desse cara, aqui, eu quero o Modal, so estou transformando ele em um objeto do jQuery, para me mdar os metodos mais legais, aqui,
+
+$('#confirmacaoExclusaoModal').on('show.bs.modal', function(event) {
+	var button = $(event.relatedTarget);
+	
+	var codigoTitulo = button.data('codigo');
+
+    >>> var modal = $(this); <<<
+	
+});
+
+103. Entao, var form, para eu pegar o formulario, ai, eu posso fazer, aqui, um modal.find('form');
+
+$('#confirmacaoExclusaoModal').on('show.bs.modal', function(event) {
+	var button = $(event.relatedTarget);
+	
+	var codigoTitulo = button.data('codigo');
+
+    var modal = $(this);
+
+    >>> var form = modal.find('form'); <<<
+	
+});
+
+, ai, ele vai encontrar o formulario, la, para mim.
+
+104. Eu quero pegar o action. O que que esta la no action?, var action = form.attr('action'),
+
+$('#confirmacaoExclusaoModal').on('show.bs.modal', function(event) {
+	var button = $(event.relatedTarget);
+	
+	var codigoTitulo = button.data('codigo');
+
+    var modal = $(this);
+
+    var form = modal.find('form');
+
+    >>> var action = form.attr('action'); <<<
+	
+});
+
+105. Okay? Com isso, eu peguei essa string aqui, oh, em DialogoConfirmacaoExclusao.html,
+
+    <form action=" >>> /titulos <<<" method="POST">
+        ...
+    </form>
+
+106. Beleza? E, ai, eu vou verificar, aqui, e, aqui, ja eh um truquezinho, que eh o seguinte, se essa string nao terminar com barra, '/', entao, oh, if (!action.endsWith('/')), por que que eu vou colocar isso daqui? As vezes, la, esta terminando com barra, as vezes, nao, depende, pode ser que isso aconteca, entao, eh um truquezinho que eu costumo usar para nao ter problema, porque, se eu colocar duas barras la, pode dar problema,
+
+$('#confirmacaoExclusaoModal').on('show.bs.modal', function(event) {
+	var button = $(event.relatedTarget);
+	
+	var codigoTitulo = button.data('codigo');
+
+    var modal = $(this);
+
+    var form = modal.find('form');
+
+    var action = form.attr('action');
+
+    >>> if (!action.endsWith('/')) { } <<<
+	
+});
+
+107. Entao, eu faco o seguinte, oh, action += '/', entao, se nao terminou com barra, eu coloco. Se ja esta terminando com barra, eu nao vou colocar nenhuma barra na action, mais,
+
+$('#confirmacaoExclusaoModal').on('show.bs.modal', function(event) {
+	var button = $(event.relatedTarget);
+	
+	var codigoTitulo = button.data('codigo');
+
+    var modal = $(this);
+
+    var form = modal.find('form');
+
+    var action = form.attr('action');
+
+    if (!action.endsWith('/')) {
+        >>> action += '/'; <<<
+    }
+	
+});
+
+108. E, ai, aqui, no formulario, eu vou, no atributo action, nao eh?, que eh editar ele, eu vou colocar action + o codigo do titulo, ou seja, form.attr('action', action + codigoTitulo);
+
+$('#confirmacaoExclusaoModal').on('show.bs.modal', function(event) {
+	var button = $(event.relatedTarget);
+	
+	var codigoTitulo = button.data('codigo');
+
+    var modal = $(this);
+
+    var form = modal.find('form');
+
+    var action = form.attr('action');
+
+    if (!action.endsWith('/')) {
+        action += '/';
+    }
+
+    form.attr('action', action + codigoTitulo);
+	
+});
+
+109. Entao, esse pedacinho de codigo, aqui,
+
+    var modal = $(this);        
+    var form = modal.find('form');
+    var action = form.attr('action');
+    if (!action.endsWith('/')) {
+        action += '/';
+    }
+    form.attr('action', action + codigoTitulo);
+
+ o que que eu faco? Eu pego esse '/titulos', na Pagina de Modal,
+
+<form action="/titulos" method="POST">
+
+    ...
+</form>
+
+, se ele estiver terminando com barra, 
+
+<form action="/titulos/" method="POST">
+
+    ...
+</form>
+
+, eu, simplesmente, adiciono o codigo, la, 
+
+<form action="/titulos/5" method="POST">
+
+    ...
+</form>
+
+, 5, por exemplo. Se ele nao estiver terminando com barra,
+
+<form action="/titulos" method="POST">
+
+    ...
+</form>
+
+, eu adiciono e, depois, concateno com o codigo,
+
+<form action="/titulos/5" method="POST">
+
+    ...
+</form>
+
+, okay?
+
+110. Essa eh a ideia, aqui, desse trecho de codigo, aqui,
+
+    var modal = $(this);	
+	var form = modal.find('form');	
+	var action = form.attr('action');	
+	if (!action.endsWith('/')) {
+		action += '/';
+	}	
+	form.attr('action', action + codigoTitulo);
+
+111. Entao, se eu adicionei isso daqui, 
+
+	form.attr('action', action + codigoTitulo);
+
+, o action + o codigo do titulo, eu ja vou conseguir fazer o submit com o codigo correto.
+
+112. Entao, vamos dar uma olhada aqui, oh, na Tela de Pesquisa, se eu clicar, aqui, no icone de exclusao, para excluir o Apto 101, por exemplo, ele vai aparecer, aqui, o Modal, se eu inspecionar esse formulario, vamos dar uma olhada, aqui, no formulario, olha la, ja esta, aqui, oh, '/titulos/2', entao, na hora em que eu clicar em Excluir, eu ja vou conseguir excluir esse cara de codigo 2. Vamos ver?
+
+113. Olha la, apagou. Vou excluir o de codigo 3. Apagou.
+
+114. Okay? Entao, ja consegui implementar a exclusao com esse truquezinho, aqui, de Javascript.
+
+115. Ah, Normandes, mas, voce falou que ia colocar uma mensagem, quando clicasse no icone de exclusao, voce ia colocar, aqui, oh, 'Condominio Apto 301', por exemplo. Vamos fazer isso?
+
+116. A ideia eh a mesma, aqui, oh, a ideia eh a mesma de pegar o elemento e alterar ele la na Pagina de Modal.
+
+117. Entao, eu preciso da Descricao. De onde eu vou pegar esse cara? Vou pegar do mesmo lugar, button.data('descricao'),
+
+    var button = $(event.relatedTarget);
+    var codigoTitulo = button.data('codigo');
+    >>> var descricaoTitulo = button.data('descricao'); <<<
+    
+    var modal = $(this);        
+    var form = modal.find('form');
+    var action = form.attr('action');
+    if (!action.endsWith('/')) {
+        action += '/';
+    }
+    form.attr('action', action + codigoTitulo);
+
+118. Entao, eu preciso vir, aqui, na PesquisaTitulos.html, e, ai, para eu adicionar um novo atributo, aqui,
+
+<a class="btn btn-link btn-xs" data-toggle="modal" data-target="#confirmacaoExclusaoModal" 
+>>> th:attr="data-codigo=${titulo.codigo}" <<<>
+    ...
+</a>
+
+, eu vou separar ele por virgula, data-descricao="${titulo.descricao}", okay?
+
+<a class="btn btn-link btn-xs" data-toggle="modal" data-target="#confirmacaoExclusaoModal" 
+th:attr="data-codigo=${titulo.codigo}, data-descricao=${titulo.descricao}">
+    ...
+</a>
+
+, okay? Com isso, eu vou ter a descricao disponivel, aqui, para eu utilizar no Javascript, em cobranca.js, recuperei ela aqui,
+
+    var button = $(event.relatedTarget);
+    var codigoTitulo = button.data('codigo');
+    >>> var descricaoTitulo = button.data('descricao'); <<<
+    
+    var modal = $(this);        
+    var form = modal.find('form');
+    var action = form.attr('action');
+    if (!action.endsWith('/')) {
+        action += '/';
+    }
+    form.attr('action', action + codigoTitulo);
+
+119. Vamos continuar. No DialogoConfirmacaoExclusao.html, eu quero colocar aqui, 
+
+    <div class="modal-body">
+        >>> <span>Tem certeza que deseja apagar o titulo?</span> <<<
+    </div>
+
+, nao eh?
+
+120. Entao, no lugar desse span, certo?
+
+121. Entao, o que que eu vou fazer?
+
+122. Eu vou fazer o seguinte, oh, ja estou com a descricao aqui,
+
+    var button = $(event.relatedTarget);
+    var codigoTitulo = button.data('codigo');
+    >>> var descricaoTitulo = button.data('descricao'); <<<
+    
+    var modal = $(this);        
+    var form = modal.find('form');
+    var action = form.attr('action');
+    if (!action.endsWith('/')) {
+        action += '/';
+    }
+    form.attr('action', action + codigoTitulo);
+
+, eu venho aqui, no modal.find('.modal-body'), oh, 'modal-body',
+
+    <div class=" >>> modal-body <<< ">
+        <span>Tem certeza que deseja apagar o titulo?</span>
+    </div>
+
+, encontrar pela classe, e o span, que esta ali dentro, 
+
+    var button = $(event.relatedTarget);
+    var codigoTitulo = button.data('codigo');
+    var descricaoTitulo = button.data('descricao');
+    
+    var modal = $(this);        
+    var form = modal.find('form');
+    var action = form.attr('action');
+    if (!action.endsWith('/')) {
+        action += '/';
+    }
+    form.attr('action', action + codigoTitulo);
+
+    modal.find('.modal-body span')
+
+, modal.find('.modal-body span'), e, ai, eu vou substituir o conteudo que esta ali pelo que?
+
+123. Por esse HTML, aqui, oh, 
+
+    modal.find('.modal-body span').html('Tem certeza que deseja excluir o titulo <strong>' + descricaoTitulo + '</strong>');
+
+124. Okay, salvei, aqui, vamos ver se vai funcionar?
+
+125. Okay, ao exibir o Modal, esta exibindo a Descricao em negrito na mensagem de confirmacao.
+
+126. Entao, a gente conseguiu criar esse Modal, nao eh?, para fazer essa exclusao. Nao eh complicado, nao eh?, nao eh dificil, voce viu que, passo-a-passo, devagarzinho, a parte do Spring foi muito facil, nao eh?, por enquanto, vamos adicionar, aqui, mais a mensagem de sucesso,
+
+	@RequestMapping(value = "{codigo}", method = RequestMethod.DELETE)
+	public String excluir(@PathVariable Long codigo) {
+		titulos.delete(codigo);
+
+		return "redirect:/titulos";
+	}
+
+127. Mas, eh muito simples, nao eh?
+
+128. Entao, eh so essa partezinha, aqui,
+
+    var button = $(event.relatedTarget);
+	
+	var codigoTitulo = button.data('codigo');
+	var descricaoTitulo = button.data('descricao');
+	
+	var modal = $(this);	
+	var form = modal.find('form');	
+	var action = form.attr('action');	
+	if (!action.endsWith('/')) {
+		action += '/';
+	}	
+	form.attr('action', action + codigoTitulo);	
+	modal.find('.modal-body span').html('Tem certeza de que deseja excluir o titulo <strong>' + descricaoTitulo + '</strong>?');
+
+, as vezes, se voce nao esta familiarizado com Javascript, que eh um pouco mais complicadinho, nao eh?, mas nao eh muito.
+
+129. Vamos so revisar. Eu pego, aqui,
+
+var button = $(event.relatedTarget);
+
+, o evento, o botao que disparou o evento, eh assim que eu pego ele,
+
+        $(event.relatedTarget);
+
+, okay? Dentro desse botao, eu posso usar essa funcao data(), aqui, do jQuery, para acessar os atributos data, aqui, que estao no botao,
+
+<a class="btn btn-link btn-xs" data-toggle="modal" data-target="#confirmacaoExclusaoModal" 
+th:attr=">>>data-codigo<<<=${titulo.codigo}, >>>data-descricao<<<=${titulo.descricao}">
+    ...
+</a>
+
+, entao, eu quero adicionar informacao? Adiciona, aqui, como data,
+
+<a class="btn btn-link btn-xs" data-toggle="modal" data-target="#confirmacaoExclusaoModal" 
+th:attr=">>>data-codigo<<<=${titulo.codigo}, >>>data-descricao<<<=${titulo.descricao}">
+    ...
+</a>
+
+, data eh para isso, eh para adicionar informacoes, adicionar dados, entao, eu adicionei dados nesse botao, para eu poder usar posteriormente.
+
+130. Peguei o modal,
+
+    var modal = $(this);
+
+, quem disparou o evento, nao eh?, eh o this, entao, eu pego o modal, aqui, em uma variavel jQuery.
+
+131. O metodo find(),
+
+    var form = modal. >>> find <<< ('form');
+
+, para ele encontrar o componente form. Dentro do form, eu usou attr(), 
+
+    var action = form.attr('action');
+
+, para pegar o atributo 'action'. Ai, o action, eu so estou fazendo, aqui, um truquezinho,
+
+    if (!action.endsWith('/')) {
+        action += '/';
+    }
+
+, porque, se ele nao terminar com '/', eu adiciono a barra para, depois, concatenar o codigo,
+
+    form.attr('action', action + codigoTitulo);
+
+132. Altero, la, entao, o action desse formulario, que eu recuperei, aqui,
+
+    var form = modal.find('form');
+
+, nao eh, o formulario do modal, e alterei o action. E, tambem, coloquei uma mensagem, nao eh?, customizada la no meu formulario,
+
+    modal.find('.modal-body span').html('Tem certeza de que deseja excluir o titulo <strong>'+ descricaoTitulo + '</strong>?');
+
+133. Vamos, so, agora, adicionar, aqui, uma mensagem de que o titulo foi excluido com sucesso. Okay? Da mesma forma que a gente fez aqui, oh,
+
+	public String salvar(@Validated Titulo titulo, Errors errors, RedirectAttributes attributes) {
+		if (errors.hasErrors()) {
+			return CADASTRO_VIEW;
+		}
+		if (titulo.getCodigo() == null) {
+			Long last = this.buscarUltimoRegistro();
+			titulo.setCodigo(++last);
+		}
+		this.titulos.save(titulo);
+		>>> attributes.addFlashAttribute("mensagem", "Titulo salvo com sucesso!"); <<<
+		return "redirect:/titulos/novo";
+	}
+
+134. Entao, eu preciso do RedirectAttributes, para colocar, aqui, oh, 'Titulo excluido com sucesso!',
+
+	@RequestMapping(value = "{codigo}", method = RequestMethod.DELETE)
+	public String excluir(@PathVariable Long codigo) {
+		titulos.delete(codigo);
+        
+        >>> attributes.addFlashAttribute("mensagem", "Titulo excluido com sucesso"); <<<
+
+		return "redirect:/titulos";
+	}
+
+, eu preciso copiar esse cara, aqui, RedirectAttributes attributes, como parametro de entrada do metodo excluir(),
+
+	@RequestMapping(value = "{codigo}", method = RequestMethod.DELETE)
+	public String excluir(@PathVariable Long codigo, RedirectAttributes attributes) {
+		titulos.delete(codigo);
+        
+        attributes.addFlashAttribute("mensagem", "Titulo excluido com sucesso");
+
+		return "redirect:/titulos";
+	}
+
+135. E, ai, o que que vai faltar?
+
+136. Na Tela de Pesquisa, que eh o que ja tem na Tela de Cadastro, a mensagem, o Layout de Mensagem, ou seja,
+
+    <div layout:include="Mensagem"></div>
+
+, vamos colocar, em PesquisaTitulos.html, por cima de 'panel-default'.
+
+137. Beleza?
+
+138. Essa mensagem, aqui,
+
+    <div layout:include="Mensagem"></div>
+
+, o problema dela, eu nao vou poder recuperar, aqui, essa mensagem, ela vai ser usada, em Mensagem.html,
+
+<div class="alert alert-success" th:if="${!#strings.isEmpty(mensagem)}">
+	<span th:text="${mensagem}"></span>
+</div>
+
+, mas eu tenho que usar quando tem #fields, em Mensagem.html,
+
+<div class="alert alert-danger" th:if="${>>> #fields.hasAnyErrors() <<<}">
+	<div th:each="detailedError : ${#fields.detailedErrors()}">
+		<span th:text="${detailedError.message}"></span>
+	</div>
+</div>
+
+, entao, eu vou copiar so esse pedacinho, aqui, em Mensagem.html,
+
+<div class="alert alert-success" th:if="${!#strings.isEmpty(mensagem)}">
+	<span th:text="${mensagem}"></span>
+</div>
+
+, e a gente poderia, entao, separar essa mensagem em mensagem de sucesso e mensagem de erro. A mensagem de erro, eu utilizo, apenas, quando,..., vamos fazer isso?, a mensagem de erro eu utilizo apenas quando eu tenho um formulario, nao eh?, porque, dai, eu posso usar esse #fields, aqui,
+
+
+
+139. Entao, vamos fazer o seguinte, oh, Vamos trocar, aqui, Mensagem.html, por MensagemErro.html, e vou copiar esse arquivo e vou renomear para MensagemGeral.html, ou seja, pode ser uma mensagem geral.
+
+140. Okay? Na mensagem de erro, MensagemErro.html, eu vou tirar esse cara, aqui,
+
+<div class="alert alert-success" th:if="${!#strings.isEmpty(mensagem)}">
+	<span th:text="${mensagem}"></span>
+</div>
+
+, e deixar so a mensagem de erro,
+
+<div class="alert alert-danger" th:if="${#fields.hasAnyErrors()}">
+	<div th:each="detailedError : ${#fields.detailedErrors()}">
+		<span th:text="${detailedError.message}"></span>
+	</div>
+</div>
+
+, e, na MensagemGeral.html, eu vou tirar a mensagem de erro,
+
+<div class="alert alert-danger" th:if="${>>> #fields.hasAnyErrors() <<<}">
+	<div th:each="detailedError : ${#fields.detailedErrors()}">
+		<span th:text="${detailedError.message}"></span>
+	</div>
+</div>
+
+141. Na Tela de Cadastro de Titulo, aqui, eu estou inserindo o Mensagem,
+
+    <div layout:include="Mensagem"></div>
+
+, agora, eu vou inserir MensagemGeral,
+
+    <div layout:include="MensagemGeral"></div>
+
+, e, tambem, vou inserir o MensagemErro,
+
+    <div layout:include="MensagemGeral"></div>
+    <div layout:include="MensagemErro"></div>
+
+
+142. Okay? Na tela de Pesquisa de Titulos, eu vou colocar, apenas, o MensagemGeral,
+
+    <div layout:include="MensagemGeral"></div>
+
+143. Okay? Vamos ver se vai funcionar. Recarregar a Pagina de Pesquisa de Titulos.
+
+144. A gente testa o sistema todo, novamente, aqui.
+
+145. Vamos la. Primeiro, vamos testar o Cadastro, aqui, as mensagens de erro e sucesso, Descricao 'Teste Apagar', Data de Vencimento '10/01/2016', Valor '199,00', Stauts 'Pendente', Salvar.
+
+146. Entao, ele salvou e exibiu a mensagem de sucesso.
+
+147. Entao, a gente nao estragou essa parte.
+
+148. Vamos voltar, aqui, para a pesquisa.
+
+149. Se eu clicar, aqui, em excluir, vai aparecer a Tela de Modal, 'Voce tem certeza?', vamos excluir, exibiu a mensagem 'Titulo excluido com sucesso.'
+
+150. Entao, deu certo o que eu queria fazer ai, para voce, nao eh?, com as mensagens, com os fragmentos, a gente vai melhorando aos poucos o sisteminha.
+
+151. Fim da Aula 02.016. Implementando a Exclusao.
+
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,163 @@
+<!-- 
+
+Aula 03.012. Ajustes Responsivos
+
+1. Bom, vamos fazer, agora, alguns ajustes para o nosso sisteminha ficar bem Responsivo. No inicio, eu falei para voce que ele era Responsivo, mas a gente precisa fazer alguns ajustes.
+
+2. Por que alguns ajustes? Porque a gente fez algumas customizacoes, nem sempre tudo fica do jeitinho que a gente quer, entao, a gente precisa mexer um pouquinho no CSS.
+
+3. Okay? Entao, vamos dar uma olhada o que que a gente fez. Vou te mostrar como que a gente pode simular esse sisteminha em um Celular, por exemplo, em um iPhone 5, okay?
+
+4. Entao, olha so, como eu posso fazer.
+
+5. Eu posso vir aqui, abrir o Chrome DevTools, e se eu clicar, aqui, no icone do Celularzinho, Toggle device mode, ele vai trocar para o modo de Device.
+
+6. E, aqui, no combo Responsive, voce pode escolher qual o tipo de celular que voce quer. Vamos colocar, aqui, no iPhone 5.
+
+7. Ai, ele fala assim, olha, as vezes, eh bom voce dar uma Recarregada na Pagina, para voce ver como eh que vai ficar. Beleza? E deixa eu mudar esse cara, aqui, para a direita, ou seja, clicar no botao 'Dock to right'. Clicar na Guia Elements.
+
+8. Ai, fica melhor. Bom, eh assim que ele vai aparecer no iPhone 5. Ah, Normandes, mas isso ai nao esta Responsivo, nao. Eh verdade. Do jeito que esta ai, nao esta Responsivo, nao, mas eh porque esta faltando algumas coisinhas, ali, uma meta-tag, ali, no nosso sistema, para ele reconhecer o tamanho da tela.
+
+9. Nao eh?, para ele poder passar o tamanho da tela, e o Bootstrap se encarregar de fazer alguns ajustes, ja automatico, que o Bootstrap vai fazer, e alguns que nos vamos fazer.
+
+10. Okay? Uma outra forma, assim, antes de colocar essa tag, voce pode fazer, as vezes, eh reduzir, as vezes, eh reduzir a tela, por exemplo.
+
+11. Voce reduzindo, aqui, o proprio,..., como a telinha, aqui, ja reconheceu, o Bootstrap ja vai montando, aqui, a tela, como ela ficaria menor. So que, na realidade, se voce acessar isso no Celular, ela nao vai ficar assim. Ela vai ficar como esta aqui, quando mudamos para o modo Device, no Chrome DevTools.
+
+12. Okay? Entao, algumas coisas da para voce testar assim, ou seja, diminuindo o tamanho da tela. O instrutor vai fazendo assim, ele esta desenvolvendo, entao, ele vem aqui, diminui / aumenta o tamanho da tela, toda hora, so para ver como esta ficando, quando eh Responsivo.
+
+13. Se voce der uma olhada ai, oh, olha so o que que o Bootstrap faz, na hora que ele diminui a tela, depois de diminuir a tela para um certo tamanho, ele troca, ao inves de o label Descricao ficar na frente ele coloca em cima, para dar um pouco mais de espaco para a gente digitar, e as coisas aparecerem aqui.
+
+14. Ta vendo? So que, no Celular, ainda esta aparecendo assim, ou seja, com um Zoom menor, e os elementos nao se readaptam suas posicoes na tela. Ou seja, nao esta 100% Responsivo, nao.
+
+15. Entao, vamos la. Vamos adicionar essas meta-tags, aqui, oh, no LayoutPadrao.html, dentro do 'head', que sao as que eu costumo colocar,
+
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+
+16. <meta name="viewport" content="width=device-width" />, esse cara, aqui, eh que vai falar, vai habilitar a Responsividade de fato. Colocando isso aqui nas telas, quando eu acessar em um Celular, do Celular, o Bootstrap ja vai reconhecer o tamanho da tela do Celular, e ja vai desenhar os componentes de acordo com esse tamanho.
+
+17. Entao, se eu voltar, aqui, agora, e der um Refresh na tela, '/titulos/novo', olha so, ja ficou mais Responsivo, ta vendo? Ja aplicou a Responsividade do Bootstrap aqui.
+
+18. Okay? E, aqui, se eu mudar o Modo para ver a tela em tamanho Desktop, voce vai ver que nao muda nada, continua do mesmo jeito, a telinha no Browser normal.
+
+19. Okay? Entao, importantissimo adicionar essas meta-tags, nos nossos Projetos.
+
+20. Okay? Bom, qual ajustezinho que eu falei que eu quero fazer, aqui, tambem?
+
+21. Lembra que eu tinha adicionado um espacozinho, aqui, na esquerda e direita da tela?
+
+22. Bom, eu acho que esse espaco, no Celular, eh um disperdicio. A gente pode tirar esse espaco, quando for o Celular. Esse espacinho so eh legal quando eu estiver, aqui, na tela Desktop. Na Tela do Celular, a gente pode tirar. Como que eu faco isso?
+
+23. Vamos la. Eu consigo identificar quando eh um Celular / quando nao eh um Celular?
+
+24. Consigo sim. Olha so. Eu vou fazer o seguinte. Eu vou colocar, logo aqui em cima, em style.css, eu vou ate colocar um comentario, aqui, oh, 
+
+/** Tela Grande **/
+
+, para a gente saber quais as classes CSS que devem ser aplicadas quando uma tela eh grande.
+
+25. Entao, oh, quando uma tela for grande, eu quero colocar isso, aqui,
+
+
+/** Tela Grande **/
+
+.panel-default {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+,  que eh a margem esquerda e a margem direita. A margem no alerta, la, tambem, nao eh?,
+
+/** Tela Grande **/
+
+.panel-default {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.alert {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+26. Se eu mandar Salvar, aqui, oh, em '/titulos/novo', eu quero tirar essa margenzinha aqui, tambem, do lado esquerdo / direito.
+
+27. Nos vamos colocar, aqui, agora, um Media Query, isso no CSS, hein, onde min-width for 768 pixels,
+
+@media(min-width: 768px) {
+
+    .panel-default {
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+
+    .alert {
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+
+}
+
+28. Okay? O que que eu estou falando, aqui? Eu estou falando que, com a tela do tamanho, no minimo, de 768 pixels, eh que eu vou fazer aparecer essas classes, aqui,
+
+    .panel-default {
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+
+    .alert {
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+
+29. Menor do que isso, eu nao coloco. O que for menor do que 768 pixels, ele nao vai adicionar essas classes CSS, aqui.
+
+30. Eh so isso. Salvei, aqui. Se eu voltar, aqui, dar um Refresh, no Modo Device do Chrome DevTools, olha la, percebe que sumiu aquele espacozinho que estava aqui, entre a mensagem e entre o painel e o final da tela nos lados esquerdo / direito.
+
+31. E, na tela grande, continua o espaco tanto no inicio, quanto no fim, aqui, da Pagina, nos lados esquerdo e direito da tela.
+
+32. Beleza? Entao, oh, aqui, no Celular, a gente tirou a margem, aqui, na Tela Grande, esta aparecendo as margens esquerda / direita da tela.
+
+33. Isso a gente fez com essa Media Query, @media ( min-width: 768px ) { }
+
+34. E o que eh legal para te mostrar, ta vendo que o Bootstrap ja faz a maioria das coisas pra gente Responsiva.
+
+35. Aqui na tela de Pesquisa. Ficou estranho, hein. Na tela de Pesquisa, nao esta Responsivo, esta meio esquisito isso daqui.
+
+36. O que que estragou, aqui?
+
+37. Foi a tabela.
+
+38. A tabela nao esta Responsiva.
+
+39. Entao, para a gente adicionar a tabela Responsiva, vamos la na tela de Pesquisa, e eh so eu colocar uma <div> envolta dessa tabela, aqui, oh, 
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+        ...
+        </table
+    </div>
+
+40. Beleza. Coloquei essa div com essa classe 'table-responsive', que eh uma classe propria do Bootstrap. Vamos dar uma testada agora? Recarregar a Pagina Html, em Modo Device, no Chrome DevTools.
+
+41. Olha so. Ja ficou certinho, aqui, a pesquisa, e, agora, eu consigo navegar, oh, se eu passar o dedo no Celular, aqui, eu vou conseguir ir para la e para ca, para a direita e para a esquerda, ou seja, a tabela ficou Responsiva, nao preciso fazer ela encaixar na tela, direto.
+
+42. Okay? Eh isso dai, oh. 
+
+43. Tirou aquele espacinho do canto, ali, na esquerda e direita da tela, e ficou essa telinha, ai.
+
+44. Beleza? Acho que eh isso. Bom, aqui, vai continuar tudo funcionando, Editar, ai, essas coisas nao mudam.
+
+45. Nao eh?, o que era importante, aqui, era a gente ver se o nosso sistema esta Responsivo. Se eu mandar excluir, aqui, so para a gente ver o Modal aparecendo, ele vai aparecer no Celular tambem, okay? E, importante falar que, aqui, na Tela Desktop, nao muda o que ja esta funcionando.
+
+46. So quando ficar responsiva, olha la, ou seja, diminuindo o tamanho da tela, ai, aqui, agora, a gente ja pode ver, oh, telinha Responsiva. Legal, nao eh?
+
+47. Bom, era isso daqui. Entao, voce criou um sisteminha, essa aula, aqui, oh, eh a ultima aula tecnica, pelo menos, se nao tiver nenhuma atualizacao ai, e voce criou um sistema usando Spring MVC, Spring Boot, Spring Data JPA, Thymeleaf, jQuery, a gente mexeu com CSS, Responsivo, eh o nosso sisteminha, voce viu, aqui, na tela de um celular, nao e?, e vimos mais um monte de coisas, dai, acho que foi bem interessante esse desenvolvimento desse Projeto.
+
+48. Fim da Aula Aula 03.012. Ajustes Responsivos.
+
+
+
+
+-->

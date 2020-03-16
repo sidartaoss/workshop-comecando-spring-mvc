@@ -1,0 +1,49 @@
+<!--
+
+Aula 01.007. Conhecendo o Projeto do Workshop
+
+1. O instrutor vai nos mostrar o projeto do curso funcionando, por que que ele pensou nesse projeto, como eh que ele vai funcionar, para nos termos uma ideia do que a gente vai alcancar ao final deste curso, okay?
+
+2. Nos vamos comecar esse projeto do zero, a partir das proximas aulas. Beleza?
+
+3. O instrutor so vai nos mostrar, agora, para nos vermos o que que nos vamos desenvolver.
+
+4. Entao, vamos la. O instrutor esta, aqui, com o Spring Tool Suite iniciado e vai iniciar o projeto aqui. Oh, estou usando o Spring Boot, e, ai, ja vou te mostrar quanto tempo ele demora para subir. Beleza. Subiu o projeto. Demorou 8 segundos e meio para iniciar, okay?, e, ai, eu ja posso, aqui, acessar o projeto, http://localhost:8080/titulos, ele vai cair aqui na Pesquisa de titulos.
+
+5. O que que eh um Titulo?
+
+6. Bom, o que que o instrutor pensou, aqui, para fazer esse Projeto?
+
+7. O instrutor, coincidentemente, eh o sindico, aqui, de verdade, do predio de onde ele mora, eh um predio pequeno, com 6 apartamentos apenas, e ele eh o sindico ali. E, ai, o instrutor usa um sisteminha da web para gerenciar, aqui, os recebimentos das boletas que ele gera, mas, ele pensou, 'Se eu fosse criar um sisteminha desses, como eh que eu faria? Como eh que eu comecaria esse sistema?'.
+
+8. Entao, eh isso daqui, um titulo eh alguma coisa que eu vou receber. Se voce estiver em alguma loja, voce pode pensar em uma loja, tambem, a loja que emite alguns boletos, algumas faturas para receber mais tarde, alguma coisa assim, beleza?
+
+9. Obviamente, eh um sistema simples, para a gente poder fazer dentro desse Workshop. 
+
+10. Entao, nao tem Cadastro de Cliente, a gente vai trabalhar apenas nos Titulos.
+
+11. Okay? Um Titulo, entao, ele tem uma Descricao, uma Data de Vencimento, um Valor, e um Status, para falar se ele foi recebido, ou se ainda esta pendente esse Titulo.
+
+12. Okay? Essa aqui eh a tela de pesquisa. Na tela de pesquisa, eu tenho, aqui, um campo de entrada para a gente preencher a pesquisa, entao, vamos supor, eu quero saber, aqui, o apartamento 102, entao, eu posso colocar, aqui, 102, e dar um <ENTER>, ele ja vai filtrar e trazer para mim, oh, 'Condominio Apto 102'. Se fosse uma descricao qualquer, poderia colocar o nome do cliente, da Maria, por exemplo, e, ai, quando eu pesquisasse por Maria, ele iria trazer essa fatura dela.
+
+13. Entao, olha so, Data de Vencimento, aparece aqui, oh, o instrutor vai nos ensinar a mostrar data formatada, primeiro dia, depois mes, depois ano. O Valor, tambem, com virgula, e com casa decimal. O Status, se esta Pendente, ou se ja foi Recebido, e, por ultimo, tres icones, para Editar, para Excluir, e para Receber. O Receber eh um atalho, aqui, para o Editar. Eu poderia clicar, aqui, em Editar, vir aqui, na tela de edicao, e colocar o Status como Recebido, e clicar no botao Salvar. Ai, aparece uma mensagem de 'Titulo salvo com sucesso', e clicamos em um link de 'Voltar para pesquisa'. Se eu voltar, entao, para a tela de pesquisa, a gente pode ver que o Apartamento 102 mudou o Status para Recebido e sumiu o iconezinho para Receber.
+
+14. Okay? Vamos voltar, aqui, oh, fazer a pesquisa com todos os registros. Vamos editar o Apartamento 201, que ainda nao foi Recebido. Eu posso clicar, aqui, no icone Receber, e esse Receber, aqui, vai, via Ajax, la no Servidor, altera e, depois, volta e atualiza essa partezinha aqui do Status e remove esse botaozinho de Receber. Entao, quando eu clicar aqui em Receber, nao vai ter Refresh de tela, nada disso, ele, simplesmente, ja atualiza, aqui, oh. Vou clicar, fica de olho no Pendente, oh. Clicou, passou para Recebido e, aqui, sumiu o botao Receber. Tudo via Ajax, usei Javascript para fazer isso daqui. O instrutor vai nos ensinar a fazer isso passo-a-passo.
+
+15. O instrutor ja nos mostrou como editar, como excluir, eu poderia clicar aqui no botao de Excluir, ele mostra uma mensagem, 'Tem certeza que quer excluir a cobranca Condomionio Apto 201?', voce pode clicar em Sim, em Excluir, beleza, ele excluiu aqui esse titulo.
+
+16. Eu posso vir aqui e cadastrar um novo titulo. Entao, vou colocar aqui, oh, em Descricao, 'Condominio Apto 202', Data de Vencimento, um componentizinho, oh, de calendario via Javascript tambem, vou colocar, aqui, oh, ele vencendo dia 10/01/2016. Qual eh o Valor? A medida que eu for digitando, ele ja vai formatando ali. Entao, colocar 189,90, por exemplo. E o Status esta Pendente, ainda nao recebi.
+
+17. Cliquei em Salvar. Se eu voltar para Pesquisa, oh, o 202 que eu acabei de salvar, 10/01/2016, 189,90, e esta Pendente. Okay? Posso Editar, Excluir, Receber, fazer a pesquisa e cadastrar um novo. Okay? Atualizar tambem, nao eh? Eu posso vir aqui e atualizar. Entao, eh um CRUD completinho, que a gente vai desenvolver a partir do zero.
+
+18. O que eh legal tambem, oh, vamos, esse sistema eh Responsivo. Ou seja, entao, eu posso vir aqui, oh, no Chrome Dev Tools, e falar, 'Eu quero que voce mostre como eh que eh no iPhone 5 que essa telinha vai ficar'. Eh bom voce dar um Refreshzinho na tela, aqui, oh, no iPhone 5, funcionaria dessa forma, ou seja, ficaria dessa forma a tela.
+
+19. Entao, esta diferente a tela da Web da tela do iPhone. Onde que esta diferente? Ta vendo que aqui, na tela web, tem uma bordinha, o instrutor colocou uma pequena borda aqui, oh, no sistema, na tela Mobile, nao tem essa borda. Repare-se que, aqui, a Descricao esta na frente do Input Text. Aqui, no caso de um iPhone, apareceria em cima, entao, o Input text quebra, okay?, para ficar mais visivel, mais bem apresentavel na tela de um Celular.
+
+20. Okay? Entao, eh tudo isso daqui que a gente vai desnenvolver a partir das proximas aulas.
+
+21. Eh um sistema de cadastro de titulos, entao, a gente pesquisa e cadastra um titulo, edita, que eh a atualizacao e exclui um titulo, ainda vamos usar Ajax em partes do sistema, vamos usar, aqui, o calendario, formatacao de valores, a formatacao de datas, tambem, tem o combozinho, e eh isso dai.
+
+22. Fim da Aula 01.007. Conhecendo o Projeto do Workshop.
+
+-->

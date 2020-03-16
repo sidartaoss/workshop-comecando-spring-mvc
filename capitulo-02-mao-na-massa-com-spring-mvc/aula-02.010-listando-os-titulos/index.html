@@ -1,0 +1,580 @@
+<!--
+
+Aula 02.010. Listando os Titulos
+
+1. Vamos, agora, enviar os dados, la do Controller, para a View, na parte de pesquisa, ou seja, quando eu acessar a Pagina de Pesquisa, eu vou listar todos os titulos.
+
+2. Mais para a frente, eu vou adicionar, la, um campo de pesquisa para a gente pesquisar.
+
+3. Por enquanto, vai ser uma listagem, entao, a gente so esta listando. Acessou la, a gente vai listar todos os titulos. Okay?
+
+4. Entao, vamos la.
+
+5. A gente vai vendo, aqui, eu vou mexer, aqui, na Pagina PesquisaTitulos.html, nao eh?, nos vamos trabalhar nesses 'tr's, 
+
+    <tbody>
+        <tr>
+            <td colspan="6">Nenhum titulo foi encontrado</td>
+        </tr>
+    </tbody>
+
+, e, tambem, nos vamos trabalhar, aqui, no Controller, ou seja, TituloController.java.
+
+6. Beleza? Nesses 2 carinhas, aqui, PesquisaTitulos.html e TituloController.java.
+
+7. Bom, como voce ja pode deduzir do que a gente ja fez nas ultimas aulas, a respeito de enviar, aqui, oh, vamos voltar aqui em TituloController.java, na hora em que eu quis enviar a mensagem de sucesso,
+
+    @RequestMapping(method = RequestMapping.POST)
+    public ModelAndView salvar(Titulo titulo) {
+        titulos.save(titulo);
+        ModelAndView mv = new ModelAndView("CadastroTitulo");
+        >>>mv.addObject("mensagem", "Titulo salvo com sucesso!");<<<
+        return mv;
+    }
+
+, eu defino o ModelAndView, passo o nome da View, 'CadastroTitulo', no caso, e adiciono os objetos que eu quero que a View tenha disponiveis para trabalhar.
+
+8. Certo?
+
+9. Entao, vamos la, vamos precisar adicionar algo assim quando eu acessar a tela de pesquisa, e eh nesse metodo, aqui, pesquisar(),
+
+    @RequestMapping
+    public String pesquisar() {
+        return "PesquisaTitulos";
+    }
+
+10. Nao eh? Entao, o que que eu vou utilizar?
+
+11. Eu vou aproveitar, aqui, que o meu repositorio ja esta injetado aqui, nao eh?,
+
+    @Autowired
+    private Titulos titulos;
+
+, estou usando Injecao de Dependencias, 'Normandes, nao sei direito o que eh que eh Injecao de Dependencias'. Injecao de Dependencias eh: Essa classe, TituloController, ela depende dessa interface, Titulos, aqui, mesmo. Eu estou precisando de um objeto do tipo Titulos, beleza?
+
+12. Voce nao me viu, hora nenhuma, fazendo algo assim, oh,
+
+    @Autowired
+    private Titulos titulos = new Titulos();
+
+, ou usando alguma fabrica, como se fosse que eu tivesse, aqui, uma Fabrica de Repositorios,
+
+    @Autowired
+    private Titulos titulos = RepositoryFactory.getTitulos();
+
+, alguma coisa assim. Voce nao me viu fazendo isso, eu nao precisei criar isso. Isso foi tudo injetado para mim, aqui, pelo Framework, pelo Spring IOC, ele injeta, ele procura o objeto do tipo Titulos, aqui, dentro do meu Projeto, ele sai procurando, 'Ah, encontrei esse objeto', ele vem aqui dentro e coloca o objeto para mim, automaticamente.
+
+13. Beleza? Eu nao preciso fazer nada, so anotar, aqui, com @Autowired, so isso que eu preciso fazer. Ele encontra o objeto e encaixa aqui para mim e eu ja posso usar. Qual que eh a vantagem disso, Normandes? Bom, se eu nao estou dando um new, aqui,
+
+    @Autowired
+    private Titulos titulos = new ;
+
+, nao estou usando nada, o new seria o pior dos casos, nao eh?, porque, se eu precisar, vamos supor que eu tivesse outras 10 classes usando esse Titulos, e eu trocasse a implementacao, eu teria que entrar nessas 10 classes e trocar, nao eh?
+
+14. Mas, aqui, oh, a vantagem de deixar assim, eh,
+
+    @Autowired
+    private Titulos titulos;
+
+, se eu trocar a implementacao la de Titulos, se eu estiver usando alguma outra coisa, eu nao preciso acessar nenhum Controller, nenhuma classe de servico que for utilizar esse objeto de Titulos e mexer nele, nessas classes, eu nao preciso fazer nada disso, nao eh?
+
+15. Entao, fica bem legal.
+
+16. Entao, vamos la, eu quero fazer, entao, a pesquisa, e, ai, aproveitando, agora, ja usando o Spring Data JPA, eu tenho, aqui, um JpaRepository,
+
+public interface Titulos extends JpaRepository<Titulo, Long> {}
+
+, que ja tem varios metodos para eu poder trabalhar com ele, entao, 'titulos.findAll()',
+
+    @RequestMapping
+    public String pesquisar() {
+        titulos.findAll();
+        return "PesquisaTitulos";
+    }
+
+, depois, a gente vai trocar esse cara, aqui, mas eu vou usar o findAll(), por enquanto.
+
+17. Esse findAll(), ele retorna um List, de Titulo,
+
+    @RequestMapping
+    public String pesquisar() {
+        List<Titulo> todosTitulos = titulos.findAll();
+        return "PesquisaTitulos";
+    }
+
+18. Beleza? Esses, aqui, sao todos os titulos. E, ai, eu vou adicionar isso no ModelAndView, e, nesse ModelAndView, eu coloco, aqui, a View, e retorno ele,
+
+    @RequestMapping
+    public ModelAndView pesquisar() {
+        List<Titulo> todosTitulos = titulos.findAll();
+        ModelAndView mv = new ModelAndView("PesquisaTitulos");
+        return mv;
+    }
+
+, mas antes, aqui, e, aqui, no 'mv', eu dou um 'addObject', e, aqui, eu posso colocar, por exemplo, 'titulos', vamos chamar so de titulos, o mesmo nome, e, ai, eu passo, aqui, 'todosTitulos',
+
+    List<Titulo> todosTitulos = titulos.findAll();
+    ModelAndView = new ModelAndView("PesquisaTitulos");
+    mv.addObject("titulos", todosTitulos);
+    return mv;
+
+19. Entao, com isso, aqui, essa lista de objetos, aqui, todosTitulos, estara disponivel com o nome 'titulos', aqui, na minha Pagina 'PesquisaTitulos.html';
+
+20. Okay? E, ai, eu vou trabalhar, aqui, em cima do 'tr',
+
+        <tbody>
+            <tr></tr>
+        </tbody>
+
+, eu tenho que percorrer, aqui, gerando varios tr's, a partir dessa lista, aqui, uma lista de titulos.
+
+21. Certo?
+
+22. Bom, entao, vamos la.
+
+23. Vamos brincar. Vamos deixar, por enquanto, esse 'tr' para 'Nenhum titulo foi encontrado', por enquanto, e nos vamos trabalhando, aqui, com um novo 'tr', uma nova linha, aqui, okay?
+
+        <tbody>
+            <tr>
+
+            </tr>
+            <tr colspan='6'>
+                Nenhum titulo foi encontrado.
+            </tr>
+        </tbody>
+
+24. Como o instrutor ja havia nos mostrado, la na Pagina de CadastroTitulo.html, aqui, oh, 'todosStatusTitulo' e 'status', eu uso o 'th:each', nao eh? Entao, para cada um desses elementos, aqui, 'todosStatusTitulo', ele vai repetindo o 'option'.
+
+25. Eh a mesma coisa aqui, oh, para cada 'th:each', para cada, vou colocar, aqui, primeiro, oh, '${titulos}', eu vou percorrendo e gerando um novo 'tr' e colocando nessa variavel 'titulo', aqui,
+
+        <tbody>
+            <tr th:each="titulo : ${titulos}">
+
+            </tr>
+            <tr colspan='6'>
+                Nenhum titulo foi encontrado.
+            </tr>
+        </tbody>
+
+26. Okay?
+
+27. Ai, eu posso, aqui, agora, ir colocando varios 'td's, nao eh? Eu vou colocando, aqui, os 'td's para ir preenchendo com os valores de titulo que eu quero,
+
+        <tbody>
+            <tr th:each="titulo : ${titulos}">
+                <td></td>
+            </tr>
+            <tr colspan='6'>
+                Nenhum titulo foi encontrado.
+            </tr>
+        </tbody>
+
+28. Entao, vamos la. Tambem, aqui, eu ja vou usar a classe CSS. Se eu quero que fique centralizado, ai, eu venho aqui e coloco a classe 'text-center', que vai ficar centralizado o conteudo. Qual conteudo? O codigo. No caso, aqui, 1,
+
+        <tbody>
+            <tr th:each="titulo : ${titulos}">
+                <td class="text-center">1</td>
+            </tr>
+            <tr colspan='6'>
+                Nenhum titulo foi encontrado.
+            </tr>
+        </tbody>
+
+
+29. So que nao eh para ser com 1, eh para ser o que estiver dentro da variavel 'titulo.codigo',
+
+        <tbody>
+            <tr th:each="titulo : ${titulos}">
+                <td class="text-center" th:text="${titulo.codigo}">1</td>
+            </tr>
+            <tr colspan='6'>
+                Nenhum titulo foi encontrado.
+            </tr>
+        </tbody>
+
+30. Okay? Entao, colocando, aqui, 'th:text', o 'th:text', entao, joga o conteudo para ca, 
+
+        <td class="text-center" th:text="${titulo.codigo}"> >>><<< </td>
+
+, nao eh?, entao, ele vai subsituir esse 1 pelo 'titulo.codigo', que eh esse objeto, aqui,
+
+        <tr th:each=">>> titulo <<< : ${titulos}">
+        </tr>
+
+31. E, ai, nos vamos fazendo assim para todos os outros.
+
+32. Aqui, em Descricao, nao tem classe CSS,
+
+        <tbody>
+            <tr th:each="titulo : ${titulos}">
+                <td class="text-center" th:text="${titulo.codigo}">1</td>
+                <td th:text="${titulo.descricao}"></td>
+            </tr>
+            <tr colspan='6'>
+                Nenhum titulo foi encontrado.
+            </tr>
+        </tbody>
+
+33. Vamos la, que mais? Agora, eh a Data de Vencimento. Data de Vencimento, ta ali, oh, com 'text-center', 'th:text="${titulo.dataVencimento}"',
+
+        <tbody>
+            <tr th:each="titulo : ${titulos}">
+                <td class="text-center" th:text="${titulo.codigo}">1</td>
+                <td th:text="${titulo.descricao}"></td>
+                <td class="text-center" th:text="${titulo.dataVencimento}"></td>                
+            </tr>
+            <tr colspan='6'>
+                Nenhum titulo foi encontrado.
+            </tr>
+        </tbody>
+
+34. E, agora, eh o Valor. Para Valor, classe 'text-right', 'th:text="${titulo.valor}"',
+
+        <tbody>
+            <tr th:each="titulo : ${titulos}">
+                <td class="text-center" th:text="${titulo.codigo}">1</td>
+                <td th:text="${titulo.descricao}"></td>
+                <td class="text-center" th:text="${titulo.dataVencimento}"></td>
+                <td class="text-right" th:text="${titulo.valor}"></td>
+            </tr>
+            <tr colspan='6'>
+                Nenhum titulo foi encontrado.
+            </tr>
+        </tbody>
+
+35. Agora, eh o Status. Entao, o Status tambem esta centralizado, class="text-center". So que, ai, para o Status, vamos trabalhar, vamos mexer, aqui, um pouquinho. Entao, vamos fazer o seguinte, vamos mostrar simples, e, depois, a gente volta aqui e brinca com ele, 'th:text="${titulo.status.descricao}"'.
+
+        <tbody>
+            <tr th:each="titulo : ${titulos}">
+                <td class="text-center" th:text="${titulo.codigo}">1</td>
+                <td th:text="${titulo.descricao}"></td>
+                <td class="text-center" th:text="${titulo.dataVencimento}"></td>
+                <td class="text-right" th:text="${titulo.valor}"></td>
+                <td class="text-center" th:text="${titulo.status.descricao}"></td>
+            </tr>
+            <tr colspan='6'>
+                Nenhum titulo foi encontrado.
+            </tr>
+        </tbody>
+
+36. Certo? Quero mostrar aquela 'descricao', mais bonitinho.
+
+37. E, por fim, serao os icones. Eh o lapizinho, para excluir, eles tambem vao ficar centralizados, class="text-center", e, aqui, a gente vai colocar esses icones. Depois, eu coloco-os aqui. Vamos ver o que que vai acontecer com isso daqui que eu coloquei ate agora,
+
+        <tbody>
+            <tr th:each="titulo : ${titulos}">
+                <td class="text-center" th:text="${titulo.codigo}">1</td>
+                <td th:text="${titulo.descricao}"></td>
+                <td class="text-center" th:text="${titulo.dataVencimento}"></td>
+                <td class="text-right" th:text="${titulo.valor}"></td>
+                <td class="text-center" th:text="${titulo.status.descricao}"></td>
+                <td class="text-center">
+
+                </td>
+            </tr>
+            <tr colspan='6'>
+                Nenhum titulo foi encontrado.
+            </tr>
+        </tbody>
+
+38. Ja eh para aparecer algo la na telinha, entao, vamos ver aqui, em '/titulos'. Okay, apareceu.
+
+39. Entao, olha so, esta aparecendo, aqui, os codigos, nao eh?, os testes que a gente estava fazendo, oh, Valor, Status, Pendente, e, na ultima coluna, eu ainda nao coloquei os icones. Mas apareceu, tambem, aqui, oh, 'Nenhum titulo foi econtrado'.
+
+40. Por que que apareceu esse cara, aqui? Porque ele esta la, na Pagina PesquisaTitulos.html, nao eh?,
+
+        <tr th:each="titulo : ${titulos}">
+            ...
+        </tr>
+        <tr>
+            <td colspan="6">Nenhum titulo foi encontrado</td>
+        </tr>
+
+41. Eu vou apagar esse cara? Nao, eu nao vou apagar esse cara. Eu so quero que ele apareca quando nao tiver nenhum titulo.
+
+42. Entao, eu posso usar o 'th:if', aqui, ou seja, so eh para desenhar se o que estiver aqui dentro for verdadeiro. E eu vou usar, aqui, uma expressao, usando esse objeto utilitario #lists, ai, eu faco o seguinte, se a lista 'titulos' for vazia, ai, sim, eu coloco 'Nenhum titulo foi encontrado',
+
+        <tr th:each="titulo ? ${titulos}">
+            ...
+        </tr>
+        <tr th:if="#lists.isEmpty(titulos)">
+            <td colspan="6">Nenhum titulo foi encontrado</td>
+        </tr>
+
+43. Okay? So de fazer isso, ao Recarregarmos a Pagina, vemos que a mensagem sumiu.
+
+44. Quando eu adicionar, aqui, na tela, o botao de pesquisa, nao eh?, o campozinho de pesquisa com botao para pesquisar, e, ai, eu colocar algum dado que nao existe, ai, vai aparecer 'Nenhum titulo foi encontrado', ou, quando a gente estiver acessando o sistema pela primeira vez.
+
+45. Beleza? Entao, oh, bem simplezinho, nao eh?, coloquei o 'th:if', coloco a expressao com o dolar, $, o jogo-da-velha + lists, que eh um objeto utilitario, e esse metodo isEmpty(), que existe la. Beleza? E a gente passa uma lista aqui dentro.
+
+46. Bom, vamos dar uma olhada aqui, o que que eu consigo melhorar aqui mais?
+
+47. Repara que a data, oh, esta no formato ano-mes-dia. Mas a gente nao definiu que a lingua e o pais eh o Brasil?
+
+48. Sim. E por que que nao ficou, aqui, dia/mes/ano? Porque eu nao estou mandando formatar usando o calendario definido, eu so estou mandando imprimir ali.
+
+49. E o Thymeleaf nos ajuda com alguma coisa assim?
+
+50. Ajuda. Tanto que eh complicado, eu vou, aqui, adicionar uma chave e outra chave,
+
+        <tr th:each="titulo : ${titulos}">
+            ...
+
+            <td class="text-center" th:text="${{titulo.dataVencimento}}"></td>
+        </tr>
+
+, adicionei duas chaves aqui, e ele fala, 'Ah, beleza, eh para eu formatar com as preferencias de conversor que o usuario definiu.'.
+
+51. Na verdade, ele vai converter esse formato, definido em Titulo.java,
+
+@Entity
+public class Titulo {
+
+    ...
+
+    >>>@DateTimeFormat(pattern = "dd/MM/yyyy")<<<
+    private Date dataVencimento;
+    
+    ...
+
+}
+
+, entao, ele vai usar esse formato que eu defini aqui para formatar esse valor, em Data de vencimento. Entao, oh, vamos Recarregar a Pagina PesquisaTitulos.java.
+
+52. Okay, exibiu os registros, em Data de vencimento, com o formato dia/mes/ano.
+
+53. So colocando chaves duplas, ele ja vai colocar esse padrao, esse conversor que eu defini aqui,
+
+@Entity
+public class Titulo {
+
+    ...
+
+    >>>@DateTimeFormat(pattern = "dd/MM/yyyy")<<<
+    private Date dataVencimento;
+    
+    ...
+
+}
+
+54. A mesma coisa para o Campo Valor, oh, nao tem um conversor aqui?
+
+@Entity
+public class Titulo {
+
+    ...
+
+    @NumberFormat(pattern = "#,##0.00")
+    private BigDecimal valor;
+    
+    ...
+
+}
+
+, mas eu nao usei, nao eh? Olha la, na tela, nao esta usando, olha o 10023.00. Entao, a mesma ideia, eu venho, aqui, em 'titulo.valor', pegar o valor e adicionar, aqui, chaves duplas,
+
+    <tr th:each="titulo : ${titulos}">
+
+        ...
+        <td class="text-center" th:text="${{titulo.valor}}"></td>
+
+    </tr>
+
+, mais uma vez, ao Recarregar a Pagina, vai ver que ja passou para virgula, e adicionou o ponto, aqui, para milhar.
+
+55. Entao, ele formatou, usando essa mascara, '#,##0.00', mas os valores que ele aplicou, no caso, vai ser do Brasil, nao eh?, que eh virgula para casa decimal e ponto paa milhar.
+
+56. Beleza? E, aqui, eu ja posso melhorar um pouquinho. Se eu quiser colocar, aqui, o simbolo de reais, eu consigo?
+
+57. Eu vou concatenar, aqui, oh, se eu colocar, aqui, um R$, assim,
+
+    <tr th:each="titulo : ${titulos}">
+
+        ...
+        <td class="text-center" th:text="R$ ${{titulo.valor}}"></td>
+
+    </tr>
+
+, isso aqui vai dar erro.
+
+58. Quer ver? Eu vou salvar, vamos vir aqui, oh, na Pagina Html, vai dar um errao aqui, oh. Oh, deu erro.
+
+59. Por que? Nao conseguiu, ele nao entende o que que eh isso daqui, 'R$ ', porque eu estou tentando, ele vai imaginar que isso daqui, 'R$ ', eh uma expressao dele. So que nao eh uma expressao, eu quero concatenar esse 'R$ ', aqui. Entao, para eu concatenar, eu coloco um pipe aqui, no inicio e no final,
+
+    <tr th:each="titulo : ${titulos}">
+
+        ...
+        <td class="text-center" th:text="|R$ ${{titulo.valor}}|"></td>
+
+    </tr>
+
+, ai, ele entende, 'Ah, quando ele encontrar o ${titulo.valor}, ele quer concatenar, na verdade, com esse R$'.
+
+60. Agora, se eu voltar, aqui, na Pagina Html, ja vai aparecer o R$. Beleza?
+
+61. E vamos melhorar, aqui, um pouquinho mais.
+
+62. Vamos colocar, aqui, oh, no Status, ao inves de aparecer esse escrito, 'Pendente', aqui, vamos colocar um componentizinho de label.
+
+63. Vamos voltar, aqui, na pagina do Bootstrap, deixa eu te mostrar esse componentezinho aqui, oh, GetBootstrap.com / CSS / Components / Labels, https://getbootstrap.com/docs/3.3/components/#labels.
+
+64. Vamos colocar esse componentezinho, aqui, oh, 'label-default', 'label-primary', qualquer um desses aqui. Entao, vamos colocar, agora, por exemplo, para o Pendente, o vermelhinho, que eh o 'label-danger', e, se o cara ja pagou, vamos colocar verdinho, 'label-success', aqui, okay?
+
+65. Como eh que eu posso fazer isso daqui?
+
+66. Baseado no status, entao, eu quero fazer isso baseado no status. 
+
+67. Entao, se eu colocar, aqui, a classe, aqui, oh, por exemplo, para fazer aquilo ali, se voce olhar, aqui, na documentacao, como eh que funciona esse labelzinho, oh, eh um span. Entao, eh um span com essa classe 'label label-success',
+
+    <span class="label label-success">Success</span>
+
+68. Entao, vamos colocar tudo assim, oh, 
+
+    <tr th:each="titulo : ${titulos}">
+
+        ...
+        <td class="text-center" th:text="${titulo.status.descricao}">
+            <span class="label label-success">Success</span>
+        </td>
+
+    </tr>
+
+69. E nos removemos Success. 'th:text' sai do elemento 'td' e vai para dentro do elemento 'span',
+
+    <tr th:each="titulo : ${titulos}">
+
+        ...
+        <td class="text-center">
+            <span class="label label-success" th:text="${titulo.status.descricao}"></span>
+        </td>
+
+    </tr>
+
+70. E, agora, dando um Refresh na Pagina Html, olha la, na Coluna Status, todo mundo ficou verdinho. Mas o Pendente, eu quero deixar com o vermelhinho, que eh o 'label-danger', okay? E, quando for o Recebido, eu quero coloca o verdinho, o 'label-success'.
+
+71. Como eh que eu posso fazer isso daqui?
+
+72. Entao, olha so. O 'label-success',... eh que depende, vai depender se o status, aqui, eh Pendente ou se o status eh Recebido, certo? Bom, eu posso fazer isso de uma forma feia. Vamos fazer da forma feia, aqui, primeiro.
+
+73. Vamos fazer, aqui, o seguinte, oh. Existe, aqui, a tag 'th:classappend', do Thymeleaf, onde eu vou dizer o seguinte, 'Eu quero adicionar essa classe, uma classe, aqui, CSS, mas eu posso usar uma expressao booleana para definir se eu quero adicionar ou nao'.
+
+74. Entao, eu vou colocar, aqui, uma expressao do Thymeleaf e vou colocar o seguinte, 'se o titulo.status for igual a PENDENTE, eu vou usar o operador ternario, aqui,... nao, na verdade, eu vou ter que transformar isso daqui para string, eu vou ter que olhar aqui na documentacao',
+
+    <td class="text-center">
+        <span class="label" th:text="${titulo.status.descricao}"
+                th:classappend="${#strings.toString }"></span>
+    </td>
+
+, vamos dar uma olhada aqui, http://www.thymeleaf.org, a gente vem, aqui, na documentacao, https://www.thymeleaf.org/documentation.html, vamos ler, acho que eh essa daqui, https://www.thymeleaf.org/doc/tutorials/2.1/usingthymeleaf.html, vamos olhar Objeto Utilitario, aqui, '18 Appendix B: Expression Utility Objects' / Strings, https://www.thymeleaf.org/doc/tutorials/2.1/usingthymeleaf.html#strings, entao, tem um metodo, aqui, toString(), alguma coisa assim.
+
+75. Entao, eh #strings.toString(obj), e passa o objeto. Ai, ele vai converter para string, para eu poder comparar la.
+
+76. Entao, aqui, '${#strings.toString()}', ai, eu passo, aqui, titulo.status, ai, sim, eu vou conseguir comparar aqui com PENDENTE, e, ai, eu vou adicionar, se for PENDENTE, eu quero colocar o 'label-danger', se for pago, 'RECEBIDO', eu vou colocar 'label-success',
+
+    <td class="text-center">
+        <span class="label" th:text="${titulo.status.descricao}"
+                th:classappend="${#strings.toString(titulo.status) == 'PENDENTE' ? 'label-danger' : 'label-success' }"></span>
+    </td>
+
+77. Okay? Sera que eh isso daqui? Vamos dar uma testada.
+
+78. Oh, isso mesmo. Ficou, aqui, Pendente. Vamos cadastrar um novo titulo Pago. Descricao 'Condominio Apto 300',Data de vencimento '10/01/2016', Valor '100,00', Status 'Recebido', clicar em Salvar, vamos voltar, aqui, para a Pagina de Pesquisa, olha la, Status Recebido, em Verde.
+
+79. Entao, quando for Recebido, ele adicona a classe 'label-success'. Quando for Pendente, ele adiciona a classe 'label-danger'.
+
+80. Aqui, se voce olhar, oh, em Inspecionar, nesse elemento, na coluna Status, esta, no Chrome DevTools, na Guia Elements, esta so assim, oh, 
+
+    <span class="label label-danger">Pendente</span>
+
+, e, se a gente inspecionar, aqui, o Recebido, vai estar la, 'label-success',
+
+    <span class="label label-success">Recebido</span>
+
+81. Ta vendo a diferenca? Quando eh Pendente, ele coloca o 'danger', quando eh sucesso, ele coloca o 'success'.
+
+82. Okay? Bom, mas isso aqui,
+
+        <span class="label" th:text="${titulo.status.descricao}"
+                th:classappend="${>>>#strings.toString(titulo.status) == 'PENDENTE'<<< ? 'label-danger' : 'label-success' }"></span>
+
+, esta muito feio, nao eh? Olha que tamanho de expressao. Seria mais legal o objeto ja, aqui, o titulo, que de algo me falar, la, 'Olha, ele esta Pendente'. Entao, eu posso colocar um metodo, la, isPendente, por exemplo, que vai facilitar, eu nao preciso colocar esse cara, aqui, desse tamanhozao.
+
+83. Entao, vamos la, vamos fazer isso aqui?
+
+84. Eu vou vir aqui, embaixo, oh, na classe Titulo.java, e vou colocar um metodo assim, oh, isPendente, ou seja, pergunto para o objeto, e ele vai me retornar, se o StatusTitulo.PENDENTE for igual ao status aqui desse objeto, se ele for igual, ele vai me retornar true, 
+
+    public boolean isPendente() {
+        return StatusTitulo.PENDENTE.equals(this.status);
+    }
+
+85. Entao, eu posso vir, aqui, na Pagina PesquisaTitulos.html, e colocar assim, oh, '${titulo.pendente}', ou seja, ele eh 'pendente'?, ai, eu ja pergunto direto: 'O titulo eh pendente?'. Sim, entao, coloca o 'danger'. Nao, entao, coloca o 'success',
+
+        <span class="label" th:text="${titulo.status.descricao}"
+                th:classappend="${titulo.pendente ? 'label-danger' : 'label-success'}"></span>
+
+, eh so fazer isso daqui.
+
+86. Voce vai ver que vai continuar funcionando. Recarregar a Pagina Html.
+
+87. Okay, esta funcionando, tambem.
+
+88. Entao, so recapitulando o que que a gente fez, aqui, nesta aula. Eu troquei, aqui, no metodo pesquisar(), para retornar um ModelAndView, por que? Porque eu preciso passar o nome da View, e tambem adicionar um objeto para a View. Qual objeto que eh? Eu fiz a pesquisa em todos os titulos e estou adicionando, aqui, 
+
+    List<Titulo> todosTitulos = titulos.findAll();
+    ModelAndView mv = new ModelAndView("PesquisaTitulos");
+    >>>mv.addObject("titulos", todosTitulos);<<<
+
+, todos os titulos.
+
+89. Significa que, com o nome 'titulos', eu posso acessar, aqui, o 'tr', aqui, na minha Pagina, e fazer um 'th:each', aqui, oh, 'th:each="titulo : ${titulos}"'>, 'titulos', entao, pesquisando todos aqueles titulos, eh o nome daquele objeto que eu coloquei, entregando essa variavel 'titulo',
+
+    <tr th:each="titulo : ${titulos}">
+        ...
+    </tr>
+
+90. Ai, eu vou preenchendo, aqui, os varios 'td's. Quando eu quero formatar, usando Conversor que ja esta definido, no caso, aqui, na classe Titulo, na dataVencimento, eu nao estou usando esse conversor aqui, @DateTimeFormat(pattern = "dd/MM/yyy")?
+
+91. Entao, eu coloco duas chaves,
+
+        <td class="text-center" th:text="${{titulo.dataVencimento}}"></td>
+
+, a mesma coisa para o Valor, eu nao quero converter o Valor, la, usando o Conversor? Sim, entao, coloco, aqui, duas chaves,
+
+        <td class="text-right" th:text="|R$ ${{titulo.valor}}|"></td>
+
+92. Quero concatenar uma string, aqui, na tela, do Thymeleaf, eu uso o pipe, coloco o pipe, aqui, eu consigo concatenar, nao eh?
+
+93. E a gente viu mais o componentezinho label, aqui, do Bootstrap, e a gente viu, aqui, mais duas coisas, duas propriedades, nao eh?, duas tags do thymeleaf, beleza?, esse th:classappend, e o th:if.
+
+94. O 'th:classappend' vai adicionar uma nova classe ao que esta aqui, 
+
+        <span class=">>>label<<<" th:text="${titulo.status.descricao}"
+            th:classappend="${titulo.pendente ? 'label-danger' : 'label-success'}"></span>
+            
+, eu nao posso colocar, aqui, 'th:class',
+
+        <span class="label" th:text="${titulo.status.descricao}"
+			>>>th:classappend<<<="${titulo.pendente ? 'label-danger' : 'label-success'}"></span>
+
+
+, se eu ja tenho uma classe, eu quero adicionar uma nova. Entao, se o titulo for pendente, eu adiciono o 'label-danger', senao, o 'label-success'.
+
+95. E, usando o Utiliario #lists, com o metodo isEmpty(), eu vou adicionar essa mensagem se 'Nenhum titulo for encontrado', ou seja, se esses 'titulos', aqui, veio vazio,
+
+        <tr th:if="${#lists.isEmpty(>>>titulos<<<)}">
+            <td colspan="6">Nenhum titulo foi encontrado.</td>
+        </tr>
+
+-->
+
+
+
+
+
+
+
+
+
+
+
+

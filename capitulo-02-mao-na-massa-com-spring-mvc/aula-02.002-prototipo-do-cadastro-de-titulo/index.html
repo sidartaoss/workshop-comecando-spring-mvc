@@ -1,0 +1,513 @@
+<!--
+
+Aula 02.002. Prototipo de Cadastro de Titulo.
+
+1. A gente ja tem o projeto pronto, aqui, entao, vamos desenvolver a primeira tela, pelo menos, o prototipo da tela, a gente ainda nao vai lincar com o banco de dados, mas nos vamos ter a primeira tela de cadastro de um Titulo.
+
+2. So para nos lembrarmos, oh, a telinha eh assim, ela tem, aqui, um painel, tem um painelzinho aqui, onde eu vou colocar, ai, a Descricao, a Data de Vencimento, o Valor e o Status.
+
+3. Lembra la, quando o instrutor nos mostrou sobre o Sistema? No caso, aqui, eu poderia usar esse Sistema para receber as boletas, nao eh?, o Recebimento dos outros apartamentos do condominio, nao eh?, se for um cara com uma lojinha, ele poderia ate, aqui, colocar o nome do cliente, em Descricao, a Data de Vencimento que ele fez fiado, la, sei la, uma Padaria, nao eh?, o Valor que ele tem que receber, e tal, algo assim.
+
+4. Entao, colocando, aqui. Entao, aqui, esta bonitinho, nao eh?, esta um Painel, esta tudo alinhado aqui, os campos de entrada, aqui, sao mais bonitinhos, nao eh aquele HTML cruzao, feio.
+
+5. O instrutor desenvolveu esse CSS todo aqui?
+
+6. Nao.
+
+7. O instrutor esta usando, aqui, o Bootstrap.
+
+8. Beleza? So para nos lembrarmos, la, do Bootstrap, a versao 4.1.3 ja esta pronta, entao, nos vamos usar a versao 4.1.3, okay?
+
+9. O Bootstrap, so para a gente recordar, eh um framework HTML, CSS, e JavaScript para a gente desenvolver as nossas aplicacoes. E ele facilita bastante, por ser ja Responsivo, ou seja, ja funciona tanto no Browser, aqui, quanto no Celular, se o cara estiver acessando pelo Browser do Celular, vai funcionar tambem, a gente consegue fazer alguns ajustes, algumas coisas para ele funcionar nos dois.
+
+10. Beleza? Bom, ele tem, entao, varias classes CSS, 
+
+https://getbootstrap.com/docs/3.3/css/
+
+para as apresentacoes, oh, os Formularios, entao, .form-horizontal, que eh o que eu quero usar, 
+
+https://getbootstrap.com/docs/3.3/css/#forms-horizontal
+
+, olha la, Label Email, vem o Input Email, Label Password, vem, aqui, o Input Password, ta vendo oh, o botaozinho. Entao, ele ja vem com isso pronto e como eh que voce faz para aprender?
+
+11. Voce olha assim, oh, eu quero usar um Formulario Horizontal, como esse. Ai, voce vem aqui, olha o exemplo dele, oh, 'Ah, tah, tah aqui, oh, eu preciso criar um form, colocar essa classe aqui. Depois, para cada elemento, oh, eu vou colocar dentro de um form-group, tem o Label, tem o div, com "col-sm-10", para colocar, la, o Input', e por ai vai.
+
+12. Aqui, ele usa oh, 'col-sm-10', um esqueminha chamado de Grid System, que eh esse carinha aqui,
+
+https://getbootstrap.com/docs/3.3/css/#grid
+
+, oh, eu vou usar tambem, que eh o seguinte. Ele divide a tela, pega isso aqui como se fosse a tela, esse pedaco aqui, a tela inteira, e, ai, ele divide a tela em colunas. 
+
+13. E, ai, se eu colocasse uma coluna para cada, eu teria assim, oh, cada componente ficaria dentro desse espacinho de coluna. Mas eu posso falar o seguinte, 'Eu quero que uma coluna, como se ele fizesse um colspan', nao eh?, ele agrupa 8 colunas, se eu colocar 'col-md-8'. 'col-md-4', ele vai pegar esse cara aqui. O que que eh isso? Ai, aqui dentro, eu coloco um outro elemento, por exemplo, aqui, eu posso colocar um Input, aqui, em 'col-md-8', eu coloco um Label, aqui, em 'col-md-4', eu coloco um Input, nao eh?, e por ai vai. O instrutor vai usar esse esqueminha tambem.
+
+14. Entao, oh, o Bootstrap tem essas classes CSS, tem componentes, tambem,
+
+https://getbootstrap.com/docs/3.3/components/
+
+, como Botoes, como Labels, aqui, por exemplo, que a gente vai usar.
+
+15. Entao, lembra la, na Pesquisa, que o instrutor usou, la, uns carinhas assim, 
+
+https://getbootstrap.com/docs/3.3/components/#available-variations
+
+, para falar se esta Recebido, ou se esta Pendente um Titulo?
+
+16. Entao, eu uso esses componentes dele, ja tem esses componentes prontos, tambem.
+
+17. E tem partes de JavaScript tambem, que a gente vai usar, tambem, como o Modal, aqui, oh, Modal,
+
+https://getbootstrap.com/docs/3.3/javascript/#static-example
+
+, se clicar aqui, oh, 
+
+https://getbootstrap.com/docs/3.3/javascript/#live-demo
+
+, no botao Launch demo modal, ele vai abrir um Modal.
+
+18. Entao, eu olho aqui como eh que ele fez, e aprendo para fazer no nosso Sistema.
+
+19. Beleza?
+
+20. Entao, vamos la, vamos comecar a configurar, aqui, no Eclipse. Primeiramente, eu preciso baixar o Bootstrap e adicionar aqui no meu Projeto.
+
+21. Nao eh?, entao, vamos voltar la em cima, clicar aqui, em 'Getting Started',
+
+https://getbootstrap.com/docs/4.1/getting-started/introduction/
+
+, vem aqui em Download, 
+
+https://getbootstrap.com/docs/4.1/getting-started/download/
+
+, copiar link do botao Download,
+
+https://github.com/twbs/bootstrap/releases/download/v4.1.3/bootstrap-4.1.3-dist.zip
+
+, ir em github.com, no projeto Boostrap, nas Releases, e baixar a Release 3.3.6 e descompactar.
+
+22. E, ai, ele tem 3 partes principais, aqui, css, fonts e js. CSS, que eu vou copiar, aqui, so o bootstrap.min.css, e, aqui, no Eclipse, dentro da pasta static, dentro de 'src/main/resources', eu vou criar uma pasta aqui, nomeando-a como css, e vou colar aquele boostrap.min.css.
+
+23. Okay? Aqui, os fontes eu tambem vou copiar, porque, as vezes, o Bootstrap pode precisar de algum icone, de alguma fonte, e, entao, ele vai buscar desses arquivos. Entao, eu vou criar, aqui, no Eclipse, dentro da pasta static, uma pasta 'fonts', e colar essas fontes aqui dentro.
+
+24. Okay? E, por fim, a parte de Javascript, eh o boostrap.min.js, que eu preciso, e vou colar aqui, no Eclipse, dentro da pasta 'static/js'.
+
+25. Beleza? Bom, ja estou com essa parte do Bootstrap pronta.
+
+26. Vamos criar a nossa Pagina. Eh a primeira pagina, la, do cadastro, e comecar a criar o prototipo dela. Depois, a gente faz a funcionalidade de cadastro, por enquanto, vamos so fazer ela funcionar.
+
+27. Bom, para eu fazer ela aqui, oh, eu vou clicar com botao direito na pasta templates / New / Other... / HTML, eh um arquivo HTML. Ai, eu vou em Next. O Eclipse esta querendo salvar, oh, na pasta 'webapp', porque, normalmente, eh onde eu salvaria os arquivos web. So que nao, no nosso caso, aqui, eh na pasta templates, porque nos estamos usando Thymeleaf, e o Thymeleaf eh configurado para usar aqui dentro de, o Spring Boot ja configura para a gente, para usar aqui dentro da pasta 'templates'.
+
+28. Qual eh o nome do arquivo?
+
+29. Eu vou chama-lo de CadastroTitulo.html, porque a gente esta cadastrando um Titulo.
+
+30. Vamos adicioanar, aqui, algumas, deixa eu adicionar esse Namespace aqui, oh, na tag <hml>,
+
+    <html xmlns="http://www.w3.org/1999/xhtml"
+
+, para falar que esse HTML eh do tipo xhtml, ou seja, eh um HTML que precisa que tudo que abre, precisa fechar. Okay?
+
+31. So para nos mostrar, que isso aqui dar um erro, essa Pagina, quando eu tentar acessa-la, nao agora, daqui um pouco, a gente chega la.
+
+32. Vamos mudar aqui o titulo, vamos colocar, aqui, Cadastro de Titulo,
+
+<!DOCTYPE html>
+<html lang="pt-BR"
+	xmlns="http://www.w3.org/1999/xhtml"	
+>
+<head>
+<meta charset="ISO-8859-1">
+<title>Cadastro de Titulo</title>
+</head>
+<body>
+
+</body>
+</html>
+
+33. Vamos configurar, aqui, no head, para ler os nossos arquivos CSS la do Bootstrap, entao,
+
+<head>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+</head>
+
+34. A ultima coisa antes do </body>, a gente deve colocar os nossos JavaScripts, nao eh?, entao, 
+
+<body>
+
+    ...
+<script src="/js/boostrap.min.js"></script>
+</body>
+
+35. Sempre assim que a gente deve fazer, certo?
+
+36. Colocar, so, aqui, vamos colocar um <h1> aqui, no <body>,
+
+<!DOCTYPE html>
+<html lang="pt-BR"
+	xmlns="http://www.w3.org/1999/xhtml"	
+>
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Cadastro de Titulo</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+</head>
+<body>
+    <h1>Cadastro de titulo</h1>
+
+<script src="/js/boostrap.min.js"></script>
+</body>
+</html>
+
+, vamos colocar assim, so para a gente ver funcionando.
+
+37. Lembra quando o instrutor explicou sobre o Framework Action-Based? 
+
+38. O Browser faz a Requisicao, que vai cair no Framework. Mas o Framework, depois, entrega isso para quem? Para um Controller.
+
+39. Okay? Entao, o Controller pode chamar o Model, aqui, para fazer as Regras de Negocio, e salvar no banco, nos nao vamos fazer isso agora. Ai, o Controller retorna, ja, para o Framework, o nome da View, para o Framwork, no caso, o Spring-MVC, achar a View, que eh a nossa Pagina, e devolver para o Browser.
+
+40. Entao, repara, oh, a Requisicao Web, a primeira coisa que ele tem que ter, oh, eh chegar, aqui, no Controller.
+
+41. Eu nao consigo ver aquela Pagina, aquele Cadastro de Titulo, sem criar um Controller. Entao, eu vou criar esse Controller, aqui, para a gente dar o nome, aqui, para a View, para ele ja retornar, aqui, para o Framework encontrar a View e desenhar no Browser para a gente.
+
+42. Okay?
+
+43. Entao, eu venho aqui, na parte do Java, botao direito em 'src/main/java', New / Class, eu vou colocar dentro do pacote 'com.algaworks.cobranca.controller', e vou chamar a classe de TituloController, porque eh o Controller do Titulo,
+
+package com.algaworks.cobranca.controller;
+
+public class TituloController {
+
+}
+
+44. No Spring, todo Controller deve ser anotado com a anotacao @Controller,
+
+package com.algaworks.cobranca.controller;
+
+import org.springframework.stereotype.Controller;
+
+@Controller
+public class TituloController {
+
+}
+
+45. E, ai, eu vou criar um metodo, aqui, oh, que retorna uma String, que eh o nome da View. Qual eh o nome da View?
+
+46. Eh o nome desse arquivo, que esta dentro da pasta templates, sem o .html, ou seja, 'CadastroTitulo'.
+
+47. Entao, olha la, 
+
+package com.algaworks.cobranca.controller;
+
+import org.springframework.stereotype.Controller;
+
+@Controller
+public class TituloController {
+
+    public String novo() {
+        return "CadastroTitulo";
+    }
+
+}
+
+, sem o '.html'. Por que sem o .html? Porque, se um dia eu quiser trocar, eh uma separacao que o Spring faz bem legal, porque, se um dia trocar, aqui, 'Ah, eu nao vou usar mais html, eu vou usar, sei la, jsp', entao, eu nao preciso mexer no meu Controller, beleza?
+
+48. So que o framework, ele mapeia uma URL, mas, na hora que ele acessar la, /alguma-coisa, ele tem que saber que ele tem que chamar esse metodo aqui, baseado na URL que eu digitar, aqui, no Browser.
+
+49. Entao, aqui, eu vou digitar, http://localhost:8080/alguma-coisa, para ele chegar la.
+
+50. Como eu estou trabalhando com titulos, eu vou colocar 'titulos/novo', ou seja, 'http://localhost:8080/titulos/novo', ou seja, eu quero que ele mapeie essa URL para ele chegar naquela pagina de Cadastro de Titulos.
+ 
+51. Entao, como eh que eu posso fazer?
+
+package com.algaworks.cobranca.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+public class TitutloController {
+
+    @RequestMapping("/titulos/novo")
+    public String novo() {
+        return "CadastroTitulo";
+    }
+
+}
+
+52. Se eu fizer esse mapeamento dessa forma, quando eu digitar isso no Browser, ele cai aqui, dentro desse metodo, 
+
+    @RequestMapping("/titulos/novo")
+    public String novo() {
+        return "CadastroTitulo";
+    }
+
+, vai retornar essa View, 
+
+        return "CadastroTitulo";
+
+53. Ele vai encontrar essa Pagina, aqui,
+
+<!DOCTYPE html>
+<html lang="pt-BR"
+	xmlns="http://www.w3.org/1999/xhtml"	
+>
+<head>
+<meta charset="ISO-8859-1">
+<title>Cadastro de Título</title>
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+</head>
+<body>
+
+<h1>Cadastro de Título</h1>
+
+<script src="/js/bootstrap.min.js"></script>
+</body>
+</html>
+
+, e vai retornar la para o Browser para a gente.
+
+54. Vamos ver se isso vai funcionar?  
+
+55. Eu ja tinha feito, aquela outra vez, iniciar Cobranca, nao eh?, so para relembrar, eh nesse arquivinho aqui, que tem o metodo main, eu preciso mandar executar esse cara, botao direito em CobrancaApplication / Run As / Spring Boot App.
+
+56. Ele vai iniciar a Aplicacao, aqui, se a gente olhar aqui, no Console, oh, olha so, ele mostra, aqui, no log, oh, se voce olhar essa linha, aqui, ele ta falando, oh, que mapeou /titulos/novo, ele mapeou aqui, oh, no Controller, no metodo novo().
+
+57. Entao, oh, esse mapeamento nosso, agora, se eu vier aqui no Browser, e dar um <ENTER> aqui, eh para funcionar, mas deu errado.
+
+58. Ta falando, aqui, que o elemento <meta> precisa terminar com </meta>. Por que? Eu to falando que eu quero que esse meu html seja um xhtml,
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+, ou seja, tudo que abre, tem que fechar.
+
+59. Entao, se esse "meta", aqui, do 'charset', abriu, eu preciso fecha-lo,
+
+<meta charset="UTF-8" />
+
+60. Okay? Como eh um caminho com erro, eu editei, la, salvei, se eu der um Refresh, aqui, ele ja vai funcionar, oh, Recarregar a Pagina Html.
+
+61. Entao, a gente conseguiu fazer aquela navegacao, mais uma vez, aqui, no slide do instrutor: 1. Chegou a Requisicao do Framework, 2. O Framework encontrou o Controller, 3. Nos ainda nao fizemos, ainda, essa parte, aqui, de ir no Model, essa parte aqui nos pulamos, 4. Mas, ai, o Controller retornou o nome de uma View, que chegou no nome dela, 5. E retornou para o Browser.
+
+62. Okay? Entao, vamos la, vamos continuar a desenhar, a criar o prototipo aqui da nossa tela. So para lembrarmos, aqui, como eh a tela, entao, oh, repara bem, essa tela, ela tem, aqui, essa barra de navegacao, com o Logo da Algaworks, tem um painel padrao, tem, aqui, os elementos do formulario, e isso aqui que nos vamos desenvolver.
+
+63. Vamos fazer essa barra de navegacao, aqui, agora.
+
+64. Para o instrutor nao ter que ficar digitando e voce ver o instrutor digitando, o instrutor ira copiar, aqui, de uma forma mais rapida. Entao, aqui dentro do body, vamos colocar esse cara aqui,
+
+    <nav class="navbar navbar-inverse navbar-static-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">
+                    <img alt="AlgaWorks" src="/images/logo-algaworks.png"/>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+65. Vamos ver o que que eu estou fazendo, aqui, oh. Bom, de onde eu copiei esse cara, de onde eu aprendi a fazer isso daqui?
+
+66. Eh no site do Bootstrap, em Componentes, em Navbar, http://getbootstrap.com/docs/4.1/components/navbar/, com uma imagem de uma marca, http://getbootstrap.com/docs/4.1/components/navbar/#brand, entao, eu coloco esse cara aqui, ou seja, esse pedaco de codigo, entao, eu fui aprendendo, aqui, 'Ah, entao, eh assim que funciona', ai, ele cria essa barra de navegacao.
+
+67. Ai, foi a assim que o instrutor foi aprendendo, e foi colocando, aqui.
+
+68. Eu preciso colocar a logo da AlgaWorks, olha so o caminho, /images/logo-algaworks.png. Entao, aqui, oh, eu nao tenha, ainda, essa pasta, eu vou criar, aqui, dentro de static, a pasta images, e, aqui, dentro, eu vou copiar a logozinha, logo-algaworks.png, agora, ele vai conseguir recuperar la.
+
+69. E, ai, eu salvei aqui o arquivo CadastroTitulo.html. Depois que eu salvei, isso ja esta aplicado aqui no sistema? Vamos dar uma olhada? Nao veio para ca. Por que que ele nao veio para ca? Porque ele nao conseguiu dar o Refresh, aqui. Entao, teria que parar o Servidor, e reiniciar toda vez o Servidor. E isso eh um saco, nao eh?, imagina, eu tenho que parar, iniciar, de novo, o Servidor, tem que ficar esperando esse tempinho, toda vez, nao eh?
+
+70. Agora, vem aqui, na Pagina Html, da o Refresh na Pagina, ai, sim, colocamos, aqui, a barra de navegacao.
+
+71. Isso eh meio chato, ficar fazendo, nao eh? Entao, o que que eu vou fazer? Eu ja vou, aqui, depois, nos ja vamos ver um pouquinho mais coisas sobre o Dev-Tools, o que que ele faz, mas, eu ja vou configurar ele aqui. O que eh o Dev-Tools? Eh o carinha que, na hora que eu faco uma alteracao, ele ja aplica essa alteracao pra mim, nao eh?, entao, isso eh bem legal. Entao, eu vou parar, aqui, o projeto, primeiro, vou vir aqui no pom.xml, o instrutor nao colocou la na hora para nos mostrar qual que eh o beneficio de a gente ter o Dev-Tools, entao, a cada alteracao na pagina, a gente teria que parar o Servidor e subir novamente.
+
+72. Agora, com o Dev-Tools, eh so eu copiar essa dependencia aqui, oh,
+
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-devtools</artifactId>
+    </dependency>
+
+73. Salvei, aqui, o pom.xml, ele vai baixar isso da Internet, okay?, no caso, aqui, o instrutor ja tem, entao, vem rapidinho, posso iniciar o projeto novamente.
+
+74. Vamos fechar o pom.xml, aqui.
+
+75. Ai, deixa eu te mostrar o que que, com ele, a gente consegue fazer.
+
+76. Beleza. Subiu, O projeto continua funcinando normal. Eu vou escrever um ola, aqui, qualquer, vamos colocar, aqui, oh, de novo, <h1>, por exemplo,
+    
+	<nav class="navbar navbar-inverse navbar-static-top">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="#">
+					<img alt="AlgaWorks" src="/images/logo-algaworks.png" />
+				</a>
+			</div>
+		</div>
+	</nav>
+
+    <h1>Olá com DevTools</h1>
+
+77. Salvei. Volto aqui, na Pagina Html, ja deu Refresh, ele ja aplicou essa alteracao que eu fiz.
+
+78. Com isso, a gente vai ganhar muito tempo no nosso desenvolvimento.
+
+79. Entao, oh, apaguei, salvei, venho, aqui, na Pagina Html, deu Refresh, ja ta funcionando.
+
+80. Depois, vamos ver um pouquinho mais de detalhe, o instrutor vai nos mostrar o que que, nesse Refresh, a gente vai precisar fazer.
+
+81. Bom, vamos la. A gente colocou, aqui, o layout de navegacao, mas, se nos repararmos, aqui, ele nao alinhou verticalmente a imagem na barra de navegacao certinho, nao, aqui, tem um espacinho um pouco maior no topo do que no inferior. Entao, eu quero dar uma customizadinha nisso. Como eh que eu faco para dar essa customizada?
+
+82. Eu vou criar, aqui dentro da pasta css, um novo arquivo, eu vou chamar de style.css, do nosso sitema.
+
+83. Okay? E, ai, eu identifico, vamos olhar, aqui, de novo, que o navbar-brand, essa carinha aqui,
+
+<a class="navbar-brand" href="#">
+    <img alt="AlgaWorks" src="/images/logo-algaworks.png" />
+</a>
+
+, que eu quero dar uma alinhada nele, aqui, eu quero colocar uma margemzinha maior. Entao, eu posso, simplesmente, selecionar, aqui, em style.css,
+
+.navbar-brand {
+    padding-top: 12px;
+}
+
+, adicionando, aqui, um padding-top de 12 pixels, ele ja vai dar essa ajustada para mim.
+
+84. So que, como eu coloquei esse style.css, aqui, na pasta css, eu tenho que colocar, aqui, embaixo do bootstrap, eu vou colocar o meu style.css,
+
+<link rel="stylesheet" src="/css/bootstrap.min.css">
+<link rel="stylesheet" src="/css/style.css">
+
+85. Beleza? Salvei, aqui, dou um Refresh na Pagina Html, olha la, ja deu a alinhadinha que eu estava precisando. Okay?, vamos continuar o desenvolvimento?
+
+86. Voltamos, aqui, em CadastroTitulo.html. Na telinha que o instrutor exibiu no slide, eu vou precisar de um formulario, 'form-horizontal', que eh o formulario que eu quero usar,
+
+    <form class="form-horizontal">
+
+    </form>
+
+87. Ness formulario, dentro do formulario, eu vou ter um 'div', 'panel panel-default',
+
+    <form class="form-horizontal">
+        <div class="panel panel-default">
+
+        </div>
+    </form>
+
+88. O que que eh esse 'panel panel-default'?
+
+89. O instrutor vai mostrar, agora, so no inicio, depois, o instrutor passa isso rapido, e voce consegue pesquisar, aqui, tambem, oh, no site do Bootstrap. Aqui, em css, https://getbootstrap.com/docs/3.3/css/, em Componentes, https://getbootstrap.com/docs/3.3/components/, Panels, https://getbootstrap.com/docs/3.3/components/#panels, olha la, aquele Panel la, com Panel title, Panel content, que eh o que eu quero fazer, eh so para a gente lembrar, aqui, da telinha, olha so a telinha, em que o instrutor exibe, a partir de um slide. Entao, eu tenho esse Panel, aqui, entao, eu vou adicionar esse cara aqui, agora. Beleza?
+
+90. Entao, eu olho la como esta na documentacao do Bootstrap, https://getbootstrap.com/docs/3.3/components/#panels-heading, e vou implementando. Entao, ele tem um div 'panel-heading',
+
+    <form class="form-horizontal">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+
+            </div>
+            <div class="panel-body">
+
+            </div>
+        </div>
+    </form>
+
+, ai, aqui, nesse div 'panel-heading', ah, aqui, vem o titulo, oh, ja, direto, <h3>. Vou colocar um h1, aqui, porque eh o titulo da pagina,
+
+    <form class="form-horizontal">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h1 class="panel-title">Novo título</h1>
+            </div>
+
+        </div>
+    </form>
+
+91. Salvei. Vamos dar uma olhada como esta? Recarregar a Pagina Html. Okay, esta aparecendo o painel com o titulo 'Novo titulo'.
+
+92. E por ai vai o desenvolvimento, aqui, do Prototipo da telinha. O instrutor vai copiar esse Prototipo, aqui, mais rapido, e, ai, a gente vai passando um por um, para nos nao termos que ficar vendo o instrutor digitar toda hora.
+
+93. Nao eh?
+
+94. Pronto. Vamos dar uma olhada aqui.
+
+95. O instrutor ja tinha feito essa parte, aqui, do 'panel-heading'. Agora, aqui, no 'panel-body', nos adicionamos um 'form-group', Label 'Descricao', e um Input para Descricao.
+
+    <div class="panel-heading">
+        <h1 class="panel-title">Novo titulo</h1>
+    </div>
+    <div class="panel-body">
+        <div class="form-group">
+            <label for="descricao" class="col-sm-2 control-label">Descricao</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="descricao" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="dataVencimento" class="col-sm-2 control-label">Data de vencimento</label>
+            <div class="col-sm-2">
+                <input type="text" class="form-control" id="dataVencimento" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="valor" class="col-sm-2 control label">Valor</label>
+            <div class="col-sm-2">
+                <input type="text" class="form-control" id="valor" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="status" class="col-sm-2 control-label">Status</label>
+            <div class="col-sm-2">
+                <select class="form-control">
+                    <option>Pendente</option>
+                    <option>Recebido</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-primary">Salvar</button>
+            </div>
+        </div>                       
+    </div>  
+
+, e o label, colocando esse 'for', com o id="descricao", isso aqui eh legal por que?
+
+96. Quando eu clico, aqui, no label Descricao, ele ja seleciona o input de Descricao, ou seja, eu nao preciso clicar so no input, eu posso clicar no label, que o foco vai para o input tambem.
+
+97. Lembra que o instrutor falou sobre o Grid System? Entao, para esse label, eu falei que quero usar 2 colunas e, ai, para todos os labels, eu vou usar 2 colunas e, ai, todos eles vao ficar alinhados, aqui, oh, eu estou usando 2 colunas dessa tela. Eles vao ficar alinhados certinho, aqui.
+
+98. Para a Descricao, eu usei 4 colunas, entao, na tela, ele pegou 4 colunas, por isso que Descricao, aqui, esta maior, por exemplo, do que Data Vencimento, onde eu usei so 2 colunas para mostrar a Data de Vencimento.
+
+99. Okay? Oh, o Valor, o 'form-group' para o Status, por enquanto, eu estou deixando tudo fixo, aqui, na mao, nao eh?, e o botao, aqui, de enviar,
+
+<div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+        <button type="submit" class="btn btn-primary">Salvar</button>
+    </div>
+</div>
+
+100. E, aqui, no botao de Enviar, olha so, eu coloquei, oh, 'col-sm-offset-2', o que que eh esse offset, aqui, de 2? 
+
+101. Significa que eu quero que ele pule 2 colunas, aqui, entao, ele vai pular 2 colunas para colocar a partir dali, para o botao nao ficar do lado esquerdo, para ficar alinhado, aqui, com os demais campos de input. Entao, eu ponho esse offset, aqui, de 2. Entao, ele comeca a desenhar a partir, depois do 2, ele pula esses 2 aqui, coloca um nada la, para comecar depois do 2, que eh, justamente, onde estao o tamanho dos labels.
+
+102. Okay? Coloquei, la, o tipo do botao de submit, que vai enviar o formulario, nao eh?, vai submeter o formulario. Qual eh a classe do botao? 'btn-primary', por que o 'btn-primary'? Para ele ficar azul, nao eh?, so para voltar la, na documentacao, o botao esta aqui em css, https://getbootstrap.com/docs/3.3/css/, em Buttons, https://getbootstrap.com/docs/3.3/css/#buttons, oh o botao btn-primary, ele vai ficar azul, 'Ah, eu queria que ele ficasse verde', eh so voce trocar, la, para 'btn-success', por exemplo, ai, vai ficar verde, okay?
+
+103. Entao, eh isso. Viu que a gente desenhou essa telinha, aqui. Ah, nao, vamos customizar, ainda, uma coisinha, aqui. Eu queria que ficasse uma bordinha aqui, oh, no painel. Nao gosto desse carinha, aqui, no Browser, encostado, aqui, igual esta assim, nao.
+
+104. So para dar uma olhada, aqui, de novo, oh, no slide do instrutor, repara que tem uma pequena margem aqui, oh, do lado esquerdo e direito do painel, para esse painel nao ficar grudado, aqui, no Browser.
+
+105. Entao, vamos customizar isso. Tem que vir, aqui, no CSS, e, ai, essa carinha, essa classe, eh do panel, certo? O panel-default, o jeito dele, por padrao, eh ficar ali sem margem. Entao, eu quero que o panel-default, eu quero adicionar uma margem na esquerda de 10 pixels, e uma margem na direita de 10 pixels tambem,
+
+.panel-default {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+106. Ao Recarregarmos a Pagina, vemos que deu um espacinho nas margens esquerda / direita.
+
+107. Beleza? Entao, esse eh o prototipo, entao, que a gente definiu, entao, a gente configurouo CSS, aqui, nao eh?, o bootstrap, a gente baixou o CSS, a parte JavaScript, apesar de a gente nao ter usado nada de JavaScript do Bootstrap, ainda, mas ele ja esta configurado, aqui, se a gente precisar, as fontes, tambem, nao sei nem se a gente usou, as vezes, o Bootstrap pode baixar, dependendo do que a gente usa, ele vai fazer a Requisicao, aqui. Okay? Configuramos, aqui, e temos esse prototipo da telinha.
+
+108. Bom, aqui, no botao Salvar, nao esta fazendo nada, se eu cliar aqui, provavelmente, eh, nao esta fazendo nada, porque estou enviando esse formulario para lugar nenhum.
+
+109. Fim da Aula 02.002. Prototipo de Cadastro de Titulo.
+
+
+-->

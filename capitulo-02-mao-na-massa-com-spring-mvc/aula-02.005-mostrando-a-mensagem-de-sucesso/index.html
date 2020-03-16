@@ -1,0 +1,346 @@
+<!-- 
+
+Aula 02.005. Mostrando a Mensagem de Sucesso
+
+1. Quando a gente salva um Titulo, eh legal mostrar uma mensagem, ali, falando, oh, o Titulo foi salvo com sucesso.
+
+2. Nao eh? Entao, para isso, eu vou adicionar algumas coisas, aqui, parra a gente conseguir mostrar essa mesnagem. 
+
+3. Okay? E, ai, a gente ja vai ver, tambem, algumas coisinhas a mais, aqui, ja vamos comecar a mexer um pouco mais no Thymeleaf, que, ate agora, a gente nao fez, praticamente, nada com o Thymeleaf.
+
+4. Okay? Bom, vamos la, a primeira coisa que eu vou colocar, aqui, em CadastroTitulo.html, vai ser o local onde eu vou colocar essa mensagem.
+
+5. Eu vou coloca-la aqui, oh, dentro do form, aqui, eu vou criar uma div, aqui, e eu vou adicionar algumas coisas, aqui, deixa eu copiar, aqui, para nos darmos uma olhada, ai, a gente conversa em cima disso.
+
+6. Entao, oh,
+
+    <form class="form-horizontal" method="POST" action="/titulos">
+
+        <div class="alert alert-success alert-dismissable" role="alert">
+        </div>
+
+        ...
+
+    </form>
+
+7. Vou colocar essa div com essas classes, aqui, do Bootstrap, para falar que eh um alerta, vai parecer um alertazinho, ali, com a mensagem, essa classe, aqui, 'alert-dismissable', permite a gente fechar esse alerta, okay? Para poder fechar, eu tenho que colocar o botao, entao, vamos colocar, aqui, o botaozinho, que eh um 'X', nada mais do que isso, para a gente fechar essa mensagem,
+
+    <form class="form-horizontal" method="POST" action"/titulos">
+        <div class="alert alert-success alert-dismissable" role="alert">
+            <button type="button" class="close" data-dismiss="alert"></button>
+        </div> 
+    </form>
+
+, e, aqui, vai um span, com a mensagem, aqui, por exemplo, 'Titulo salvo com sucesso!', colocar algo assim,
+
+    <div class="alert alert-success alert-dismissable" role="alert">
+        <button type="button" class="close" data-dismiss="alert"></button>
+        <span>Titulo salvo com sucesso!</span>
+    </div>
+
+8. Vamos ver isso daqui na tela, para ver como isso vai ficar.
+
+9. Oh, vai aparecer algo mais ou menos assim, na tela. Bom, e, ai, eu ja estou vendo algo que eu nao estou gostando, que eh esse espacinho, aqui, do lado esquerdo e direito da tela, entao, vamos colocar uma margem, aqui, para ficar mais certinho.
+
+10. Vamos em style.css.
+
+11. Para isso, eh na classe .alert, eu vou colocar, aqui, entao, uma margem esquerda, margin-left, de 10 pixels e uma margem direita de 10 pixels,
+
+.alert {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+12. Okay? Se a gente voltar, aqui, na tela, e der um Refresh, ja deu um espacinho, uma margem, aqui, na mensagem.
+
+13. Entao, essa eh a ideia, eh fazer aparecer esse carinha, quando a gente salvar um Titulo.
+
+14. Okay? Aquele 'X' de fechar a mensagem nem aparece, aqui, entao, eu acho que ele nem precisa dele aqui, mesmo, nao, deixa eu ver, aqui, posso tirar esse cara aqui, ficar assim, mais simples, ainda,
+
+    <div class="alert alert-success">
+        <span>Titulo salvo com sucesso!</span>
+    </div>
+
+15. Beleza? Okay.
+
+16. Bom, entao, isso aqui que eu preciso fazer aparecer quando uma mensagem de sucesso estiver disponivel, aqui, nao eh?, para mostrar.
+
+17. E ai que vai comecar a entrar o Thymeleaf.
+
+18. Como assim? Por que que eu vou usar o Thymeleaf?
+
+19. Ou seja, eu quero mostrar essa div,
+
+    <div class="alert alert-success">
+        <span>Titulo salvo com sucesso!</span>
+    </div>
+
+, apenas se tiver uma mensagem para ser mostrada. E, ai, para isso, eu vou usar a tag do Thymeleaf, aqui.
+
+20. Para eu usar a tag do Thymeleaf, eu preciso adiciona-la, aqui, no cabecalho, aqui, no elemento html. Entao, eu vou fazer o seguinte, oh, eu vou adicionar aqui, oh, um novo namespace, xmlns="", 'ns' de namespace, xmlns:th="", e, ai, o namespace do Thymeleaf eh esse aqui, oh, "http://www.thymeleaf.org", pronto, eh esse aqui, o namespace do Thymeleaf,
+
+    <!DOCTYPE html>
+    <html xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:th="http://www.thymeleaf.org">
+
+        ...
+
+    </html>
+
+21. Entao, agora, tudo o que eu usar 'th:', ai, eu tenho as tags, eu tenho as coisas disponiveis do Thymeleaf para eu poder usar, as tags dele.
+
+22. Entao, aqui, eu vou usar uma que eh o 'IF'.
+
+23. Entao, 'th:if', significa que ele vai renderizar essa tag div e, ai, no caso, ela toda, do comeco ao fim, se a condicao, aqui, retornar 'true'. Qual condicao que eh essa?
+
+    <div class="alert alert-success" th:if="">
+        <span>Titulo salvo com sucesso!</span>
+    </div
+
+24. Ai, eu ja vou usar uma expressao Thymeleaf, eu coloco um dolar, abro chaves, e, ai, eu vou usar um utilitario do Thymeleaf de strings, esse jogo-da-velha e strings, '${#strings}', eh um objeto do proprio Thymeleaf com metodos para eu poder trabalhar, aqui. Entao, eu vou falar o seguinte, oh, 'Se ela for, se isEmpty(), a mensagem', que mensagem que eh essa? Eh uma variavel que eu vou passar aqui,
+
+    <div class="alert alert-success" th:if="${#strings.isEmpty(mensagem)}">
+        ...
+    </div>
+
+, entao, eu acho que existe o metodo isNotEmpty(). Nao tenho certeza, vamos dar uma olhada, aqui, na documentacao? 
+
+25. https://www.thymeleaf.org/documentation.html, nos estamos usando, aqui, oh, a versao 2.1, https://www.thymeleaf.org/doc/tutorials/2.1/usingthymeleaf.html, vamos pesquisar, aqui, oh, #strrings, entao, tem o sinal de negacao antes. Vamos olhar, agora, em Thymeleaf + Spring, https://www.thymeleaf.org/doc/tutorials/2.1/thymeleafspring.html. Vamos dar uma olhada, agora, em https://www.thymeleaf.org/doc/tutorials/2.1/usingthymeleaf.html, aqui, em Appendix B: Expression Utility Objects, em Strings, https://www.thymeleaf.org/doc/tutorials/2.1/usingthymeleaf.html#strings, isso aqui que eu queria achar.
+
+26. Entao, oh, nao, nao tem, eh so o isEmpty() mesmo. Entao, aqui, oh, #strings.isEmpty(name), name eh o nome da variavel, entao, o que eu posso fazer eh negar isso.
+
+27. Entao, se nao estiver vazia, eu vou mostrar aquela mensagem.
+
+28. Okay? Entao, oh, sao varios metodos para a gente trabalhar, oh, trim(str), com string, para saber o tamanho, oh, tem varios, capitalize(), uncapitalize(), eh, nao tem, poderia colocar, nao eh?, para ficar um pouco mais legivel. Entao, nao tem esse isNotEmpty(), eu posso negar,
+
+    <div class="alert alert-success" th:if="${!#strings.isEmpty(mensagem)}">
+
+    </div>
+
+29. Entao, vamos salvar aqui e ver. Se der errado, aqui, vai dar um errao. Beleza.
+
+30. Beleza, carregamos a Pagina Html e nao deu erro. Entao, esta certo.
+
+31. Entao, se nao estiver vazio esse atributo 'mensagem', ele vai mostrar. Beleza. Qual atributo que eh esse mensagem?
+
+32. Vamos adicionar, aqui, oh, em TituloController.java. Quando eu salvar um Titulo, eu vou adicionar esse atributo mensagem. E, ai, ao inves de eu retornar uma String, eu vou retornar um cara que carrega o nome da View, mas, tambem, carrega mais informacoes que eu preciso na minha View.
+
+33. Entao, esse cara eh o ModelAndView,
+
+import org.springframework.web.servlet.ModelAndView;
+
+@Controller 
+@RequestMapping("/titulos")
+public class TituloController {
+
+    @Autowired
+    private Titulos titulos;
+
+    @RequestMapping("/novo")
+    public String novo() {
+        return "CadastroTitulo";
+    }
+
+    @RequestMapping(method = RequestMethod.POST)
+    public >>>ModelAndView<<< salvar(Titulo titulo) {
+        titulos.save(titulo);
+        return "CadastroTitulo"
+    }
+
+}
+
+34. Ao inves de eu retornar so a View, eu vou retornar, tambem, alguns dados (Model) para essa View.
+
+35. Como eh que esse cara funciona?
+
+36. Eu crio, aqui, oh, direto um objeto ModelAndView. O construtor dele, aqui, ja recebe a View, que ele vai retornar,
+
+    @RequestMapping(method = RequestMethod.POST)
+    public ModelAndView salvar(Titulo titulo) {
+        titulos.save(titulo);
+
+        ModelAndView mv = new ModelAndView("CadastroTitulo");
+
+        // return "CadastroTitulo";
+
+        return mv;
+    }
+
+, e, por final, na ultima linha, eu retorno 'mv', 'return mv'.
+
+37. Se eu so fizer isso daqui, continua funcionando normal, posso salvar aqui, nao vai ter problema nenhum. 
+
+38. So que, agora, eu posso vir aqui, no 'mv', e fazer o seguinte, oh, 'addObject()', e colocar aqui, oh, 'mensagem', e, aqui, eu escrevo, oh, 'Titulo salvo com sucesso!',
+
+    ...
+
+    ModelAndView mv = new ModelAndView("CadastroTitulo");
+    >>>mv.addObject("mensagem", "Titulo salvo com sucesso!");<<<
+    return mv;
+
+    ...
+
+, okay? Vamos colocar essa mensagem e, quando eu estiver chegando na View, esse atributo, aqui, 'mensagem', estara disponivel, aqui, nessa Pagina Html, ou seja, em CadastroTitulo.html.
+
+39. Entao, eu posso fazer isso aqui, oh, em CadastroTitulo.html,
+
+    <form class="form-horizontal" method="POST" action="/titulos">
+
+        <div class="alert alert-success" th:if=">>>${!#strings.isEmpty(mensagem)}"<<<>
+            ...
+        </div>
+
+    </form>
+
+, se nao estiver vazio, ele vai mostrar essa mensagem, esse div, aqui. E quando que ele vai mostrar isso? Quando eu salvar com sucesso. Oh, depois de eu salvar,
+
+    @RequestMapping(method = RequestMethod.POST)
+    public ModelAndView salvar(Titulo titulo) {
+        >>>this.titulos.save(titulo);<<<
+        ModelAndView mv = new ModelAndView("CadastroTitulo");
+        mv.addObject("mensagem", "Título salvo com sucesso!");
+        return mv;
+    }
+
+, eu chamei o metodo salvar(), e deu tudo certo? Ai, ele vai fazer isso,
+
+    @RequestMapping(method = RequestMethod.POST)
+    public ModelAndView salvar(Titulo titulo) {
+        >>>this.titulos.save(titulo);<<<
+        ModelAndView mv = new ModelAndView("CadastroTitulo");
+        mv.addObject("mensagem", "Título salvo com sucesso!");
+        return mv;
+    }
+
+40. Okay? Salvei de novo, ele vai recarregar, aqui, e vamos la na Pagina Html, http://localhost:8080/titulos/novo, vamos salvar um outro registro, aqui, vamos ver, aqui, no Console H2, o que que tem, oh, vamos conectar de novo, 'select * from titulo', nao tem nada.
+
+41. Vamos salvar, aqui, em http://localhost:8080/titulos/novo, Descricao 'Condominio Apto 102', Data de vencimento '10/01/2016', Valor 100,10, por exemplo, Status 'Pendente', e vou Salvar.
+
+42. Quando eu clicar em Salvar, tem que ir para o banco de dados e tem que aparecer a mensagem.
+
+43. Oh, exibiu a mensagem 'Titulo salvo com sucesso!' no alto da Pagina.
+
+44. E, aqui, ainda estamos, aqui, no Console do H2, 'select * from titulo', o registro eh exibido, ou seja, foi salvo com sucesso.
+
+45. Bom, mas, aqui, se voce olhar,
+
+    <div class="alert alert-success" th:if="${!#strings.isEmpty(mensagem)}">
+        <span>Titulo salvo com sucesso!</span>
+    </div>
+
+, bom, mas eu estou mostrando essa mensagem aqui,
+
+    <div class="alert alert-success" th:if="${!#strings.isEmpty(mensagem)}">
+        >>><span>Titulo salvo com sucesso!</span><<<
+    </div>
+
+
+ , eu nao estou mostrando a mensagem que veio do servidor, aqui,
+
+    <div class="alert alert-success" th:if="${!#strings.isEmpty(>>>mensagem<<<)}">
+        <span>Titulo salvo com sucesso!</span>
+    </div>
+
+46. Como eh que eu faco para mostrar a mensagem que veio do servidor aqui,
+
+    <div class="alert alert-success" th:if="${!#strings.isEmpty(>>>mensagem<<<)}">
+        <span>>>><<<</span>
+    </div>
+
+47. Eu posso vir aqui e colocar, oh, th:text, e, ai, aqui, eu coloco a mensagem,
+
+    <div class="alert alert-success" th:if="${!#strings.isEmpty(mensagem)}">
+        <span th:text="${mensagem}"></span>
+    </div>
+
+, e essa mensagem, aqui, agora,
+
+    <div class="alert alert-success" th:if="${!#strings.isEmpty(mensagem)}">
+        <span th:text="${>>>mensagem<<<}">Titulo salvo com sucesso!</span>
+    </div>
+
+, vai ser a mensagem que vira daqui, desse carinha aqui, oh,
+
+    @RequestMapping(method = RequestMethod.POST)
+    public ModelAndView salvar(Titulo titulo) {
+        titulos.save(titulo);
+
+        ModelAndview mv = new ModelAndView("CadastroTitulo");
+        mv.addObject(">>>mensagem<<<", "Titulo salvo com sucesso!");
+        return mv;
+    }
+
+48. Vamos colocar aqui diferente, so para voce ver? Eu vou colocar aqui, assim, oh, 'Titulo salvo com sucesso!!!', com 3 exclamacoes, aqui, oh, so para voce ver que nao eh esse cara que vai aparecer, 
+
+    <div class="alert alert-success" th:if="${!#strings.isEmpty(mensagem)}">
+        <span th:text="${mensagem}">>>>Titulo salvo com sucesso!!!<<<</span>
+    </div>
+
+
+, na verdade, vai ser este atributo, aqui, 
+
+    <div class="alert alert-success" th:if="${!#strings.isEmpty(mensagem)}">
+        <span th:text="${>>>mensagem<<<}">Titulo salvo com sucesso!</span>
+    </div>
+
+a mensagem que esta vindo, aqui, 
+
+    @RequestMapping(method = RequestMethod.POST)
+    public ModelAndView salvar(Titulo titulo) {
+        titulos.save(titulo);
+
+        ModelAndview mv = new ModelAndView("CadastroTitulo");
+        mv.addObject(">>>mensagem<<<", "Titulo salvo com sucesso!");
+        return mv;
+    }
+
+
+, do servidor
+
+49. Okay? Vamos dar uma olhada, aqui, oh, vou salvar um novo registro aqui, oh, Descricao 'Novo', Data de vencimento '11/01/2016', Valor 100, por exemplo, Status 'Pendente', e vou Salvar.
+
+50. Olha la. Apareceu somente com um ponto de exclamacao, 'Titulo salvo com sucesso!'
+
+51. Okay? Se apareceu so com um ponto de exclamacao, realmente, eh o que veio do Servidor, e nao o que veio da telinha.
+
+52. Ta okay? Vou, ate, fazer mais uma vez, salvar, aqui, um 'Teste', Descricao 'Teste', Data de vencimento '10/01/2016', Valor 150,00, por exemplo, Status 'Recebido', e vou Salvar. 
+
+53. Oh, exibiu a mensagem somente com uma exclamacao.
+
+54. Beleza? Bom, entao, a gente ja comecou a trabalhar mais com o Thymeleaf, agora, ta vendo?, a gente ja esta usando algumas tags dele aqui, oh, para a gente poder dar um comportamento diferente para a nossa Pagina.
+
+55. Beleza? E o que que eh legal, aqui, do Thymeleaf?, oh? voce esta percebendo, eh que eh tudo HTML.
+
+56. Entao, assim, oh, sao tags HTML, aqui, 
+
+    <div class="alert alert-success" >>>th:if<<<="${!#strings.isEmpty(mensagem)}">
+        <span th:text="${mensagem}">Titulo salvo com sucesso!</span>
+    </div>
+
+, so tem uma propriedade, nao eh?, a mais, aqui, do Thymeleaf. Nao eh?, eh uma propriedade a mais do Thymeleaf,
+
+    <div class="alert alert-success" th:if="${!#strings.isEmpty(mensagem)}">
+        <span >>>th:text<<<="${mensagem}">Titulo salvo com sucesso!</span>
+    </div>
+
+, entao, nao eh nada que polua demais o codigo, nao eh?, o codigo da nossa View.
+
+57. Entao, a gente so precisou adicionar esse cara aqui,
+
+    <html xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:th="http://www.thymeleaf.org">
+
+, no cabecalho. Por que que eu pude adicionar esse cara, aqui, no cabecalho? Porque, no meu pom.xml, ja tem, aqui, oh, o thymeleaf configurado,
+
+
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-thymeleaf</artifactId>
+    </dependency>
+
+58. Beleza? Entao, o instrutor acha que eh isso daqui que ele queria mostrar nesta aula, mostrar essa mensagem, que esta salvando no banco de dados, e a gente ja comecou a configurar o Thymeleaf, nos vamos mexer, ainda, muito com Thymeleaf, aqui, nesta Pagina, nos vamos modificar ainda bastante coisas, esses nomes, aqui, nao vao ficar assim, nos vamos usar layout, mas, a gente esta evoluindo, aos pouquinhos, o instrutor quer que vejamos a evolucao do projeto de pouquinho em pouquinho.
+
+59. Fim da Aula 02.005. Mostrando a Mensagem de Sucesso.
+
+
+ -->

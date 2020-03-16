@@ -1,0 +1,829 @@
+<!--
+
+Aula 02.009. Template com Thymeleaf
+
+1. Voce viu, na ultima aula, quando a gente estava criando a tela de Pesquisa de Titulos, voce viu que eu repeti muito codigo que estava la, no Cadastro de Titulo, nao eh? E se a gente, se voce olhar bem, nao eh?, aqui, na parte de Cadastro de Titulo, essa parte, o menu de navegacao, a gente poderia ter menus, aqui, nao eh?, no sistema, mais completos, nao eh?, com o login, o nome do usuario, um menu, aqui, para navegar entre as varias paginas do sistema, isso tudo seria a mesma coisa, nao eh?
+
+2. As vezes, aqui, um 'footer', mais aqui, embaixo, para mostrar outras coisas, ou seja, o que a gente esta mudando, aqui, na pagina, praticamente, eh o miolo, aqui, dessa Pagina, nao eh?
+
+3. Entao, a gente pode transformar isso em um layout. E, ai, tem esse projetinho aqui, oh, que esta no GitHub, eh o thymeleaf-layout-dialect, okay?
+
+4. Esse camarada aqui, ele vai nos ajudar a criar o layout para o nosso sistema.
+
+5. E, ai, a gente vai so preencher esses layouts com a pagina. Entao, por exemplo, eu vou criar um layout padrao, aqui, para o Sistema e, ai, eu vou preencher esse layout padrao com a parte de pesquisa, com a parte de cadastro. Okay?
+
+6. E, aqui, https://github.com/ultraq/thymeleaf-layout-dialect, ele explica como a gente faz para usa-lo, nao eh?, entao, tem a documentacao dele, aqui, bem simplezinha a documentacao, ele mostra, aqui, alguns exemplos, o que que a gente precisa ter, para esse layout funcionar, beleza? Entao, nos vamos usar la.
+
+7. Legal que, com Spring Boot, a gente ja colocou a dependencia do Thymeleaf, ele ja coloca essa dependencia do layout para a gente tambem. Entao, nao temos que adicionar nada, aqui, ja esta com o pom.xml configurado para isso. Beleza? Gracas ao Spring Boot.
+
+8. Bom, entao, nos vamos mexer, principalmente, em quem? Em PesquisaTitulo.html, CadastroTitulo.html, e nov vamos criar, aqui, na pasta templates do nosso Projeto, um novo arquivo, New / File / LayoutPadrao.html.
+
+9. Esse LayoutPadrao.html eh que a gente vai definir o Layout da nossa Pagina, nao eh?, ou seja, o cabecalho, nos vamos definir o CSS, que tem que ter em todas as paginas, os JavaScripts, e a gente vai deixar uma secao, ali, no meio, para ser preenchida com o conteudo principal.
+
+10. Entao, toda essa parte, aqui, esse 'head', e esse menu de navegacao, aqui, a gente vai levar isso tudo para o layout,
+
+<head>
+	<meta charset="UTF-8" />
+	<title>Cadastro de Título</title>
+	
+	<link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css"/>
+	<link rel="stylesheet" type="text/css" href="/css/style.css"/>
+	
+</head>
+
+<body>
+
+	<nav class="navbar navbar-inverse navbar-static-top">
+
+11. Beleza? Entao, vamos comecar, devagarzinho, vamos la, aos poucos, e voce vai ver que nao eh complicado trabalhar com layout, aqui, nao.
+
+12. Vamos la, entao, vamos comecar, pegando, aqui, de PesquisaTitulo.html, vamos copiar esse cabecalho todo, aqui, oh, tudo isso aqui, nos vamos levar para la, essa parte aqui tambem, nao eh?, ou seja, os elementos 'html', 'head' e 'nav', e temos que fechar, aqui, o elemento </body> e </html>,
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+
+    <title>Pesquisa de Titulos</title>
+
+    <link rel="stylesheet" href="/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+    <nav class="navbar navbar-inverse navbar-static-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">
+                    <img alt="AlgaWorks" src="/images/logo-algaworks.png" />
+                </a>
+            </div>
+        </div>
+    </nav>
+
+</body>
+</html>
+
+13. Aqui, no 'title', nao eh 'Pesquisa de Titulos', eu estou no Layout, entao, eu vou colocar, aqui, o nome do sistema, 'Cobranca',
+
+    <head>
+
+        ...
+        <title>Cobranca</title>
+        ...
+
+    </head>
+
+14. Estou importando, aqui, o CSS, do Bootstrap, do style.css,
+
+    <head>
+
+        ...
+
+        <link rel="stylesheet" href="/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="/css/style.css" />
+
+    </head>
+
+, depois, a gente vai ver uma tag, aqui, do Thymeleaf, para a gente melhorar esse href, aqui, vai ver que legal que fica, quando eu for te mostrar como eh que eu faco o deploy no Tomcat. Entao, aguarde ai um pouquinho. Para a imagem, aqui, tambem,
+
+
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">
+                    <img alt="AlgaWorks" src="/images/logo-algaworks.png" />
+                </a>
+            </div>
+
+, nos vamos usar isso. Todos recursos estaticos, na verdade.
+
+15. Beleza, entao, aqui, o menu de navegacao ja esta aqui, eu posso, agora, definir,..., beleza, entao, essa aqui, 
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+
+    <title>Cobranca</title>
+
+    <link rel="stylesheet" href="/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+    <nav class="navbar navbar-inverse navbar-static-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">
+                    <img alt="AlgaWorks" src="/images/logo-algaworks.png" />
+                </a>
+            </div>
+        </div>
+    </nav>
+    
+</body>
+</html>
+
+, eh a parte comum, ta vendo que eu copiei, aqui, do PesquisaTitulos.html, eu vou tirar e levar, aqui, para o LayoutPadrao.html.
+
+16. E, ai, eu posso definir, aqui, agora,..., antes, aqui, eu preciso, de PesquisaTitulos.html, desses JavaScripts, aqui, tambem,
+
+<script src="js/jquery.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+
+, eu vou copiar e colar em LayoutPadrao.html, aqui, embaixo,
+
+    <script src="js/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+</body>
+</html>
+
+17. Beleza? Bom, o que?..., se voce perceber aqui, oh, na pagina PesquisaTitulos.html, eu peguei essa parte,
+
+    <script src="js/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+</body>
+</html>
+
+, levei la para LayoutPadrao.html, e peguei essa parte aqui,
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+
+    <title>Cobranca</title>
+
+    <link rel="stylesheet" href="/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+    <nav class="navbar navbar-inverse navbar-static-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">
+                    <img alt="AlgaWorks" src="/images/logo-algaworks.png" />
+                </a>
+            </div>
+        </div>
+    </nav>
+
+, e levei para o LayoutPadrao.html.
+
+18. Entao, ou seja, eu so estou com esse miolo, aqui, em PesquisaTitulos.html,
+
+    <div class="panel panel-default">
+    	<div class="panel-heading">
+    		<h1 class="panel-title">Pesquisa de Titulos</h1>
+    	</div>
+    	<div class="panel-body">
+    	 	<table class="table table-bordered table-striped">
+    	 		<thead>
+    	 			<tr>
+    	 				<th class="text-center col-md-1">#</th>
+    	 				<th>Descricao</th>
+    	 				<th class="text-center col-md-2">Data de Vencimento</th> 
+    	 				<th class="text-right col-md-2">Valor</th>
+    	 				<th class="text-center col-md-2">Status</th>
+    	 				<th class="col-md-1"></th>
+    	 			</tr>
+    	 		</thead>
+    	 		<tbody>
+    	 			 <tr>
+    	 			 	<td colspan="6">Nenhum titulo foi encontrado.</td>
+    	 			 </tr>
+    	 		</tbody>
+    	 	</table>
+    	</div>
+    </div> 
+
+, que eu quero passar, que eu quero deixar nessa pagina. O resto tudo, aqui, eu vou tirar. 
+
+19. Beleza? Entao, oh, eu vou tirar, em PesquisaTitulos.html, isso daqui,
+
+    <nav class="navbar navbar-inverse navbar-static-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">
+                    <img alt="AlgaWorks" src="/images/logo-algaworks.png" />
+                </a>
+            </div>
+        </div>
+    </nav>
+
+, eu vou tirar, dentro de 'head', os elementos que se repetem em outras paginas, ou seja, 'meta' e 'link',
+
+    <head>
+
+        <meta charset="UTF-8">
+
+
+        <link rel="stylesheet" href="/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="/css/style.css" />
+    </head>
+
+, eu vou deixar o elemento 'title', aqui, para, quando eu estiver, la, na Pagina de Pesquisa, aparecer, la, o titulo 'Pesquisa de Titulos'. Mas, se voce nao quiser, imagina se voce fala, 'Nao, eu quero que o titulo fique sempre o mesmo', voce poderia tirar ate essa parte aqui,
+
+    <head>
+        <title>Pesquisa de Titulos</title>
+    </head>
+
+20. Beleza? Tirei isso, tirei isso, aqui, tambem.
+
+    <script src="js/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+
+21. Posso, ate, tirar o 'body', porque o 'body' tambem foi para la, nao eh?
+
+22. Entao, vamos indentar o div 'panel-default', em PesquisaTitulos.html. Entao, eu deixei esse div 'panel-default', aqui, ja relacionado, por que?
+
+23. Eu levei, aqui, para o LayoutPadrao.html, ate a tag 'body'. Entao, eu nao preciso ter a tag 'body' la em PesquisaTitulos.html, tambem.
+
+24. Beleza? Entao, o que eu quero ter aqui, na tela PesquisaTitulos.html, eh esse div, aqui, 'panel-default', essa tela, aqui, sendo inserida aqui, na pagina LayoutPadrao.html, nessa parte, aqui, do 'body',
+
+ <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+
+    <title>Cobranca</title>
+
+    <link rel="stylesheet" href="/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+    <nav class="navbar navbar-inverse navbar-static-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">
+                    <img alt="AlgaWorks" src="/images/logo-algaworks.png" />
+                </a>
+            </div>
+        </div>
+    </nav>
+    
+    
+    >>><<<
+    
+    
+	<script src="js/jquery.min.js"></script>
+	<script src="/js/bootstrap.min.js"></script>	        
+</body>
+</html>
+
+25. Okay? Bom, e ai, como eh que eu posso fazer isso? Eu posso definir, aqui, no LayoutPadrao.html, uma secao, ai, eu ja vou usar aquele layout, esse carinha, aqui, oh, o dialeto do thymeleaf-layout, https://github.com/ultraq/thymeleaf-layout-dialect, para a gente definir isso.
+
+26. Entao, como eh que eu vou fazer? Eu vou adicionar, entao, primeiro, eu adiciono esse namespace, aqui, oh, 
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+, coloquei esse cara, aqui, oh, esse eh o namespace, e, agora, eu posso vir aqui, 
+
+<body>
+    <nav class="navbar navbar-inverse navbar-static-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">
+                    <img alt="AlgaWorks" src="/images/logo-algaworks.png" />
+                </a>
+            </div>
+        </div>
+    </nav>
+    
+    
+    >>><<<
+    
+    
+	<script src="js/jquery.min.js"></script>
+	<script src="/js/bootstrap.min.js"></script>	        
+</body>
+
+, e falar o seguinte, que eu tenho, aqui, uma secao, 
+
+<body>
+    <nav class="navbar navbar-inverse navbar-static-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">
+                    <img alt="AlgaWorks" src="/images/logo-algaworks.png" />
+                </a>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <section>
+
+    </section>
+    
+    
+	<script src="js/jquery.min.js"></script>
+	<script src="/js/bootstrap.min.js"></script>	        
+</body>
+ 
+, e vou usar 'layout:fragment', e vou dar um nome, aqui, 'conteudo',
+
+    <section layout:fragment="conteudo">
+
+    </section>
+
+27. Okay? E, aqui, eu posso, ate, colocar alguma coisa, aqui, so para me orientar nessa pagina, entao, aqui, oh, 'Conteudo Principal', por exemplo,
+
+    <section layout:fragment="conteudo">
+        <p>Conteudo Principal</p>
+    </section>
+
+28. Okay? Entao, olha so, essa aqui,
+
+    <section layout:fragment="conteudo">
+        <p>Conteudo Principal</p>
+    </section>
+
+, eh uma secao que eu vou usar para inserir conteudos, aqui, da Pesquisa de Titulos, ou seja, da pagina PesquisaTitulos.html. Entao, essa pagina, PesquisaTitulos.html, vai ser inserida aqui, nesse lugar aqui,
+
+    <section layout:fragment="conteudo">
+        <p>Conteudo Principal</p>
+    </section>
+
+29. Por que? Porque eu estou definindo um nome, aqui,
+
+    <section >>>layout:fragment="conteudo<<<">
+        <p>Conteudo Principal</p>
+    </section>
+
+, para esse conteudo.
+
+30. 'Ah, Normandes, entao, como eh que eu falo, aqui, que a Pesquisa de Titulos eh para vir, para ir ser inserida aqui, em LayoutPadrao.html?'
+
+31. Eh simples, em PesquisaTitulos.html, eu vou adicionar, aqui, tambem, oh, o namespace do thymeleaf-layout-dialect,
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+, e, agora, eu vou falar, tambem, oh, eu vou configurar, aqui, oh, 'layout:decorator', e vou falar o seguinte, "Eu quero usar qual layout como decorador dessa pagina?", "LayoutPadrao",
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorator="LayoutPadrao">
+
+
+, esse arquivo aqui, oh, LayoutPadrao.html, eu so coloco o nome dele, aqui, oh, 'LayoutPadrao', nao preciso colocar '.html'. Entao, oh, 'layout:decorator="LayoutPadrao"'.
+
+32. Entao, o decorador desta pagina, ou seja, da pagina PesquisaTitulos.html, eh o 'LayoutPadrao'.
+
+33. 'Ah, so isso, Normandes'?
+
+34. Quase.
+
+36. Ai, o que que eu vou falar aqui, na pagina PesquisaTitulos.html, eh o seguinte, oh, eu quero que essa porcao, aqui, oh, desse div 'panel-default' eh que entre la naquela secao, na pagina LayoutPadrao.html,
+
+    <section layout:fragment="conteudo">
+        <p>Conteudo Principal</p>
+    </section>
+
+37. Entao, oh, o que que eu vou fazer, aqui, em PesquisaTitulos.html? Eu vou criar um 'section', aqui, com 'layout:fragment="conteudo"', e vou colocar a div 'panel-default' dentro dessa secao,
+
+    <section layout:fragment="conteudo">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h1 class="panel-title">Pesquisa de Titulos</h1>
+            </div>
+            <div class="panel-body">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th class="text-center col-md-1">#</th>
+                            <th>Descricao</th>
+                            <th class="text-center col-md-2">Data de Vencimento</th> 
+                            <th class="text-right col-md-2">Valor</th>
+                            <th class="text-center col-md-2">Status</th>
+                            <th class="col-md-1"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="6">Nenhum titulo foi encontrado.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>        
+    </section>
+
+38. Beleza? Entao, so recaptulando. Na pagina PesquisaTitulos.html, eu defini o namespace, aqui, do layout. Tanto em PesquisaTitulos.html, quanto em LayoutPadrao.html, eu defini o namespace de layout.
+
+39. Por que? Para eu definir uma regiao no LayoutPadrao.html, ou seja, a section 'conteudo', nao eh? Entao, se eu modificar o menu de navegacao, eu so vou mexer nessa pagina, nessa parte,
+
+    <nav class="navbar navbar-inverse navbar-static-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">
+                    <img alt="AlgaWorks" src="/images/logo-algaworks.png" />
+                </a>
+            </div>
+        </div>
+    </nav>
+
+, beleza?
+
+40. Se eu modificar, aqui, no LayoutPadrao.html,
+
+	<script src="js/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+</body>
+</html>
+
+, acrescentar script, eu so vou mexer nessa pagina, nessa parte.
+
+41. E, ai, essa parte, aqui, no LayoutPadrao.html,
+
+    <section layout:fragment="conteudo">
+        <p>Conteudo Principal</p>
+    </section>
+
+, ela eh customizavel. Ela eh customizavel como?
+
+42. Em PesquisaTitulos.html, por exemplo, eu adiciono, aqui,
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    >>>layout:decorator="LayoutPadrao"<<<>
+
+, eu falor qual que eh o decorador, qual que eh a pagina que eu quero usar como decorator, aqui, como decoracao, dessa pagina, eh o LayoutPadrao.
+
+43. Qual parte que vai ser? Esse section, aqui, em PesquisaTitulo.html,
+
+    <section layout:fragment="conteudo">
+        <div class="panel panel-default">
+            ...
+        </div>
+    </section>
+
+44. Entao, la naquele lugar, em LayoutPadrao.html, onde esta escrito 'conteudo', vai ser inserido essa div aqui, ou seja, 'panel-default'.
+
+45. Beleza? Vamos fazer a mesma coisa la para a tela de cadastro, ou seja, CadastroTitulo.html.
+
+46. Vamos vir aqui, oh, em CadastroTitulo.html, copio o namespace e 'layout-decorator',
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:th="http://www.thymeleaf.org"
+    >>>xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorator="LayoutPadrao"<<<
+    >
+
+47. Aqui, no 'head', em CadastroTitulo.html, eu vou so deixar o 'title', aqui,
+    
+    <head>
+	    <title>Cadastro de Titulo</title>
+	</head>
+
+, okay? Vamos adicionar o 'section', aqui, em CadastroTitulo.html, so vai ficar o formulario, aqui,
+
+    <section layout:fragment="conteudo">
+        <form class="form-horizontal" method="POST" action="/titulos">
+            ...
+        </form>
+    </section>
+
+, vai sair, tambem, os elementos 'script' e 'body', em CadastroTitulo.html.
+
+48. Entao, ficou apenas o formulario, aqui, de salvar, tirei a parte de CSS, tirei tudo aquilo la. Bom, eh para funcionar. Vamos reiniciar o Servidor, aqui, para a gente dar uma olhada? Ver se o sistema continua funcionando.
+
+49. E, ai, a gente ainda vai mexer em algumas outras coisinhas ali, vou te mostrar como eh que eu posso tirar o menu de navegacao, ali, e colocar em outro arquivo tambem.  
+
+50. Entao, vamos la, http://localhost:8080/titulos/, tem que mostrar a pagina de pesquisa, oh, ta funcionando, http://localhost:8080/titulos/novo, tambem esta funcionando, continua funcionando o sistema. Vamos salvar um novo registro, aqui? Descricao 'Novo Titulo', Data de Vencimento '10/01/2016', Valor 123,12, Status 'Pendente', clicar em 'Salvar', 'Titulo salvo com sucesso!'
+
+51. Entao, o layout, voce percebe que ele nao estragou, nao eh, o nosso sistema continua funcionando com layout, so que, agora, com menos repeticao. Ta vendo, oh?, aqui, em PesquisaTitulos.html, eu ja fui direto para o div 'panel-default', relacionado a pesquisa, em CadastroTitulo.html, eu ja fui, eu ja posso ir direto, oh, para o formulario de cadastro, nao eh?, para as proximas paginas que esse sistema possa ter continuarem assim.
+
+52. Entao, vamos fazer alguma coisa, aqui, o instrutor vai nos mostrar como, por exemplo, esse layout de navegacao,
+
+    <nav class="navbar navbar-inverse navbar-static-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">
+                    <img alt="AlgaWorks" src="/images/logo-algaworks.png" />
+                </a>
+            </div>
+        </div>
+    </nav>
+
+, o instrutor acha que a gente pode tira-lo e coloca-lo em um novo arquivo.
+
+53. Por que? Normalmente, o cabecalho, aqui, da pagina, pode ser mais complexo do que isso, nao eh?, cheio de menus, nao eh?, entao, o instrutor acha que eh uma boa ideia a gente pegar esse cara aqui e jogar em um novo arquivo. Como que eu posso fazer isso?
+
+54. Eu vou criar um novo arquivo aqui, oh, na pasta templates do Projeto, vou chamar de Cabecalho.html, okay?, e o que eu vou ter nesse cara aqui?
+
+55. Eu terei esse cabecalho, aqui,
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+56. E eu posso pegar, agora, o menu de navegacao e jogar aqui, ou seja, remover de LayoutPadrao.html e colar em Cabecalho.html,
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<nav class="navbar navbar-inverse navbar-static-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">
+                <img alt="AlgaWorks" src="/images/logo-algaworks.png" />
+            </a>
+        </div>
+    </div>
+</nav>    
+
+</html>
+
+
+57. Entao, eu estou com o menu de navegacao aqui, em Cabecalho.html. Como eh que eu faco, agora, para incluir esse cabecalho aqui, no LayoutPadrao.html?
+
+58. Repare que, agora, eh diferente, eu nao estou usando o Cabecalho.html como decorador, nao eh isso que eu quero fazer. Eu quero pegar esse codigo, aqui, em Cabecalho.html,
+
+<nav class="navbar navbar-inverse navbar-static-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">
+                <img alt="AlgaWorks" src="/images/logo-algaworks.png" />
+            </a>
+        </div>
+    </div>
+</nav>
+
+, e inserir, inclui-lo aqui dentro de LayoutPadrao.html,
+
+<head>
+    <meta charset="UTF-8" />
+
+    <title>Cobranca</title>
+
+    <link rel="stylesheet" href="/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+
+    >>><<<
+    
+    
+    <section layout:fragment="conteudo">
+            <p>Conteudo Principal</p>
+    </section>
+        
+        
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>	        
+</body>
+</html>
+
+, para, quando eu for trabalhar com o cabecalho, eu mexer em 1 so arquivo, fica mais organizado.
+
+59. Entao, o que que eu posso fazer? Eu posso usar, aqui, em LayoutPadrao.html, por exemplo, o elemento 'header', com o atributo 'layout:include', com o valor 'Cabecalho', ou seja, o nome do arquivo Cabecalho.html,
+
+<head>
+    <meta charset="UTF-8" />
+
+    <title>Cobranca</title>
+
+    <link rel="stylesheet" href="/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+    
+    <header layout:include="Cabecalho"></header>
+    
+    <section layout:fragment="conteudo">
+        <p>Conteudo Principal</p>
+    </section>
+        
+        
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>	        
+</body>
+</html>
+
+60. Pronto. Vamos reiniciar, novamente, o Servidor. Eu, simplesmente, incluo essa pagina, aqui. Vamos re-testar as Paginas.
+
+61. Okay, esta funcionando.
+
+62. E, ai, vamos aproveitar que eu ja estou, aqui, mexendo, aqui, com o layout, e vamos adicionar um link no canto superior direito, de 'Nov titulo', na Pagina de Pesquisa, e, na Pagina de Cadastro, 'Voltar para pesquisa'. Vamos adicionar isso aqui la? So para a gente deixar, ja, um pouquinho mais arrumado, aqui, o nosso sistema, nao eh?, mais navegabilidade.
+
+63. Entao, vamos la, o que que eu vou fazer, oh?
+
+64. Eu vou adicionar aqui, em PesquisaTitulos.html, um link, com a classe 'btn btn-link', que eh o link do Bootstrap, okay?, '/titulos/novo', porque eu quero ir para um Novo Titulo,
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h1 class="panel-title">Pesquisa de titulos</h1>
+            <a class="btn btn-link" href="/titulos/novo">Novo titulo</a>
+        </div>
+    </div>
+
+65. Okay, vamos voltar, aqui, na pagina PesquisaTitulos.html, vamos Recarregar a pagina. Ficou no lado esquerdo da pagina.
+
+66. Entao, a gente vai ter que dar uma customizada, aqui, no CSS. Vamos adicionar, aqui, oh, uma classe, que eu vou chamar o seguinte, eu, na verdade, vou ter que adicionar mais coisas, para eu conseguir alinhar o link a direita na pagina.
+
+67. Vamos colocar a classe 'aw-', de 'AlgaWorks', porque estamos customizando, 'aw-link-panel'. Vamos abrir o style.css, 
+
+.aw-link-panel {
+
+}
+
+68. Nesse cara aqui, o que que eu vou colocar? Eu quero que ele flutue para a direita, okay? 
+
+.aw-link-panel {
+    float: right;
+}
+
+Vamos Recarregar e dar uma olhada aqui, na Pagina PesquisaTitulos.html.
+
+69. Beleza, flutuou para a direita.
+
+70. So que ficou na posicao errada, por que? Porque esse Titulo 'Pesquisa de Titulos', aqui, esta ocupando essa linha inteira, em <h1>
+
+71. Entao, nos tambem temos que mandar o Titulo 'Pesquisa de Titulos' flutuar.
+
+72. Entao, vamos adicionar, aqui, uma classe, em h1, oh, 'aw-titulo-panel', okay?, e, em style.css, eu tenho que mandar esse cara flutuar para a esquerda,
+
+.aw-titulo-panel {
+    float: left;
+}
+
+73. Beleza. Esse cara, aqui, oh, 'Novo titulo', ja subiu um pouquinho, nao eh?, so que ele esta flutuando, entao, eh como se a barra superior do painel ficasse sem conteudo.
+
+74. Na verdade, eu posso vir aqui, na Pagina PesquisaTitulos.html, e fazer o seguinte, oh, eu vou adicionar isso aqui dentro de um 'div', porque tem uma classe do Bootstrap, que eh essa 'clearfix', que ela da uma ajeitada nas coisas, aqui, para a gente,
+
+    <div class="panel-heading">
+        <div class="clearfix">
+            <h1 class="panel-title aw-titulo-panel">Pesquisa de titulos</h1>
+            <a class="btn btn-link aw-link-panel" href="/titulos/novo">Novo titulo</a>
+        </div>
+    </div>
+
+75. Ele fala o seguinte, o 'clearfix', deixa eu te mostrar, aqui, no Bootstrap, https://getbootstrap.com/docs/3.3/css/#helper-classes-clearfix, 'Easily clear floats by adding .clearfix to the parent element.'
+
+76. Entao, para consertar algumas coisas, ele usa essa classe 'clearfix', entao, ele vai mostrando, oh, as vezes, pode ser que aconteceu algo que voce precisa dar uma consertada, precisa limpar, dar um clear no CSS, entao, voce usa a classe clearfix, que ele vai dar uma ajudada, olha so, ou seja, adicione para a gente dar uma consertada quando eu estou com um float ali, nao eh?, entao, eu mandei um cara flutuar, o painel achou que, no lado esquerdo, nao tinha ninguem, nao eh?, entao, a documentacao fala, oh, facilmente, se voce colocar essa classe clearfix para o elemento pai, que foi exatamente o que eu fiz aqui, oh, eu adicionei um elemento pai como 'clearfix',
+
+        <div class="clearfix">
+            <h1 class="panel-title aw-titulo-panel">Pesquisa de titulos</h1>
+            <a class="btn btn-link aw-link-panel" href="/titulos/novo">Novo titulo</a>
+        </div>
+
+, e eu usei float, ele da essa consertada.
+
+77. Beleza? Entao, essa eh a ideia do clearfix. Entao, tem alguns truques, aqui, de CSS, que ele faz.
+
+78. Entao, eh justamente isso. Quando eu usar float, o clearfix no elemento pai pode dar uma ajudada para consertar.
+
+79. Bom, so que, ai, esta com muito espaco, aqui, na barra de titulo, eh por causa de padding, nao eh? Entao, vamos tirar esses paddings, aqui, no 'aw-link-panel', por exemplo. Vamos tirar o padding, 0px,
+
+.aw-link-panel {
+    float: right;
+    padding: 0px;
+}
+
+80. Oh, ao recarregar a Pagina PesquisaTitulos.html, vemos que ja deu uma consertada aqui, ele tirou o padding, ali, que tinha.
+
+81. So que, em 'Pesquisa de titulos', ao lado esquerdo da barra de titulo, nao esta muito alinhado, esta um pouquinho mais para cima, verticalmente, entao, vamos adicionar um padding maior no topo, um padding-top de 2 pixels, para o titulo descer um pouquinho, aqui, oh,
+
+.aw-titulo-panel {
+    float: left;
+    padding-top: 2px;
+}
+
+82. Desceu, agora, acho que esta mais alinhado, aqui, ao centro, verticalmente.
+
+83. Beleza? Entao, quando eu clicar aqui em 'Novo Titulo', vai para a tela de CadastroTitulo.html. Okay, esta funcionando.
+
+84. Vamos fazer a mesma coisa, adicionar, em CadastroTitulo.html, um link 'Voltar para pesquisa'?
+
+85. Agora, vai ser mais facil, nao eh?
+
+86. Eu ja fiz a primeira vez. Entao, aqui, na PesquisaTitulo.html, eh so a gente copiar esse cara todo, aqui,
+
+    <div class='panel-heading'>
+        <div class="clearfix">
+            <h1 class="panel-title aw-titulo-panel">Pesquisa de titulos</h1>
+            <a class="btn btn-link aw-link-panel" href="/titulos/novo">Novo titulo</a>
+        </div>
+    </div>
+
+, e colarmos em CadastroTitulo.html,
+
+    <div class="panel-heading">
+        <h1 class="panel-title">Novo titulo</h1>
+        <div class="clearfix">
+            <h1 class="panel-title aw-titulo-panel">Novo titulo</h1>
+            <a class="btn btn-link aw-link-panel" href="/titulos">Voltar para pesquisa</a>
+        </div>				
+    </div>
+
+87. Beleza? Vamos ver aqui? Recarregar a pagina 'titulos/novo'. Testamos os links de ambas as paginas de cadastro e pesquisa de titulos e esta funcionando.
+
+88. Entao, oh, o objetivo desta aula, aqui, vamos dar um resumo, foi nos mostrar o que? O layout. Nos definimos um layout padrao, vamos olha-lo aqui, de novo.
+
+89. A gente define o layout padrao,
+
+
+<html
+    ...
+    layout:decorator="LayoutPadrao"
+
+
+e define uma regiao que eu quero que seja preenchida por alguma pagina,
+
+    <section layout:fragment="conteudo"></section>
+
+90. So que eu nao posso, aqui, em LayoutPadrao, falar, 'Ah, eu quero que voce coloque a Pagina de Pesquisa'. Ah, por que? Porque, na hora que eu estiver na Pagina de Cadastro, como eh que eu vou falar qual que eh a Pagina que deve colocar? Entao, o legal eh a Pagina de Cadastro, a Pagina de Pesquisa falar qual que eh o seu Decorator,
+
+<html
+    ...
+    layout:decorator="LayoutPadrao"
+
+91. Entao, olha so, voce pode, inclusive, ter mais de 1 Decorator. Voce pode ter, aqui,
+
+<html
+    ...
+    layout:decorator="LayoutPadrao"
+
+, um outro Layout para um outro tipo de Pagina, e voce usa-lo.
+
+92. Entao, quem define qual eh o Layout que essa Pagina quer usar eh a propria Pagina.
+
+93. Beleza?
+
+94. Mas, eu tambem posso usar o 'include',
+
+    <header layout:include="Cabecalho"></header>
+
+, eu te mostrei, aqui, oh, com a tag 'layout-include', eu consigo inserir um arquivo Cabecalho.html. Entao, nesse caso, eu estou falando, 'Quero inserir, esse trecho, aqui,'
+
+<header layout:include="Cabecalho"></header>
+
+, eh um fragmento de pagina, nao eh?, que eh esse Cabecalho.html,
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:th="http://www.thymeleaf.org"
+		xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<nav class="navbar navbar-inverse navbar-static-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">
+                <img alt="AlgaWorks" src="/images/logo-algaworks.png" />
+            </a>
+        </div>
+    </div>
+</nav>
+
+</html>
+
+, dento da minha pagina.
+
+95. Por que que eu faco isso daqui? Ah, quando eu tenho algo maior, aqui,
+
+<nav class="navbar navbar-inverse navbar-static-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">
+                <img alt="AlgaWorks" src="/images/logo-algaworks.png" />
+            </a>
+        </div>
+    </div>
+</nav>
+
+, como o menu de navegacao, poderia ser um pouco mais complexo, nao eh?, com regras de seguranca, etc., eu deixo em um arquivo separado, porque fica mais facil dar manutencao nele. Nao eh verdade?
+
+96. E, tambem, a gente brincou um pouquinho mais, aqui, com a nossa Pagina PesquisaTitulos.html, adicionando esse menu de navegacao, aqui, no 'heading', nao eh?,
+
+    <div class="clearfix">
+        <h1 class="panel-title aw-titulo-panel">Pesquisa de titulos</h1>
+        <a class="btn btn-link aw-link-panel" href="/titulos/novo">Novo titulo</a>
+    </div>
+
+, a gente customizou um pouquinho, aqui, de CSS, mandei flutuar para a direita, mandei flutuar para a esquerda, ajustei os paddings, e a gente viu essa classezinha, aqui, 'clearfix', do Bootstrap, que ela ajuda, nao eh?, como a propria documentacao diz, ela da uma consertada nas coisas quando a gente usa o 'float', ela usa umas tecnicas, ali, entao, quando a gente usa o 'float', ela conserta a bagunca que o float deixou.
+
+97. Fim da Aula 02.009. Template com Thymeleaf.
+
+
+
+-->

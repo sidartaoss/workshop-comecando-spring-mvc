@@ -1,0 +1,415 @@
+<!-- 
+
+Aula 02.004. Cadastrando um Novo Titulo
+
+1. Na ultima aula, a gente enviou os dados da Pagina para o Servidor, e a gente viu o Spring converter os dados para um Objeto, aqui,
+
+	@RequestMapping(method = RequestMethod.POST)
+	public String salvar(>>>Titulo titulo<<<) {
+
+        ...
+
+	}
+
+, para a nossa Entidade. Certo?
+
+2. O que a gente fez foi mostrar, simplesmente, a descricao, aqui, no Console.
+
+3. Bom, o que que eu vou fazer, agora? Nos vamos salvar isso no banco de dados.
+
+4. Beleza?
+
+5. Ao inves de a gente imprimir aqui, eu quero que isso va para um banco de dados.
+
+6. Nos estamos usando, neste momento,  banco H2, que eh um banco de dados em memoria. Ou seja, toda vez que eu parar o Servidor e subir, ele vai apagar os dados, vai perder os dados. Depois, a gente configura o MySQL. Voce vai ver que eh bem simples configurar o MySQL, la, tambem.
+
+7. Mas o H2 eh um cara bem rapido para a gente ja comecar, para a gente iniciar os testes, tambem.
+
+8. Beleza? Bom, entao, vamos la. Para eu salvar isso daqui no banco de dados, eu vou precisar criar um Repositorio.
+
+9. E esse Repositorio eh o cara que contem, que faz a persistencia das nossas Entidades. Beleza?
+
+10. Entao, o Repositorio Titulos, no plural mesmo, eu vou poder adicionar Titulos la dentro, vou poder recuperar titulos la dentro.
+
+11. E o Spring Data JPA, vem com um cara, um Repositorio mais generico para a gente poder utilizar. Entao, a gente, voce vai ver aqui que eh muito facil, muito rapido comecar com ele. E, como a gente esta usando, so para lembrar aqui, a gente esta usando o Spring Data JPA, oh, quando a gente criou o Projeto, eu adicionei essa dependencia, la, do Spring Data JPA,
+
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-data-jpa</artifactId>
+</dependency>
+
+, entao, a gente pode usar esse Camarada.
+
+12. E, ai, vamos la. Como eh que eu vou fazer isso, entao? Eu vou criar, aqui, uma interface, no pacote 'com.algaworks.cobranca.repository', uma Interface, e nos vamos chama-la de Titulos,
+
+package com.algaworks.cobranca.repository;
+
+public interface Titulos {
+
+
+
+}
+
+13. Okay?
+
+14. E vou estender JpaRepository,
+
+package com.algaworks.cobranca.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface Titulos extends JpaRepository<T, Serializable> {
+
+
+
+}
+
+15. Esse JpaRepository ja tem varios metodos, aqui, oh, definidos, nao eh?, findAll(), ta vendo?, para buscar todos, para salvar, oh, tem o metodo save(), okay? Tem o metodo para buscar a partir do ID, oh, o getOne(ID id), beleza?
+
+16. Entao, ele ja vem com varios metodos prontos para a gente, a gente so precisa passar, aqui,
+
+public interface Titulos extends JpaRepository<>>>T, Serializable<<<> {
+
+}
+
+, configura-lo. O que eu preciso passar, aqui, no T?
+
+17. Eh a Entidade que esse Repositorio vai trabalhar. No caso, eh o Titulo,
+
+public interface Titulos extends JpaRepository<Titulo, Serializable> {
+    
+}
+
+, o Titulo la do Model. Okay?
+
+18. E, aqui, o segundo parametro, aqui, que eu preciso configurar, eh o Tipo de Dado do ID dessa Entidade Titulo.
+
+19. Entao, se eu olhar aqui, oh,
+
+@Entity
+public class Titulo {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private >>>Long<<< codigo;
+
+    ...
+}
+
+, qual que eh o tipo de dado?
+
+20. Long. Entao, aqui, eu coloco o Long,
+
+public interface Titulos extends JpaRepository<Titulo, Long> {
+    
+}
+
+21. Beleza? Pronto, esse cara ja esta funcionando. Ueh, Normandes, mas cade a implementacao do metodo, ai, save(), voce vai pegar um EntityManager, e tal?
+
+22. Nao precisa. Quem vai dar a implementacao disso daqui, do Titulo, ja eh o proprio Spring. O Spring Data ja vai gerar, ja vai ter a implementacao desse cara para a gente.
+
+23. Beleza? Vai ser diretao, vai ser facil, ele ja tem uma implementacao generica, nao eh que ele gera, ele ja tem uma implementacao generica, com essa configuracao que eu fiz,
+
+public interface Titulos extends >>>JpaRepository<Titulo, Long><<< { ... }
+
+, a gente ja vai conseguir usar essa classe que ele tem la por detras dos panos, sem precisar olha-la.
+
+24. Beleza? Bom, criei, aqui, esse cara. Agora, eu venho, aqui, no Controller, e uso-a,
+
+@Controller
+@RequestMapping("/titulos") 
+public class TituloController {
+
+    private Titulos titulos;
+    
+    @RequestMapping("/novo")
+    public String novo() {
+        return "CadastroTitulo";
+    }
+
+    ...
+
+}
+
+, e, ai, beleza. Ueh, eh so colocar aqui?,
+
+@Controller
+@RequestMapping("/titulos") 
+public class TituloController {
+
+    >>>private Titulos titulos<<<;
+
+    ...
+
+25. Quase.
+
+26. Eu preciso que a implementacao, nao eh?, o objeto, venha e seja colocado aqui, 
+
+@Controller
+@RequestMapping("/titulos") 
+public class TituloController {
+
+    >>>private Titulos titulos<<<;
+
+    ...
+
+para mim, nesse objeto, para eu poder usar.
+
+27. Se eu tentar usar esse cara, aqui, direto, this.titulos.save(), por exemplo, passando, aqui, o titulo,
+
+
+    @RequestMapping(method = RequestMethod.POST)
+    public String salvar(Titulo titulo) {
+
+        >>>this.titulos.save(titulo);<<<
+
+        return "CadastroTitulo";
+    }
+
+, ele vai dar um NullPointerException, aqui, porque, vai falar, "Da onde que esta vindo esse cara?". Entao, para eu poder falar, 'Coloque uma instancia, aqui, desse cara, para mim', eu vou usar o @Autowired,
+
+...
+
+    @Autowired
+    private Titulos titulos
+
+...
+
+28. Entao, eu anoto esse cara aqui, o Spring ja vai localizar a implementacao desse titulos, e injetar, aqui, para mim.
+
+29. Entao, eu ja estou usando, oh, o Spring IOC, ele ja injeta, aqui, esse objeto para mim, ja toma conta disso tudo, entao, fica muito facil, nao eh?, voce viu la, eu fui la, criei uma Interface, Titulos, estendi, aqui, um Repositorio, e ja dou um @Autowired nele, aqui, para poder usar.
+
+30. Por enquanto, eu estou fazendo, aqui, tudo dentro do Controller, depois, eu vou criar uma Camada de Servico, para a gente brincar um pouquinho mais, para ter mais a separacao de Servico, aqui, do Controller com a parte do Model.
+
+31. Beleza? So para a gente ver funcionando, por enquanto. 
+
+32. Bom, entao, o instrutor acha que eh isso daqui. Eu ja consigo subir esse servidor e ver isso sendo salvo no Banco de dados. Nos estamos usando o H2. Como eh que eu vou ver no H2 se eu consegui salvar ou nao?
+
+33. Ai que esta. Quando eu estou usando, aqui, o H2, no pom.xml, algumas coisas tem que acontecer, aqui, oh. Eu estou desenvolvendo uma aplicacao Web, nao eh?, eh uma aplicacao web, aqui,
+
+<dependency>
+    <groupId>org.springframework.boot</groupId>        
+    <artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+
+34. Eu estou com o H2, aqui, usando, nao eh?, o H2, aqui, como banco de dados,
+
+<dependency>
+    <groupId>com.h2.database</groupId>
+    <artifactId>h2</artifactId>
+    <scope>runtime</scope>
+</dependency>
+
+35. E tambem estou usando o spring-boot-devtools,
+
+<dependency>
+    <groupId>org.springframework.boot</groupId>        
+    <artifactId>spring-boot-devtools</artifactId>
+</dependency>
+
+, essas 3 condicoes aconteceram?
+
+36. Sim. Eu estou no meu ambiente de Desenvolvimento, nao eh?, tambem, eu posso vir aqui, oh, vamos abrir uma nova abinha no Chrome, http://localhost:8080/h2-console, ele vai abrir essa telinha, aqui, que eh o Console, eh o tipo client, mesmo, um mini-ide para a gente fazer consultas em cima do H2. 
+
+37. Deve-se alterar o JDBC URL para: jdbc:h2:mem:testdb. 'testdb' eh o nome definido pelo Spring Boot para ser o banco de dados de teste.
+
+38. Como eu nao modifiquei nada, aqui, de Username, Password, nem nada, eh so dar um Connect, aqui, e ele conectou. E, aqui, olha a tabela Titulo, aqui, oh, ta vendo.
+
+39. Entao, eu posso vir aqui, e fazer 
+
+select * from titulo, okay?, e mandar executar, aqui, oh. Ele vai trazer, aqui, o resultado, nao tem nada, porque eu acabei de subir a aplicacao, eh um banco em memoria, significa que, toda vez que eu parar e subir a aplicacao, esses caras aqui vao sumir.
+
+40. Eh um banco em memoria, mas esse cara nao eh recomendado voce usar em Producao, nao, tah. So para a gente fazer esses testes, assim, rapidinho, ele eh legal.
+
+41. Voce ve que, aqui, o instrutor esta explicando, nao eh?, todos os detalhes da Aplicacao, mas, imagina voce ja mais fluente, e, ai, voce quer criar uma aplicacao rapidinho, ver como eh que vai acontecer, voce nao precisa nem instalar o MySQL, ja vai diretao, nao eh? Entao, aqui, eu ja vou conseguir ver.
+
+42. Venho aqui, na pagina Html, em 'titulos/novo', nao eh?, para a gente cadastrar um Titulo novo, e vamos la, preencho os dados, Descricao 'Condominio Apto 101', Data de vencimento '10/01/2016', Valor '150.00', com ponto, aqui, ainda, essa data aqui, eu nem sei o que que essa data, aqui, vai virar, vamos dar uma olhada? Eu vou salvar isso daqui, e a gente ve o que vai virar e a gente ja configura isso aqui certo. Isso aqui nao vai salvar 10 de Janeiro de 2016, vai ser alguma coisa estranha, ai. Vamos ver.
+
+43. Vamos mandar salvar aqui. Oh, voltou para a propria telinha. Se eu voltar, aqui, no Console do H2, e mandar executar, 'select * from titulo', salvou aqui. Olha a data, ficou 2016-10-01, ficou 01 de Outubro de 2016, ou seja, nao eh o que eu coloquei, nao eh?, entao, vamos colocar, aqui, Descricao 'Condominio Apto 102', vamos colocar Data Vencimento '20/10/2016', por exemplo, Valor '300.00', Status 'Recebido', so para a gente ver.
+
+44. Salvou. Vamos executar, novamente, no Console do H2, 'select * from titulo'.
+
+45. Olha aqui, 2017-08-10, realmente, essa data, aqui, nao sei o que que esta acontecendo com ela. O instrutor nao lembra qual que eh o padrao do jeito que envia a data, aqui, na Pagina Html, para o Servidor. Entao, ja vamos configurar isso daqui, para ficar mais certo, aqui, no nosso projeto, okay?
+
+46. Entao, vamos la. Para a gente fazer isso, eu vou parar, aqui, o Servidor, para nao ficar dando Refresh toda hora, e vou fazer o seguinte, oh, eu vou mexer em duas classezinhas, aqui, eu vou mexer, aqui, na CobrancaApplication.java, e vou definir o Locale default da minha Aplicacao, ou seja, eu quero falar que eu quero trabalhar com 'pt-BR'. Ai, depende, as vezes, se o computador esta configurado em Ingles ou Portugues, nao sei como eh que esta, entao, vamos definir o Locale para ser sempre o 'pt-BR'.
+
+47. Entao, eu vou colocar, aqui, @Bean, porque eu estou criando um Bean LocaleResolver, 
+
+package com.algaworks.cobranca;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class CobrancaApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(CobrancaApplication.class, args);
+    }
+
+    @Bean
+    public LocaleResolver localeResolver() {
+
+    }
+
+}
+
+, okay? E, aqui, eu vou retornar new FixedLocaleResolver, e, aqui, eu vou passar um new Locale, que eh onde eu passo a lingua 'pt', e o pais 'BR',
+
+import java.util.Locale;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.web.servlet.LocaleResolver;
+import org.springframework.web.servlet.i18n.FixedLocaleResolver;
+    ...
+
+    @Bean
+    public LocaleResolver localeResolver() {
+        return new FixedLocaleResolver(new Locale("pt", "BR"));
+    }
+
+    ...
+
+48. Aqui,
+
+        return new FixedLocaleResolver(new Locale("pt", "BR"));
+
+, eu estou definindo, entao, que eu quero usar as definicoes do Brasil, ou seja, de Data, de Numeracao, tambem, okay?, ou seja, casa decimal vai ser com virgula, okay?
+
+49. E, aqui, na classe Titulo.java, aqui, na Entidade, eu vou definir como que eu quero o formato da Data. Okay?
+
+50. Eu vou definir aqui, oh, @DateTimeFormat(), e vou passar, aqui, o 'pattern = dd/MM/yyy', lembra que o mes, ai, tem que ser com M maiusculo, o m minusculo eh o minuto, okay?,
+
+import org.springframework.format.annotation.DateTimeFormat;
+
+@Entity
+public class Titulo {
+
+    ...
+
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    @Temporal(TemporalType.DATE)
+    private Date dataVencimento;
+
+}
+
+51. Okay? Bom, entao, defini, aqui, 
+
+@SpringBootApplication
+public class CobrancaApplication {
+
+    ...
+	
+	@Bean
+	public LocaleResolver localeResolver() {
+		return new FixedLocaleResolver(>>>new Locale("pt", "BR")<<<);
+	}
+}
+
+, no Brasil, defini, aqui,
+
+@Entity
+public class Titulo {
+
+    ...
+    
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    @Temporal(TemporalType.DATE)
+    private Date dataVencimento;
+
+    ...
+}
+
+, o formato, aqui, da data, acho que, agora, a gente vai conseguir salvar a data certa sempre que a gente quiser, vamos ver?
+
+52. Recarregar a Pagina Html. Vamos dar uma olhada, aqui, esperar a aplicacao subir. Okay, subiu.
+
+53. Vamos voltar, aqui, no Console do H2, eu preciso logar novamente. Clicar em Connect, 'select * from titulo', dou um Run, beleza, nao tem nada. 
+
+54. Vamos vir, aqui, em '/titulos/novo', beleza?, e vamos la, prencher Descricao 'Condominio Apto 102', Data de vencimento '20/01/2016', Valor '350,00', Status 'Pendente', Salvar. 
+
+55. Retornou,
+
+There was an unexpected error (type=Bad Request, status=400).
+Validation failed for object='titulo'. Error count: 1
+org.springframework.validation.BindException: org.springframework.validation.BeanPropertyBindingResult: 1 errors Field error in object 'titulo' on field 'valor': rejected value [350,00]; codes [typeMismatch.titulo.valor,typeMismatch.valor,typeMismatch.java.math.BigDecimal,typeMismatch]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [titulo.valor,valor]; arguments []; default message [valor]]; default message [Failed to convert property value of type 'java.lang.String' to required type 'java.math.BigDecimal' for property 'valor'; nested exception is java.lang.NumberFormatException] at 
+
+56. Temos que colocar ponto, (.), aqui, ainda, em Valor, 350.00. 
+
+57. Eh, funcionou. Ainda deixa ponto, depois, eu vou te mostrar como que a gente configura, ja vamos configurar, agora, tambem, o Valor do numero.
+
+58. Vamos executar, novamente, Run, no Console do H2, select * from titulo, ah, agora, sim, oh, 20 de Janeiro de 2016, 2016-01-20, 350 reais.
+
+59. Entao, vamos formatar o numero, aqui, tambem, o BigDecimal, na classe Titulo.java,
+
+@Entity
+public class Titulo {
+
+    ...
+
+    @NumberFormat(pattern = "#,##0.00")
+    private BigDecimal valor;
+
+    ...
+
+}
+
+, entao, eu quero que ele tenha duas casas decimais, "#,##0.00", dessa forma, aqui, oh, tenho duas casas decimais, tem que ter, pelo menos, um digito nao-decimal, para ele formatar, e virgula separando o milhar. Beleza? Aqui, eu tenho que colocar no formato americano. Ai, eu coloco ponto, aqui, "#,##0>>>.<<<00" mas, como o Locale, aqui, eh "pt-BR", 
+
+    @Bean
+    public LocaleResolver localeResolver() {
+        return new FixedLocaleResover(new Locale("pt", "BR"));
+    }
+
+, ele vai entender a virgula. Vamos ver? Recarregar a Pagina Html.
+
+60. De novo, aqui, vamos colocar, Descricao 'Condominio Apto 102', Data de vencimento '10/01/2016', Valor '120,40', Status 'Pendente', Salvar.
+
+61. Agora, sim, se eu vier, aqui, no Console do H2, 'select * from titulo', Data de Vencimento 10 de Janeiro de 2016, 2016-01-10, Valor 120.40, okay?
+
+62. Entao, oh, recaptulando, aqui, o Locale, entao, defini, aqui, 
+
+@SpringBootApplication
+public class CobrancaApplication {
+
+    ...
+
+    @Bean
+    public LocalResolver localeResolver() {
+        return new FixedLocaleResover(new Locale("pt", "BR")); 
+    }
+
+}
+
+, o Locale, fixo, Brasil. Defini, aqui,
+
+@Entity
+public class Titulo {
+
+    ...
+    
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    @Temporal(Temporal.DATE)
+    private Date dataVencimento;
+
+    @NumberFormat(pattern = "#,##0.00")
+    private BigDecimal valor;
+
+    ...
+}
+
+, o formato da data, defini, aqui, o formato do numero, nao eh?, as casas decimais, falei que precisaria das casas decimais, ele entende, ele comeca a entender, a partir de entao, que, para eu definir casas decimais, eh com virgula.
+
+63. Vamos, so, salvar mais um registro, Descricao 'Teste', Data de vencimento '28/12/2016', Valor '1.123,32', Status 'Pendente', Salvar.
+
+, vamos colocar um numero bem diferente, aqui, tambem, vamos colocar 1.123,32, okay?, ou seja, eh um numero decimal no Brasil, ta vendo, o ponto eh o separador de milhar e virgula, aqui, eh o separador decimal.
+
+64. Salvei. Vamos voltar, aqui, no Console do H2. Okay, Data de Vencimento 2016-12-28, Valor 1123.32.
+
+65. Entao, deu certo, aqui, tambem.
+
+66. Beleza? Entao, a gente ja esta salvando no banco de dados. Neste momento, aqui, a aplicacao ja esta salvando no banco de dados, e a aplicacao ja esta configurada, tambem, com o Locale do Brasil. Entao, eu consigo digitar, aqui, a data no formato que a gente entende, e o valor tambem. Depois, a gente vai aplicar mascaras, aqui, para ficar mais facil, nao eh? O Valor, eu so ir digitando, aqui, ele ja ir preenchendo corretamente, e, aqui, na Data de Vencimento, aparece aquele calendariozinho, mas a gente faz mais para a frente.
+
+67. Fim da Aula 02.004. Cadastrando um Novo Titulo.
+
+-->

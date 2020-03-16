@@ -1,0 +1,59 @@
+<!-- 
+
+Aula 03.005. Introducao ao Ajax
+
+1. Vamos conversar um pouquinho, agora, sobre Ajax, porque, nas proximas aulas, eu vou te ensinar a como fazer uma Requisicao Ajax usando, la, o JavaScript com jQuery.
+
+2. Entao, eu so quero dar uma introducao rapida, aqui, para todo mundo ficar, nao eh?, para voce ficar, ali, antenado o que significa o Ajax.
+
+3. Nao tem muito segredo, nao. A ideia eh bem simples, usando o jQuery, facilita demais a nossa vida. Entao, voce vai ver que eh bem simples, mas eu so quero dar uma passada, aqui, e te mostrar como vai ficar o sistema pronto depois que a gente implementar, la, o recebimento de um titulo via Ajax.
+
+4. Okay? Entao, vamos passar, aqui o fluxo do Spring, em um framework Action-Based, quando a gente esta usando Ajax. Oh, a primeira coisa, a Requisicao, a primeira coisa que esta mudando, ai, a Requisicao, ela nao vai sair do Browser, propriamente dito, logico, sai do Browser, mas nao eh a Requisicao, la, o Browser fazendo, eh um JavaScript, ou seja, um script que a gente desenvolve, que a gente vai desenvolver, que vai sair essa Requisicao para o Servidor, okay?
+
+5. Entao, difere, ai, um pouquinho, ao inves de ser uma Requisicao, o Browser submetendo tudo, nao, eh um JavaScript, um script que a gente vai criar, que vai iniciar essa Requisicao.
+
+6. E essa Requisicao, ela vai cair aonde? No Framework.
+
+7. Ate ai, nao muda, ela vai cair la no Spring MVC, nao vai mudar nada.
+
+8. Essa Requisicao vai ser encaminhada para onde? Tambem nao muda nada. A gente vai para o Controller, caiu la no Controller, a gente vai no Model, voltamos, aqui, para o Controller, ai, que pode dar uma diferencazinha.
+
+9. Eu criei esse slide, aqui, agora, para tentar mostrar um pouco como eh que as coisas podem funcionar, podem dar uma variada, aqui. 
+
+10. Eu estou fazendo essa Requisicao Ajax. Quando eu estiver retornando do Controller, eu vou ter duas opcoes. Ou eu devolvo la para o Framework, com o nome de uma View, ou um Redirect, alguma coisa assim, ou entao, eu devolvo direto um objeto. Pode ser uma string, pode ser um objeto qualquer que, depois, pode ser transformado em XML, por exemplo, okay?
+
+11. Entao, eu posso retornar do Controller um objeto, direto. Eh logico que eu estou colocando, aqui, um objeto Controller retornando um objeto, mas, isso tudo vai passar pelo Framework, nao eh direto, direto, assim, okay? Sempre vai passar, la, pelo Spring MVC.
+
+12. Eh so para voce ter uma nocao de que eu nao preciso de uma View. Nao eh obrigatorio uma View. E eu vou usar esse caso no Projeto, ele vai retornar uma string para a gente aturalizar na tela. 
+
+13. E ai, essa Requisicao, ela volta para quem? 
+
+14. Ela vai voltar para o JavaScript.
+
+15. Beleza? Entao, o JavaScript iniciou a Requisicao, passa, ai, por esse fluxo, e a Requisicao retorna para o JavaScript.
+
+16. Como o JavaScript, eh uma linguagem, ali, que eu consigo manipular os dados da tela, o DOM, o HTML, eu posso pegar esse resultado e mexer na tela.
+
+17. Tirar um componente, colocar outro, ou seja, eu consigo fazer o que eu quiser, praticamente, ali, no Browser.
+
+18. Beleza? Entao, foi so para dar uma ideia que eu posso, do Controller, retornar um nome de uma View, essa View vai chegar la no Javascript, tambem, nao tem problema nenhum, vai chegar a pagina completa la, nao eh?, de uma View, ou eu retorno um objeto. NO caso, aqui, eu vou retornar desse Projeto, eu vou retornar uma String, voce vai ver la na hora.
+
+19. So para voce lembrar, que eu mostrei no iniciozinho do curso, o Ajax que eu vou usar, aqui, eh no Recebimento de um Titulo.
+
+20. Entao, oh, eu tenho esses dois apartamentos, aqui, no Browser, em '/titulos', para Receber, o condominio desses dois apartamentos. Entao, eu posso clicar, aqui, em Receber, voce vai ver que nao vai dar Refresh, aqui, na tela. Ele, simplesmente, recebe, some o icone de Receber, e atualiza, aqui, o Status, com Recebido.
+
+21. Eu fiz isso daqui usando Ajax. Okay? Entao, eu uso jQuery, la por tras, o jQuery faz essa Requisicao, entao, existe, la no meu Controller, alguem, nao eh?, um metodo, um RequestMapping, esperando receber essa Requisicao desse meu click, aqui, para esse Titulo de codigo 10.
+
+22. Okay? Entao, tem esse cara, la, esperando, eu recebo essa Requisicao, atualizo no banco de dados, oh, esta atualizado no banco de dados? Porque eu posso dar Refresh no Browser, aqui, agora, e voce vai ver que continua o Status como Recebido, ou seja, no banco de dados, esta Recebido.
+
+23. Okay? Posso clicar em Receber nesse outro registro, de codigo 13, e esse aqui foi recebido tambem.
+
+24. Beleza? Entao, essa eh a ideia do Ajax. Eh o Javascript iniciar a Requisicao, o Resultado da Requisicao volta para o Javascript, e, ai, eu consigo atualizar partes da tela. Voce ve que eu atualizei so esse pedacinho, aqui, em Status, e no icone de Receber, ou seja, tirei o botaozinho aqui de Receber.
+
+25. Okay, tirei o iconezinho, aqui, de Receber.
+
+26. Eu atualizei so esse pedacinho. Eu consigo mexer, entao, em pequenas partes do sistema com Ajax.
+
+27. Fim da Aula 03.005. Introducao ao Ajax.
+
+-->

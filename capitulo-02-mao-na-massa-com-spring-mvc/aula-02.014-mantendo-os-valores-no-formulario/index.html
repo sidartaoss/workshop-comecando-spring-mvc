@@ -1,0 +1,556 @@
+<!-- 
+
+Aula 02.014. Mantendo os Valores no Formulario
+
+1. Lembra que o nosso sitema, quando eu mando salvar, ele esta validando, nao eh?, mas, ai, eu vou colocar, aqui, uma Descricao, sei la, 'Condominio Apto 102', vou mandar salvar, vai sumir esse erro daqui, mas tambem some o valor no Campo Descricao.
+
+2. Entao, isso aqui nao eh legal, nao e?
+
+3. Imagina, entao, o cara digitou, aqui, alguma coisa, mandou salvar, e sumiu.
+
+4. Entao, eu quero manter esses valores, aqui, no formulario. E so mostrar, aqui, vamos supor, Valor eh obrigatorio, Data de vencimento eh obrigatorio, nas mensagens de validacao no topo da Pagina, mas a Descricao, que eu havia escrito antes, eu quero mante-la.
+
+5. Okay? E, se voce pensar, eu enviei, oh, vamos pensar, aqui, oh, eu enviei os dados, aqui, oh, uma Descricao que foi preenchida no objeto 'titulo', la, no Servidor. Chegou no metodo salvar(), 
+
+	@RequestMapping(method = RequestMethod.POST)
+	public ModelAndView salvar(@Validated Titulo titulo, Errors errors) {
+		ModelAndView mv = new ModelAndView("CadastroTitulo");
+		if (errors.hasErrors()) {
+			return mv;
+		}
+		Long last = this.buscarUltimoRegistro();
+		titulo.setCodigo(++last);
+		this.titulos.save(titulo);
+		
+		mv.addObject("mensagem", "Titulo salvo com sucesso!");		
+		
+		return mv;
+	}
+
+vamos olhar aqui, chegou, aqui, no metodo salvar() o 'titulo', veio preenchido. Se tem algum erro, eu retorno o 'titulo' para a Pagina.
+
+6. So que, aqui, 
+
+		if (errors.hasErrors()) {
+			return mv;
+		}
+
+, eu nao estou retornando um objeto 'titulo'. Na verdade, eu estou retornando o objeto 'titulo' novamente, porque ele ainda esta na Requisicao.
+
+7. O problema eh que o Thymeleaf, aqui, ele nao sabe, por exemplo, aqui, nesse input,
+
+<div class="panel-body">
+    <div class="form-group" th:classappend="${#fields.hasErrors('descricao')} ? has-error">
+        <label for="descricao" class="col-sm-2 control-label">Descrição</label>
+        <div class="col-sm-4">
+            >>> <input type="text" class="form-control" id="descricao" name="descricao" /> <<<
+        </div>
+    </div>
+
+, eh um field 'descricao'. Eu quero manter esse field 'descricao', ele nao sabe disso.
+
+8. Na hora em que eu estou submetendo, o nome eh descricao, mas, na hora que o Thymeleaf esta carregando, ele nao le, esse cara, aqui, name="descricao", ele fala 'Ah, esse name eh a descricao', nao, o Thymeleaf nao sabe.
+
+9. Entao, eu preciso usar uma tagzinha, aqui, do Thymeleaf, para fazer isso.
+
+10. Ao inves de ser name aqui,
+
+<input type="text" class="form-control" id="descricao" >>> name="descricao" <<< />
+
+, eu vou colocar th:field, okay?, e, ai, aqui, no valor do atributo name, eu vou fazer o seguinte, oh, eu vou colocar um asterisco, abre chaves e fecha chaves, *{descricao},
+
+<input type="text" class="form-control" id="descricao" th:field="*{descricao}" />
+
+11. Isso daqui, oh, *{...}, a outra expressao, que o instrutor falou que ia mostrar para nos, quando a gente estava vendo as expressoes, la, do Thymeleaf, eh, justamente, o seguinte, oh, eu estou falando que esse input, aqui, 
+
+<input type="text" class="form-control" id="descricao" th:field="*{descricao}" />
+
+, eh um field,
+
+<input type="text" class="form-control" id="descricao" >>> th:field <<<="*{descricao}" />
+
+, desse objeto,
+
+<form class="form-horizontal" method="POST" action="/titulos" th:object=">>>${titulo}<<<">
+
+, desse 'th:object', aqui,
+
+<form class="form-horizontal" method="POST" action="/titulos" >>> th:object="${titulo} <<<">
+
+, e o nome dele eh descricao, 
+
+<input type="text" class="form-control" id="descricao" th:field="*{>>>descricao<<<}" />
+
+, okay?
+
+12. Entao, esse asterisco, aqui, esta falando que eh um field desse objeto que esta, aqui, no th:object,
+
+<form class="form-horizontal" method="POST" action="/titulos" th:object=">>>${titulo}<<<">
+
+13. Okay? E, ai, quando deu um erro, ele vai retornar, o titulo continua na Requisicao,
+
+	@RequestMapping(method = RequestMethod.POST)
+	public ModelAndView salvar(@Validated Titulo titulo, Errors errors) {
+		ModelAndView mv = new ModelAndView("CadastroTitulo");
+		if (errors.hasErrors()) {
+			return mv;
+		}
+
+        ...
+	}
+
+, esse objeto 'titulo',
+
+	@RequestMapping(method = RequestMethod.POST)
+    public ModelAndView salvar(@Validated Titulo >>> titulo <<<, Errors errors) {
+        ...
+    }
+
+14. Ai, o Thymeleaf vai processar, e, ai, ele vai falar, 'Opa, esse cara aqui eh a descricao,
+
+<input type="text" class="form-control" id="descricao" th:field=" >>>*{descricao} <<<" />
+
+, entao, deixa eu manter o valor que tem la na Descricao?'. 
+
+15. Ele vai manter. So isso, Normandes? So isso. Acredita?
+
+16. Olha so, salvei, aqui, so escrevi na Descricao, entao, so a Descricao que vai manter la. 
+
+17. Vamos vir, aqui, em '/titulos/novo', e, ai, eu vou mandar salvar, oh, deu erro de validacao.
+
+18. Vou colocar, aqui, em Descricao, 'Condominio Apto 102', vou mandar salvar, vai sumir o erro daqui do Campo Descricao, mas esse valor, 'Condominio Apto 102', vai continuar no campo.
+
+19. Olha la. O valor, aqui, no campo Descricao, continuou.
+
+20. Oh, se eu colocar uma Data de Vencimento, aqui, mas nao Valor, o que que vai acontecer?
+
+21. O Condominio, aqui, no Campo Descricao, vai manter, a Data de Vencimento vai sumir. Por que? Eu nao passei la ainda para 'th:field'.
+
+22. Okay?
+
+23. Olha la. Sumiu o erro, mas, aqui, em Data de Vencimento, sumiu o valor tambem. Na proxima vez, ja vai dar erro, aqui, de validacao, no campo Data de Vencimento, novamente.
+
+24. Entao, eu preciso transformar esses caras, ao inves do name, para 'th:field', e, aqui, eu uso a referencia com asterisco, 'th:field=*{dataVencimento}', para referenciar o objeto que eu estou recebendo nesta Pagina,
+
+<input type="text" class="form-control" id="dataVencimento" th:field="*{dataVencimento}" />
+
+25. Entao, em Data de Vencimento e, aqui, tambem, em Valor, eu faco o mesmo,
+
+<input type="text" class="form-control" id="valor" th:field="*{valor}" />
+
+26. E, ai, quando o Thymeleaf interpretar isso daqui, ele transforma isso daqui em um name, la, no HTML.
+
+27. Entao, quando eu submeter os dados, ele vai continuar, eu nao preciso ter os dois aqui, 
+
+<input type="text" class="form-control" id="valor" >>> th:field="*{valor} <<<" />
+
+, 'th:field' e name, como eu tinha falado la no inicio, se eu tiver um name, o mesmo nome, aqui, 
+
+	@RequestMapping(method = RequestMethod.POST)
+	public ModelAndView salvar(@Validated Titulo >>> titulo <<<, Errors errors) {
+        ...
+	}
+
+do field, da propriedade dessa objeto, o Spring faz isso para a gente, preenche esse objeto automaticamente para a gente.
+
+28. Quando eu coloco 'th:field', o Thymeleaf vai fazer isso tambem, ele ja converte e coloca la no name para mim. Beleza?
+
+29. Entao, oh, salvei, entao, oh, coloquei, aqui, nos tres campos, okay?,
+
+<input type="text" class="form-control" id="descricao" th:field="*{descricao}" />
+
+...
+
+<input type="text" class="form-control" id="dataVencimento" th:field="*{dataVencimento}" />
+
+...
+
+<input type="text" class="form-control" id="valor" th:field="*{valor}" />
+
+, se eu mandar Salvar, aqui, eu vou colocar uma data, Salvar, oh, a Data de Vencimento manteve, tambem. Se eu colocar, aqui, um Valor, 1,23, por exemplo, entao, agora, ja vai conseguir Salvar no banco de dados.
+
+30. Salvou, 'Titulo salvo com sucesso!'
+
+31. Ih, Normandes, mas, agora, ao Salvar, nao sumiram os dados nos campos do formulario.
+
+32. Agora, a gente tem que fazer o que? Tem que fazer esse cara, aqui, sumir.
+
+33. Eh verdade, agora, a gente tem que fazer esse cara, aqui, sumir, ou seja, os valores nos campos do formulario.
+
+34. Entao, seria eu adicionar, aqui, 
+
+	@RequestMapping(method = RequestMethod.POST)
+	public ModelAndView salvar(@Validated Titulo titulo, Errors errors) {
+		ModelAndView mv = new ModelAndView("CadastroTitulo");
+		if (errors.hasErrors()) {
+			return mv;
+		}
+		Long last = this.buscarUltimoRegistro();
+		titulo.setCodigo(++last);
+		this.titulos.save(titulo);
+		
+		>>> mv.addObject("mensagem", "Titulo salvo com sucesso!"); <<<
+		
+		return mv;
+	}
+
+, no .addObject(), um novo Titulo, nao eh?, para limpar os dados? 
+
+35. Poderia ser.
+
+36. Pode ser sim.
+
+37. Mas, eu vou te mostrar, quero te apresentar uma funcionalidadezinha, aqui, legal, tambem, que eh o REDIRECT.
+
+38. Okay? Que eh o Redirect do Spring MVC. 
+
+39. O Redirect, o que que ele vai fazer?
+
+40. Ele vai retornar, quando ele voltar, aqui, na Pagina CadastroTitulo.html, ele vai retornar o status 302, do HTTP, que fala para o Browser o seguinte, 'Olha, eh para voce ir para uma outra Pagina, estou dando um outro endereco para voce ir'.
+
+41. Eh isso que eu vou falar, aqui, para o Browser. E o Browser, vai fazer uma nova Requisicao. E eu quero que o Browser faca uma nova Requisicao aqui, oh, para 'titulos/novo'.
+
+42. Entao, quando ele salvar, deu certo, deu salvo com sucesso, ele vai fazer uma nova Requisicao, aqui, para '/titulos/novo', beleza? Eh isso que eu quero fazer, aqui, para eu ja te ensinar isso tambem.
+
+43. Okay?
+
+44. Entao, como que eu vou fazer isso daqui?
+
+45. Se ele chegar nessa linha aqui,
+
+	@RequestMapping(method = RequestMethod.POST)
+	public ModelAndView salvar(@Validated Titulo titulo, Errors errors) {
+		ModelAndView mv = new ModelAndView("CadastroTitulo");
+		if (errors.hasErrors()) {
+			return mv;
+		}
+		Long last = this.buscarUltimoRegistro();
+		titulo.setCodigo(++last);
+		this.titulos.save(titulo);
+
+        >>> <<<
+
+		mv.addObject("mensagem", "Titulo salvo com sucesso!");		
+		
+		return mv;
+	}
+
+, significa que ele salvou com sucesso, nao eh?
+
+46. Se ele salvou, aqui, com sucesso, entao, eu posso dar um return, aqui, diferente, oh, eu posso colocar, aqui, oh, 'return new ModelAndView("redirect:")'. No Redirect, eu nao vou passar o nome de uma View, eu vou passar, sim, o nome de uma URL. Eu quero que ele venha aqui, oh, para o '/novo'. Se eu quero que ele venha para o '/novo', eh 'return new ModelAndView("redirect:/titulos/novo")'. Por que '/titulos'? Lembra que o '/novo' esta sendo concatenado com esse '/titulos', aqui,
+
+	@RequestMapping(method = RequestMethod.POST)
+	public ModelAndView salvar(@Validated Titulo titulo, Errors errors) {
+		ModelAndView mv = new ModelAndView("CadastroTitulo");
+		if (errors.hasErrors()) {
+			return mv;
+		}
+		Long last = this.buscarUltimoRegistro();
+		titulo.setCodigo(++last);
+		this.titulos.save(titulo);
+
+		mv.addObject("mensagem", "Titulo salvo com sucesso!");		
+		
+		return new ModelAndView("redirect:/titulos/novo");
+	}
+
+47. Entao, oh, eu estou redirecionando, oh, para um novo ModelAndView. Eu vou trocar esse codigo com ModelAndView(), aqui, nesse metodo salvar(), nao esta legal, nao, eh so para te mostrar que isso aqui vai ter um probleminha, e a gente vai consertar isso, deixando esse cara mais elegante.
+
+48. Beleza?
+
+49. Subiu, aqui, com sucesso. Vamos, la, salvar, na Pagina CadastroTitulo.html.
+
+50. Oh, vamos ver se esta funcionando, aqui, nao eh?, vamos colocar, aqui, 'Condominio Apto 202', por exemplo, Salvar, oh, tah mantendo os dados.
+
+51. Vamos colcoar uma Data de Vencimento, aqui, qualquer, '07/01/2016', Valor '100,00', e vou mandar Salvar.
+
+52. Vamos prever, aqui, o que que eh para acontecer. Eh para ele dar um Redirect em '/titulos/novo'.
+
+53. Okay?
+
+54. Ah, aqui, voce pode falar assim para mim, oh, 'Ah, Normandes, eu nao adicionei o objeto, 
+
+    mv.addObject("mensagem", "Titulo salvo com sucesso!");
+
+nesse ModelAndView, 
+
+return new >>> ModelAndView("redirect:/titulos/novo") <<<;
+
+, nao eh?',
+
+55. Entao, vamos fazer isso daqui,
+
+	@RequestMapping(method = RequestMethod.POST)
+	public ModelAndView salvar(@Validated Titulo titulo, Errors errors) {
+		ModelAndView mv = new ModelAndView("CadastroTitulo");
+		if (errors.hasErrors()) {
+			return mv;
+		}
+		Long last = this.buscarUltimoRegistro();
+		titulo.setCodigo(++last);
+		this.titulos.save(titulo);
+
+		ModelAndView mv2 = new ModelAndView("redirect:/titulos/novo");
+        
+        mv2.addObject("mensagem", "Titulo salvo com sucesso!");		
+		
+		return mv2;
+	}
+
+56. Isso aqui, 
+
+    mv2.addObject("mensagem", "Titulo salvo com sucesso!");		
+
+, nao vai funcionar, nao, eu sou estou colocando para voce nao ficar com duvidas, ali.
+
+57. Okay, vamos, aqui, novamente, '/titulos/novo', Salvar, okay, esta validando, Descricao 'Condominio Apto 202', Data de Vencimento '20/01/2016', Valor '189,00', vamos Salvar.
+
+58. Fez o Redirect, beleza, oh, apagou, aqui, os dados. Cade a mensagem de sucesso, Normandes?
+
+59. A mensagem de sucesso sumiu.
+
+60. Mesmo eu tendo colocado, oh, nesse ModelAndView 2,
+
+		ModelAndView mv2 = new ModelAndView("redirect:/titulos/novo");
+        
+        >>> mv2.addObject("mensagem", "Titulo salvo com sucesso!"); <<<
+		
+		return mv2;
+
+, olha la, eu adicionei a mensagem de sucesso, mas ela sumiu.
+
+61. Por que que ela sumiu?
+
+62. Porque eu fiz um Redirect. E o que que o Redirect significa? Uma nova Requisicao.
+
+63. Em uma nova Requisicao, esses dados, aqui,
+
+>>> mv2.addObject("mensagem", "Titulo salvo com sucesso!"); <<<
+
+, sao perdidos, ja era, esses dados, aqui, que eu adicionei.
+
+64. Eu fiz uma nova requisicao, eu cai aqui, oh,
+
+	@RequestMapping("/novo")
+	public ModelAndView novo() {
+		ModelAndView mv = new ModelAndView("CadastroTitulo");
+		mv.addObject(new Titulo());
+		return mv;
+	}
+
+65. Entao, quando eu cai, aqui, nessa novao Requisicao,
+
+	@RequestMapping("/novo")
+	public ModelAndView novo() {
+		ModelAndView mv = new ModelAndView("CadastroTitulo");
+		mv.addObject(new Titulo());
+		return mv;
+	}
+
+, aqui, oh, mensagem 'Titulo salvo com sucesso!'.
+
+66. Okay? Entao, eu fiz uma Requisicao aqui,
+
+	@RequestMapping("/novo")
+	public ModelAndView novo() {
+		ModelAndView mv = new ModelAndView("CadastroTitulo");
+		mv.addObject(new Titulo());
+		return mv;
+	}
+
+67. Essa mensagem se perdeu, esse cara aqui,
+
+>>> mv2.addObject("mensagem", "Titulo salvo com sucesso!"); <<<
+
+68. E, ai, os caras do Spring, olha so o que que eles criaram. Eles criaram um objeto, que eu vou receber ele aqui, oh,
+
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+	@RequestMapping(method = RequestMethod.POST)
+	public ModelAndView salvar(@Validated Titulo titulo, Errors errors, >>> RedirectAttributes attributes <<< ) {
+		ModelAndView mv = new ModelAndView("CadastroTitulo");
+		if (errors.hasErrors()) {
+			return mv;
+		}
+		Long last = this.buscarUltimoRegistro();
+		titulo.setCodigo(++last);
+		this.titulos.save(titulo);
+		
+		ModelAndView mv2 = new ModelAndView("redirect:/titulos/novo");
+		
+		mv2.addObject("mensagem", "Titulo salvo com sucesso!");
+		
+		return mv2;
+	}
+
+, ou seja, atributos para eu poder redirecionar, eh isso mesmo, ou seja, se eu adicionar esse atributo, ao inves de eu adicionar aqui no ModelAndView e adicionar nesse cara, aqui, ou seja, em RedirectAttributes, ele vai estar disponivel aqui,
+
+	@RequestMapping("/novo")
+	public ModelAndView novo() {
+		ModelAndView mv = new ModelAndView("CadastroTitulo");
+		mv.addObject(new Titulo());
+		return mv;
+	}
+
+, ele cria, por detras dos planos, aqui, ele cria uma secao temporaria para isso funcionar.
+
+69. Okay?
+
+70. Entao, aqui, oh, attributes.addFlashAttributes(), ai, o nome desse atributo chama-se flashAttribute. Ai, aqui, eu vou passar exatamente isso daqui, oh, "mensagem", "Titulo salvo com sucesso!",
+
+	@RequestMapping(method = RequestMethod.POST)
+	public ModelAndView salvar(@Validated Titulo titulo, Errors errors, RedirectAttributes attributes) {
+		ModelAndView mv = new ModelAndView("CadastroTitulo");
+		if (errors.hasErrors()) {
+			return mv;
+		}
+		Long last = this.buscarUltimoRegistro();
+		titulo.setCodigo(++last);
+		this.titulos.save(titulo);
+		
+		ModelAndView mv2 = new ModelAndView("redirect:/titulos/novo");
+		attributes.addFlashAttributes("mensagem", "Titulo salvo com sucesso!");
+
+		// mv2.addObject("mensagem", "Titulo salvo com sucesso!");
+
+		return mv2;
+	}
+
+, e posso sumir com isso daqui,
+
+		// mv2.addObject("mensagem", "Titulo salvo com sucesso!");
+
+71. Okay? Deixa eu ver se isso daqui vai funcionar assim.
+
+72. Vamos colocar, aqui, Descricao 'Condominio Apto 301', Data de Vencimento '10/01/2016', Valor '50,00', Salvar.
+
+73. Okay, fez o Redirect, e apareceu, aqui, a mensagem de 'Titulo salvo com sucesso!'
+
+74. Legal, nao eh?
+
+75. Entao, ele fez o Redirect, mas apareceu a mensagem.
+
+76. Se eu der um Refresh, aqui, oh, em '/titulos/novo', essa mensagem vai sumir. Okay, sumiu a mensagem.
+
+77. Beleza? E, ai, melhorando isso daqui, 
+
+	@RequestMapping(method = RequestMethod.POST)
+	public ModelAndView salvar(@Validated Titulo titulo, Errors errors, RedirectAttributes attributes) {
+		ModelAndView mv = new ModelAndView("CadastroTitulo");
+		if (errors.hasErrors()) {
+			return mv;
+		}
+		Long last = this.buscarUltimoRegistro();
+		titulo.setCodigo(++last);
+		this.titulos.save(titulo);
+		
+		ModelAndView mv2 = new ModelAndView("redirect:/titulos/novo");
+		attributes.addFlashAttributes("mensagem", "Titulo salvo com sucesso!");
+
+		return mv2;
+	}
+
+, porque eu nao preciso retornar, aqui, um ModelAndView, porque eu nao estou adicionando, eu nao estou fazendo ModelAndView via addObject() nenhum, entao, eu posso retornar, aqui, apenas uma String, oh, eu posso fazer o seguinte, oh, eu vou retornar, aqui, "CadastroTitulo", sumindo com esse ModelAndView, aqui,
+
+	@RequestMapping(method = RequestMethod.POST)
+    // public ModelAndView salvar(@Validated Titulo titulo, Errors errors, RedirectAttributes attributes) {
+	public String salvar(@Validated Titulo titulo, Errors errors, RedirectAttributes attributes) {
+        /** ModelAndView mv = new ModelAndView("CadastroTitulo"); **/
+		if (errors.hasErrors()) {
+			return "CadastroTitulo";
+		}
+		Long last = this.buscarUltimoRegistro();
+		titulo.setCodigo(++last);
+		this.titulos.save(titulo);
+		
+		ModelAndView mv2 = new ModelAndView("redirect:/titulos/novo");
+		attributes.addFlashAttributes("mensagem", "Titulo salvo com sucesso!");
+
+		return mv2;
+	}
+
+78. E, aqui, se eu chegar nessa linha, 'this.titulos.save(titulo)', eu so redireciono, aqui, e sumo com esse ModelAndView, aqui,
+
+	@RequestMapping(method = RequestMethod.POST)
+	public String salvar(@Validated Titulo titulo, Errors errors, RedirectAttributes attributes) {
+		if (errors.hasErrors()) {
+			return "CadastroTitulo";
+		}
+		Long last = this.buscarUltimoRegistro();
+		titulo.setCodigo(++last);
+		this.titulos.save(titulo);
+		
+		/** ModelAndView mv2 = new ModelAndView("redirect:/titulos/novo"); **/
+		attributes.addFlashAttributes("mensagem", "Titulo salvo com sucesso!");
+
+		/** return mv2; **/
+        return "redirect:/titulos/novo";
+	}
+
+79. Beleza? Vamos ver isso aqui funcionando, mais uma vez, porque, agora, eu posso retornar apenas o nome da View, ou um Redirect.
+
+80. Repara bem a diferenca de retornar o nome da View, 'CadastroTitulo', com retornar o Redirect, 'redirect:/titulos/novo'.
+
+81. Aqui, eu retorno o nome da View,
+
+		if (errors.hasErrors()) {
+			return "CadastroTitulo";
+		}
+
+, o nome da pagina, la, html.
+
+82. Aqui,
+
+        return "redirect:/titulos/novo";
+
+, eu dou um Redirect para uma URL, okay?
+
+83. Entao, eu tenho que colocar '/tituls/novo', que eh essa URL, aqui,
+
+	>>> @RequestMapping("/novo") <<<
+	public ModelAndView novo() {
+        ...
+    }
+
+84. Vamos, agora, Salvar, Descricao 'Condominio Apto 302', Data de Vencimento '15/01/2016', Valor '60,00', Salvar.
+
+85. Salvou. Oh, deu um Redirect, ta vendo aqui, oh, mostrou a mensagem de Salvo, se eu der um Refresh, a mensagem ja some, e Salvou, aqui, o Apto 302, tambem, conforme podemos ver, ao clicar no Link Voltar para pesquisa.
+
+86. Beleza? Acho que eh isso aqui que eu queria te mostrar. Mostrar o Redirect, 
+
+        return "redirect:/titulos/novo";
+
+, mostrar o 'th:field', aqui, do Thymeleaf, 
+
+<input type="text" class="form-control" id="valor" >>>th:field<<<="*{valor}" />
+
+, que esta relacionado com o objeto que estou recebendo, aqui,
+
+<form class="form-horizontal" method="POST" action="/titulos" 
+    th:object=" >>> ${titulo} <<< ">
+
+, e, assim, a gente consegue manter o valor, aqui, no formulario, oh, mesmo se eu colocar a Data de Vencimento, aqui, oh, e nao informar o Valor, os valores para os demais campos, eu vou mantendo.
+
+87. Porque o Thymeleaf consegue perceber esse objeto 'titulo',
+
+ <form class="form-horizontal" method="POST" action="/titulos" 
+    th:object=" >>> ${titulo} <<< ">
+
+, esta aqui, ainda, e o Thymeleaf pega o valor desse objeto,
+
+<form class="form-horizontal" method="POST" action="/titulos" 
+    th:object=" >>> ${titulo} <<< ">
+
+, e mantem, aqui, nesse field, nesse input.
+
+<input type="text" class="form-control" id="valor" >>>th:field<<<="*{valor}" />
+
+88. Fim da Aula 02.014. Mantendo os Valores no Formulario.
+
+
+
+
+
+
+
+-->

@@ -1,0 +1,242 @@
+<!-- 
+Aula 02.012. Expressoes do Thymeleaf
+
+1. Bom, agora, a gente ja desenvolveu, nao eh, duas telinhas, ainda tem muitas coisa para a gente desenvolver nessas telas, mas vamos dar uma Revisao nas expressoes do Thymeleaf, para voce continuar entendendo um pouco mais sobre elas.
+
+2. Vamos olhar, aqui, na documentacao, https://www.thymeleaf.org, olha so, vamos olhar aqui, Documentation, https://www.thymeleaf.org/documentation.html, nessa aqui, 'Using Thymeleaf 2.1', [Read online].
+
+3. Aqui no Capitulo 4, oh, a sintaxe das expressoes.
+
+4. Temos, basicamente, dessas expressoes, ai, 4 tipos delas. Sao essas aqui, que estao selecionadas,
+
+Variable Expressions: ${...}
+Selection Variable Expressions: *{...}
+Message Expressions: #{...}
+Link URL Expressions: @{...}
+
+5. As expressoes de variaveis, ${...}, que eu ja mostrei para voce, vamos dar mais uma olhada, aqui, oh, vamos pegar, aqui, na PesquisaTitulos.html, por exemplo, e vamos dar uma olhada, aqui, cade, cade, olha so, 
+
+<tr th:each="titulo : ${titulos}">
+    ...
+</tr>
+
+, quando eu tenho, aqui, oh, o dolar, abre chaves, fecha chaves, aqui, dentro, eu vou colocar uma variavel que estara disponivel para esta pagina, ${titulos}, por exemplo.
+
+6. Okay? Quem colocou essa variavel disponivel para essa Pagina?
+
+7. Vamos la no Controller, TituloController.java.
+
+8. Veja la no metodo pesquisar(), eu coloquei aqui, oh,
+
+    mv.addObject("titulos", todosTitulos);
+
+, eu adicionei esse objeto, dei um nome para a variavel, e coloquei o valor da variavel, oh. So para a gente lembrar, aqui, sobre um Framework Action-Based, lembra, aqui, oh, o Browser faz a Requisicao, que vai cair no Framework, no caso, o Spring MVC, que encontra qual que eh o Controller, ai, vai chegar em um Controller, beleza? Ai, o Controller vai executar as Regras de Negocio, vai chamar alguem para executar as Regras de Negocio, salvar no banco de dados, por ai, executar regras, o contexto vai voltar para o Controller, nao eh?, so lembrando que o que esta em azulzinho, eh o que a gente desenvolve, nao eh?, ou seja, Controller, Model.
+
+9. E, ai, olha so, essa parte, agora, eu quero que voce preste atencao, depois que o Controller recebeu esses dados, trabalhou neles, o Controller devolve dados, ele retorna os dados, entao, ele coloca aqui dentro, oh, nessa setinha, aqui, eu estou colocando, eu estou devolvendo o ModelAndView, aquele objeto la, ModelAndView, e, aqui, eu coloco tanto o nome da View quanto os objetos que eu quero, os nomes das variaveis que eu quero, para que? Para o Framework encaminhar isso para quem? Para a View.
+
+10. Okay? Entao, eh do Controller, que vem para a View.
+
+11. Isso eh importante voce perceber isso daqui. Entao, aqui, eu coloquei objetos que eu posso usar na View. E a View, aqui, volta para o Browser, para renderizar para o Usuario poder ver o que que ele acessou.
+
+12. Entao, a gente acessou, aqui, no Controller, o metodo pesquisar(), caimos aqui, no Controller, como eh que eu sei? Acessando em '/titulos', acessou, aqui, em '/titulos', aqui,
+
+    >>>@RequestMapping<<<
+    public ModelAndView pesquisar() {
+
+        ...
+    }
+
+, eu nao tenho nada mapeado, entao, ele acumula, nao eh?, entao, acessei um GET em '/titulos', ele caiu aqui, 
+
+    @RequestMapping
+    public ModelAndView pesquisar() {
+
+        ...
+    }
+
+, eu vou devolver um ModelAndView com o nome da View,
+
+    >>>ModelAndView mv = new ModelAndView("PesquisarTitulos");<<<
+    mv.addObject("titulos", todosTitulos);
+    return mv;
+
+, e objetos,
+
+    mv.addObject("titulos", todosTitulos);
+
+, eu posso colocar varios, nao eh so um nao.
+
+13. Para eu acessar esses objetos, eu uso o ${...}, com o Thymeleaf.
+
+14. Cada framework de View que voce for usar pode ser diferente. No caso do Thymeleaf, eh assim.
+
+15. Okay?
+
+16. E, ai, eu uso isso aqui onde?
+
+<tr th:each="titulo : >>>${titulos}<<<">
+    ...
+</tr>
+
+, em qualquer lugar?
+
+17. Nao. Eu nao posso usar, aqui, com Thymeleaf, eu nao posso, por exemplo, vir aqui e colocar um <span></span>, vamos supor que eu fosse colocar aqui, em algum lugar, um <span>, e, aqui, colocasse algo assim, oh, 
+    
+    <div class="panel-body">
+        <span>${titulos}</span>
+        <table class="table table-bordered table-spriped">
+            ...
+        </table>
+    </div>
+
+, se tivesse sentido eu fazer isso daqui, nao eh?
+
+18. Nao vai funcionar.
+
+19. Por que?
+
+20. Porque o Thymeleaf precisa processar essa pagina aqui, eu ainda, lembra assim, eu ainda estou la no Framework, nao chegou no Browser ainda, eu estou la no Servidor, okay?, eu estou no Servidor ainda, ta no Tomcat processando esses dados. Entao, isso aqui,
+
+    <div class="panel-body">
+        >>><span>${titulos}</span><<<
+        <table class="table table-bordered table-spriped">
+            ...
+        </table>
+    </div>
+
+, nao vai funcionar. Por que? Porque o Thymeleaf nao funciona assim.
+
+21. Para o Thymeleaf funcionar, eu preciso colocar, aqui, o namespace dele,
+
+<html
+...
+    xmlns:th="http://www.thymeleaf.org"
+
+, e usar as tags do Thymeleaf. No caso, 'th:each' eh uma delas,
+
+    <tr th:each="titulo : ${titulos}">
+        ...
+    </tr>
+
+, a gente esta estudando algumas dessas tags, aqui, neste curso.
+
+22. Entao, 'th:each' eh uma delas. Eu pego a variavel, ${titulos}, e entrego em uma outra variavel. Nesse caso, aqui,
+
+    <tr th:each="titulo : ${titulos}">
+        ...
+    </tr>
+
+, eu nao preciso colocar o ${} para titulo, nao, por que? Porque nao eh assim que ele foi feito.
+
+23. Se a gente olhar la na documentacao, eu aprendi que, para o Thymeleaf funcionar, eu coloco, aqui, o nome da variavel que esta sendo recebida la do Controller, e, aqui,
+
+    <tr th:each=">>>titulo<<< : ${titulos}">
+        ...
+    </tr>
+
+, eu estou criando uma nova dentro desta pagina. Beleza? Ai, o Thymeleaf vai percorrer isso daqui, e vai processar.
+
+24. Ai, entao, ele coloca, oh, 'th:text' eh uma outra tagzinha, aqui, 
+
+    <td class="text-center" th:text="${titulo.codigo}"></td>
+
+do Thymeleaf, nao eh?, e, ai, 'titulo' ja eh essa variavel aqui,
+
+    <tr th:each=">>>titulo<<< : ${titulos}">
+        ...
+    </tr>
+
+, 
+
+25. Okay? Entao, ele vai pegar esse cara, entao, eu estou acessando, 'titulos' nao sao varios objetos do tipo Titulo? Sim, entao, eu posso acessar, la, ele vai chamar o getCodigo(), ele vai chamar o getDescricao(), mas eu nao preciso escrever, aqui, getDescricao(),
+
+    <td th:text="${titulo.descricao}"></td>
+
+26. Okay? E, ai, o Thymeleaf tem algumas facilidades, como, por exemplo, formatar os campos para a gente. Entao, eu posso colocar duas chaves para ele ja formatar, usando o conversor definido no meu Projeto. No caso, aqui, de Titulo, eu tenho um conversor, oh, @DateTimeFormat, formatador, aqui, para data, e um formatador, aqui, para o valor, @NumberFormat.
+
+27. Beleza? Entao, ele vai formatar esses dados, assim, para mim, porque eu coloquei duas chaves,
+
+    <td class="text-center" th:text="${{titulo.dataVencimento}}"></td>
+
+, isso eh caracteristica do Thymeleaf. Beleza?
+
+28. O que mais que a gente viu, aqui, oh? Outra tag, aqui, do Thymeleaf, eu nao posso inventar uma tag, aqui, do Thymeleaf, e colocar. Na verdade, eu posso, se eu quise estender o Framework, ele eh estensivel, voce pode inventar a sua, mas, sem voce estender, voce so pode usar essas que estao disponiveis, entao, aqui, no caso, oh, 'th:classappend', essa tag, o que que ela faz? Ela adiciona, ela apenda, ela adiciona uma classe aqui no span, nesse elemento span,
+
+<span class="label" th:text="${titulo.status.descricao}" 
+    th:classappend="${titulo.pendente ? 'label-danger' : 'label-success'}"></span>
+
+29. Entao, ele vai adicionar uma classe baseado no que? Baseado em uma regrinha que eu colocar aqui, oh,
+
+    th:classappend="${titulo.pendente ? 'label-danger' : 'label-success'}"
+
+30. Ta vendo? Entao, aqui, oh, eu abri a chaves, e fiz uma regrinha, um operador ternario.
+
+31. Beleza? Entao, comeca a ficar simples, nao eh? Comeca a ficar facil, o nosso codigo comeca a ficar bem simplezinho, nao eh? Bem enxuto.
+
+32. Ai, olha so, esse outro 'tr', aqui, ele so vai ser renderizado se, entao, 'th:if', significa o que? Ele so vai renderizar se o retorno dessa expressao for 'true', e como que eu vou verificar o retorno dessa expressao?
+
+33. Abri, aqui, oh, com $, para usar a variavel, mas eu ja coloquei um carinha diferente, oh, um jogo-da-velha. O que que eh esse jogo-da-velha?
+
+34. Vamos dar uma olhada aqui, oh, o jogo-da-velha esta aqui, oh, em Utility Objects, https://www.thymeleaf.org/doc/tutorials/2.1/usingthymeleaf.html#strings. Entao, os Objetos Utilitarios, aqui, sao acessados com o jogo-da-velha. Entao, dentro de uma expressao, aqui, do Thymeleaf, eu posso colocar o jogo-da-velha e acessar os objetos do Thymeleaf.
+
+35. Tem varios objetos, ai, oh, tem esse #ctx, tem #locale, tem varios, varios, varios, para Date, para Calendar, para Numbers, para Strings, Objects, Booleans, Arrays, Lists, ou seja, tem varios, varios, varios objetos para a gente poder trabalhar.
+
+36. Okay?
+
+37. Vamos voltar, aqui, nas expressoes, que a gente estava olhando, https://www.thymeleaf.org/doc/tutorials/2.1/usingthymeleaf.html#standard-expression-syntax.
+
+38. Entao, olha la,
+
+<tr th:if="${#lists.isEmpty(titulos)}">
+    <td colspan="6">Nenhum titulo foi encontrado.</td>
+</tr>
+
+39. #lists, esse eh o Objeto Utilitario que eu estou usando, isEmpty() eh o metodo dele, e, aqui, dentro, eu passo uma variavel, ja estou dentro, aqui, de um contexto de uma variavel, ${} do Thymeleaf, esse titulos ele vai avaliar aqui dentro, ${}.
+
+40. Beleza? Entao, se for vazio, se nao tiver nada, ele vai retornar 'true', se ele retornar 'true', isso aqui, eh renderizado,
+
+<tr th:if="${#lists.isEmpty(titulos)}">
+    <td colspan="6">Nenhum titulo foi encontrado.</td>
+</tr>
+
+
+41. Entao, vamos, la, vamos dar uma olhada em outras expressoes, 
+
+Variable Expressions: ${...}
+Selection Variable Expressions: *{...}
+Message Expressions: #{...}
+Link URL Expressions: @{...}
+
+, essa aqui,
+
+Variable Expressions: ${...}
+
+, eh a Variavel de Expressao.
+
+42. Essa aqui, Selection Variable Expression, *{...}, a gente ainda vai ver na hora que a gente for mexer um pouco mais no Cadastro do Titulo, a gente vai olhar esse carinha, aqui, voce vai ver que ela eh bem legal, vai nos ajudar, por exemplo, a manter os valores do Cadastro quando a gente estiver validando.
+
+43. Beleza? O Message Expressions #{...}, sao expressoes para a gente recuperar, vamos supor que a gente estivesse criando, aqui, um Sisteminha que tivesse arquivo properties, para definir as mensagens que eu quero colocar. Entao, por exemplo, aqui, 'Data de Vencimento',
+
+  <th class="text-center col-md-2"> >>>Data de Vencimento<<< </th>
+
+, eu quero colocar isso em um arquivo properties, para efeitos de internacionalizacao, por exemplo, entao, eu poderia colocar isso. Mas, nao esta no escopo, aqui, deste Workshop a gente mexer com isso daqui, tah okay?, fazer internacionalizacao.
+
+44. Link URL Expression @{...}, esse cara aqui eh muito legal, tambem. Por que? Com o link expression, a gente vai conseguir melhorar muito isso daqui, oh, esse href, por exemplo,
+
+    <a class="btn btn-link aw-link-panel" >>>href="/titulos/novo"<<< >Novo titulo</a>
+
+45. Colocando aqui, oh, '/titulos/novo', nao eh uma coisa legal. Por que nao? Porque, se a gente estiver trabalhando em um outro contexto, isso daqui vai ser ruim. E eu vou provar isso para voce em um outro momento. Por enquanto, a gente esta colocando aqui, oh, 'href="/titulos/novo"', colocando fixo, mas nao eh uma coisa legal. Por enquanto.
+
+46. Onde mais a gente esta usando assim? No LayoutPadrao.html, por exemplo, aqui, oh, a referencia aos recursos, colocar assim, direto,
+
+    <link rel="stylesheet" href="/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+
+, tambem, a gente consegue melhorar isso muito, usando Link URL Expressions, @{...}, e nos vamos utilizar isso daqui, ainda, neste curso, na hora que eu te provar que, do jeito que a gente fez, nao eh uma coisa legal. Beleza? La na frente, quando a gente fizer o deploy no Tomcat.
+
+47. Mas, eu queria revisar essas expressoes, aqui, com voce, passar novamente, aqui, o Thymeleaf, para nao deixar duvidas, ai.
+
+48. Fim da Aula 02.012. Expressoes do Thymeleaf.
+
+
+-->

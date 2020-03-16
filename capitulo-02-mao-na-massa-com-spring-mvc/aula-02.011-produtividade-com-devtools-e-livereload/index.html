@@ -1,0 +1,105 @@
+<!-- 
+
+Aula 02.011. Produtividade com DevTools e LiveReload
+
+1. A dica desta aula, agora, eh muito legal, porque vai te trazer muita produtividade. A primeira delas, eu ja adianto, ai, para voce, eu tinha mudado, mudei, ate, os planos, aqui, do curso, eu ia deixar o DevTools para apresenta-lo agora, para voce, 
+
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-devtools</artifactId>
+    </dependency>
+
+mas a gente ia ficar tendo trabalho demais, toda hora ter que reiniciar, nao eh?, entao, o Spring DevTools, voce ja viu que trouxe uma facilidade muito grande para a gente desenvolver.
+
+2. Mas ainda nao acabou por ai. A facilidade que a gente usou dele era, a gente alterou, ali, o Controller, tudo que a gente alterava, nas paginas, tambem, tudo que a gente alterava, era so ir no Browser, ali, dar um Refresh, que ja estava funcionando, nao eh?
+
+3. Bom, com o LiveReload, que eh a ferramenta que eu vou te apresentar agora, as coisas, ainda vao ficar muito mais faceis.
+
+4. Especialmente, se voce usa dois monitores, ai, deixa eu te contar como eh que eu trabalho aqui. Eu tenho, aqui, o meu NoteBook, e eu coloco, em cima, logo atras, um outro monitor, um monitor maior, e, ai, eu fico, o seguinte, normalmente, eu gosto de deixar o Eclipse ou a IDE que eu estiver trabalhando, aqui, na tela do notebook, e, em cima, no monitor maior, eu deixo o Browser ali.
+
+5. E, ai, eu vou desenvolvendo, aqui, no Eclipse, entao, eu estou programando, aqui, alterando alguma coisa, e, ai, eu quero ver essa alteracao la na pagina, do que eu estou fazendo, aqui, na hora, principalmente, quando eu estou mexendo com Layout.
+
+6. Por que? Bom, Layout nao eh o meu 100% forte, entao, tem que ficar fazendo testes, direto, eu nao consigo olhar, assim, direto, e falar, 'Ja ficou bom, assim', programando, e, olhando, ali, no codigo, e falar, 'Acho que vai ficar legal'. Nao, eu tenho que fazer, troco uma corzinha, 'Ah, nao, acho que tem que trocar essa cor, aqui. Nao, acho que esse espaco nao ficou legal, nao'.
+
+7. Eu admiro quem tem essa capacidade, mas eu nao consigo fazer, eu tenho que ficar vendo isso toda hora.
+
+8. Para mim ter que fica dando esse Refresh na tela toda hora eh meio chato, nao eh?. Entao, o que que eles criaram?
+
+9. No Spring DevTools, na verdade, o Spring DevTools da o suporte para isso, mas, existe a ferramenta chamada de LiveReload, vou te mostrar, aqui, eh so pesquisar livereload no Google, eh esse primeiro site, aqui, http://livereload.com/, aqui, oh, O Pais das Maravilhas para o Desenvolvedor Web, que ele ja chama, aqui, oh, ta vendo la, a chamada desse software.
+
+10. E eh realmente, porque ele vai facilitar demais a sua vida. So que a gente nao vai usar esse, aqui, nao. Como nos estamos usando, aqui, no Java, nos vamos usar esse plugin, aqui, do Chrome. 
+
+11. Entao, eu estou, aqui, com, eu vou acessar, aqui, oh, o LiveReload, https://chrome.google.com/webstore/detail/livereload/jnihajbhpnppcggbcgedagnkighmdlei, o desenvolvedor eh o livereload.com, eh esse que voce vai instalar, voce vai, aqui, adicionar no Chrome.
+
+12. Okay? E, ai, ele vai adicionar e vai adicionar, vai instalar esse icone, aqui, no Chrome, no topo da pagina, lado direito, essa bolinha, aqui, com essas setinhas, com uma bolinha, ali, no meio.
+
+13. Beleza? Eh esse cara, ali. E, ai, o que mais? Deixa eu parar, aqui, e iniciar, novamente, o Servidor, para te mostrar.
+
+14. Quando o Spring DevTools esta aqui nas dependencias do Maven, olha so o que que ele vai fazer, o Spring DevTools esta nas dependencias do Maven. Eh importante isso para funcionar.
+
+15. Ai, olha so, aqui, oh, essa linha, 
+
+2018-12-03 15:54:35.373  INFO 19196 --- [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+
+16. Olha so o que que ele escreveu, aqui, oh, o Servidor do LiveReload esta rodando na porta 35729. Okay? O que que significa isso?
+
+17. Significa que, agora, tem um Servidor, aqui, subiu uma nova Porta, aqui, um outro Servidorzinho, junto, aqui, com o Tomcat, que vai conectar nesse Plugin, aqui, nessa Extensao, no Chrome, do LiveReload que a gente instalou, aqui, no Chrome, okay? Eu nao tenho certeza se tem para Internet Explorer, eu sei que tem para o Chrome. No Firefox, aqui, no Mac, tem, tambem, eu cheguei a instalar, ha um tempo atras, quando eu usava mais o Firefox, nao sei se esta funcionando, ainda, a que eu estou usando, aqui, eh a do Chrome, e voce vai ver que vai funcionar.
+
+18. Beleza, mas, para o Internet Explorer, eu acho que nao tem.
+
+19. Okay? Entao, ele subiu isso, so de colocar essa dependencia, aqui, do LiveReload, entao, do DevTools,  
+
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-devtools</artifactId>
+    </dependency>
+
+20. Coloquei, subiu esse Servidorzinho. O que que vai acontecer, agora?
+
+21. Olha so. Vamos supor que eu estou programando, aqui, e eu quero ver, eu nao estou satisfeito com esse espaco, aqui, da margem esquerda, que a gente tinha adicionado, entao, eu vou colocar, aqui, oh, o margin-left, esta 10 pixels,
+
+.panel-default {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+22. Eu quero testar, oh, eu nao vou vir, aqui, oh, em http://localhost:8080/titulos, no Chrome, e dar um Refresh nessa tela. 
+
+23. Ah, mas, antes, eu tenho que habilitar o LiveReload, eu tenho que clicar aqui nesse icone, ao canto superior direito da tela, voce vai ver que ele vai pintar, aqui, o..., ele tem que conectar la no Servidorzinho, ele fica colorido, ali, a bolinha por dentro. Entao, esta conectado. 
+
+24. Entao, eu estou, aqui, com a aplicacao, aqui, e eu quero testar, entao, esse tamanho dessa margem, aqui, nao eh? Antes, ela estava com zero, ai, voce vai ver que eu nao vou vir, aqui, e clicar no Refresh, nada, eu vou deixar o Cursor do Mouse aqui, em style.css, e vou trabalhar apenas aqui, no Eclipse. Entao, vamos supor, eu vou tirar a margem da esquerda, apaguei, o, 
+
+.panel-default {
+    margin-left: 0px;
+    margin-right: 10px;
+}
+
+, eu vou salvar. Na hora que eu salvei, nao sei se voce percebeu ali, ele deu um Refreshzinho ali, sozinho, e tirou a bordinha do lado esquerdo.
+
+25. Eu vou colocar, de novo, aqui, o 1. Agora, fica observando aqui, na tela, eu vou clicar em Salar, oh, o meu mouse esta aqui, em style.css, eu nao vou fazer nada, ali.
+
+26. Oh, salvei. Ele vai, sozinho, dar um Refresh e aplicar aqui na telinha.
+
+27. Oh, vamos supor que eu estivesse testando, ali, oh, 'label-danger', com o 'label-success', vamos colocar, aqui, o 'label-warning', 
+
+<span class="label" th:text="${titulo.status.descricao}"
+    th:classappend="${titulo.pendente ? 'label-warning' : 'label-success'}"></span>		 			 			
+
+que eh amarelinho, eu estou testando o 'warning', aqui, coloquei o warning, olha la como eh que ele ficou, na tela. Ah, nao, acho que eu gostei mais do 'label-danger', mesmo,
+
+<span class="label" th:text="${titulo.status.descricao}"
+    th:classappend="${titulo.pendente ? 'label-danger' : 'label-success'}"></span>
+
+28. Salvei, ai, eu olho la na tela. Ta vendo que a alteracao ja vai sendo feita, sem eu precisar ficar dando Refresh, aqui, na tela.
+
+29. Ta vendo? Entao, isso eh legal, voce vai ganhar produtividade.
+
+30. Porque, como eu disse, eu deixo a Pagina em um outro monitor meu, aqui, em cima, e vou trabalhando, aqui, no Eclipse, e vendo essas alteracoes na Pagina.
+
+31. Ate eu chegar na conclusao que o vermelho e o verde, aqui, foi o melhor, eu achei mais bonito assim.
+
+32. Nao eh? Eu nao precisava ficar vendo, aqui, no Eclipse, alterava, vem, aqui, na Pagina, da um Refresh, eu ia testando, aqui, no Eclipse, direto e vendo como ia ficando na Pagina, no outro monitor de cima.
+
+33. Entao, eu fui testando, dessa forma, as bordinhas, os espacos, as cores da Pagina. Isso vai facilitando o desenvolvimento, voce vai ganhando Produtividade com isso.
+
+-->

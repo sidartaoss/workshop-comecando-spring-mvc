@@ -1,0 +1,110 @@
+<!-- 
+
+Aula 01.006. Sacada de Mestre: O Spring Boot
+
+1. Vamos conversar, agora, um pouquinho sobre o Spring Boot.
+
+2. Esse cara ai eh, realmente, a sacada de mestre que os caras tiveram.
+
+3. Foi muito bom ter conhecido esse projeto, a vida do instrutor mudou depois dele. O instrutor vai nos mostrar muita coisa sobre ele, ao decorrer do desenvolvimento do nosso projeto.
+
+4. Mas, falando, ai, um pouquinho, o que que eh isso, se voce nunca ouviu falar, nunca usou, vamos la, ele torna mais facil a criacao de aplicacoes baseadas no Spring.
+
+5. Okay?, entao, ao inves de a gente configurar um monte de coisa, adicionar muitos arquivos de configuracao, com ele, isso tudo vai ser muito facilitado. A gente vai colocar pequenas coisas, uma anotacaozinha ali, e, as vezes, um arquivo ali, se voce quiser customizar alguma coisa, e pronto, ja vai estar funcionando o seu projeto.
+
+6. A gente comeca muito, mas eh muito rapido mesmo.
+
+7. Como que eles criaram esse cara ai?
+
+8. Bom, eles pegaram opinioes da comunidade para criar este framework. Entao, ele viram la: 'O que que eh uma dificuldade comum ai do pessoal? Ai, vamos tentar resolver isso.'.
+
+9. Quais sao as configuracoes comuns na maioria dos projetos? Vamos transformar isso em uma configuracao padrao?
+
+10. Entao, assim, ja vai estar, ja vem configurado por padrao de uma forma. Se voce quiser modificar, ai sim voce faz, mas muitos projetos, a maioria dos projetos, seguem uma mesma configuracao.
+
+11. Foi baseado nesse feedback da comunidade que eles foram adicionando essas configuracoes padrao.
+
+12. Beleza? Entao, oh, resumindo essa parte, eh um cara que vai facilitar demais a criacao do projeto, com menos configuracao.
+
+13. Se voce aceitar o jeito que ele te entrega uma aplicacao, ela ja vai estar pronta em pouquissimos passos. Eh rapido para caramba, voce vai ver isso na pratica.
+
+14. O legal eh que voce pode, ali, usar um Tomcat embutido, que vem nele ali, e, ai, para voce iniciar o Tomcat com o projeto, ou seja, rodar o projeto dentro de um Tomcat, sao alguns segundinhos, assim, eh bem rapidinho, mesmo.
+
+15. Voce fala, oh, 'Eu quero usar o Tomcat nesse projeto', voce vai adicionar isso ali em uma configuracaozinha simples do Maven, beleza, ele ja vai ter o Tomcat para voce, voce manda rodar, ele ja sobe o Tomcat, fazendo o deploy da sua aplicacao, em pouquissimos segundos.
+
+16. Okay? Ele simplifica demais a configuracao do pom.xml, no Maven. Entao, vamos dar uma olhada, aqui, lembra do pom.xml, do Maven, que o instrutor nos falou na aula sobre Maven, que esse cara aqui eh o arquivo principal, onde a gente configura as dependencias do Maven, por ai vai?
+
+17. Bom, esse arquivo, aqui, oh, se voce olhar, ele esta com 76 linhas, tem alguns espacoes em branco, aqui, tem uma parte comentada, aqui, que o instrutor, para, mais tarde, adicionar o MySQL, eh um arquivo relativamente pequeno, para a configuracao de um projeto desses, onde nos estamos usando varias coisas, aqui, como Tomcat, como o Thymeleaf, o Spring Data com Hibernate, e algumas outras coisinhas que a gente vai ver durante o desenvolvimento do Projeto.
+
+18. Entao, vamos pensar, aqui, que nos estamos criando um projeto que precise do JPA, e do Hibernate, ali, por tras, para a gente utilizar. Se a gente nao estiver usando o Spring Boot, a gente tem que colocar algumas dependencias, nao eh so uma dependencia, a gente tem que colocar, la, o Entity-Manager do Hibernate, se a gente quiser fazer o Bean Validation, tem que colocar, la, o Hibernate Bean Validation, nao eh?, e por ai vai.
+
+19. Bom, como que eu faco, aqui, com o Spring Boot?
+
+20. Com o Spring Boot, eu so coloco essa dependencia aqui, oh,
+
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-data-jpa</artigactId>
+    </dependency>
+
+, ou seja, eh um cara do Spring Boot que ja vai trazer todas as dependencias necessarias para a gente trabalhar com Spring Data JPA.
+
+21. Entao, ja traz la, como o instrutor disse, ele sabe que nos vamos precisar do Entity Manager, ele sabe que nos vamos precisar do Bean Validation, entao, ele ja adiciona isso tudo, so nos colocando essa unica dependencia aqui,
+
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-data-jpa</artigactId>
+    </dependency>
+
+22. Okay? Entao, ele facilita demais, o pom.xml, aqui, do nosso projeto, vai reduzir muito.
+
+23. Se voce pegar esse projeto, esse mesmo projetinho aqui, e falar assim, oh, eu vou desenvolver esse projeto sem usar o Spring Boot, voce vai ver o tanto de configuracoes a mais que voce precisaria fazer.
+
+24. Okay? Entao, ele configura o Spring automaticamente, para a gente, ele facilita, tambem, no ambiente de desenvolvimento.
+
+25. Sim, vejamos, de novo. A dependencia,
+
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-devtools</artigactId>
+    </dependency>    
+
+26. Esse carinha, o instrutor tera uma aula para nos mostrar como eh que ele funciona, um pouquinho, ali, mais detalhes, tem um pluginzinho que a gente vai instalar no Chrome para facilitar o desenvolvimento.
+
+27. Entao, esse carinha, aqui, por exemplo, 
+
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-devtools</artigactId>
+    </dependency>
+
+, ele ja facilita muito o desenvolvimento. Por que?
+
+28. Na hora que eu salvo alguma coisa, eu faco uma alteracao, ele ja consegue, aqui, aplicar essas configuracoes para mim no meu projeto, entao, o ciclo de vida do desenvolvimento eh muito mais rapido, eu nao preciso ficar parando toda hora o tomcat, okay? Esse tipo de coisa vai facilitar tambem.
+
+29. Entao, uma coisa, voce vai falar, 'Eh, entao, ele gera codigo?'. Nao. Ele nao possui geracao de codigo, a gente nao precisa de XML's ali para a gente ficar configurando, so o XML do Maven, porque o Maven esta gerenciando o nosso projeto, mas para o Spring Boot, nao precisamos de XML para configuracoes XML, ele nao vai ficar gerando codigo, 'Ah, entao, ele vai gerar um monte de Classes de Configuracao?'. Nao, nao, nao tem nada disso. Okay? Ele simplesmente sabe que as coisas estao ali, entao, voce colocou uma dependencia do Spring Data, o Spring Boot reconhece que tem essa dependencia no projeto e fala, 'Ah, ele quer usar o Spring Data. Entao, se ele quer usar o Spring Data, eu ja vou configurar o Entity Manager, por ai vai, o Spring Data JPA'. Entao, ele configuraria o Entity Manager para mim.
+
+30. 'Ah, eu coloquei a dependencia do Thymeleaf'. Oh, nesse projeto aqui, nessa parte aqui, oh, o instrutor colocou a dependencia do Thymeleaf,
+
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-thyemeleaf</artigactId>
+    </dependency>
+
+, ele fala, 'Ah, entao, ele quer usar o Thymeleaf, deixa eu ja configurar o View Resolver do Thymeleaf, aqui, tambem'.
+
+31. Beleza? Entao, o Spring Boot faz isso, ele reconhece o que tem e ja configura para voce. Facilita demais o desenvolvimento, demais, deixa muito mais rapido, muito mais agil o nosso desenvolvimento.
+
+32. Com alguns minutinhos, ali, voce cria o projeto, podemos falar, ate, em menos de um minuto, nos conseguimos criar um projeto, e ja ter algo rodando.
+
+33. Certo? Nao vai ter muita coisa funcionando, mas voce ja cria e ja tem algo rodando ali.
+
+34. Beleza? Eh isso dai. E, para o desenvolvimento desse projeto, nos vamos usar o Spring Boot, entao, tudo o que o instrutor fizer aqui vai ser baseado, o Spring Boot esta configurando para a gente, logico que o instrutor vai ter customizacao do projeto, para nos vermos como fazer essa customizacao.
+
+35. Bom, eh isso dai. E esse cara eh o cara. 
+
+36. Ah, so mostrar, aqui, onde ele esta, oh, spring.io, em Projects, spring.io/projects, aqui, oh, Spring Boot, http://spring.io/projects/spring-boot, e, ai, ele esta aqui, oh, atualmente, na versao 2.1.0, e, ai, ele mostra como que nos podemos configurar, algumas coisinhas, nao eh?, aqui, na documentacao de referencia, https://docs.spring.io/spring-boot/docs/2.1.0.RELEASE/reference/htmlsingle/, e, ai, temos um bom material, aqui, tambem, oh, olha o tamanho da documentacao que eles criaram, aqui, para o Spring Boot. Porque, realmente, eh um projeto que esta fazendo muito sucesso na comunidade Spring. Esse cara eh o cara.
+
+37. Fim da Aula 01.006. Sacada de Mestre: O Spring Boot.
+
+-->

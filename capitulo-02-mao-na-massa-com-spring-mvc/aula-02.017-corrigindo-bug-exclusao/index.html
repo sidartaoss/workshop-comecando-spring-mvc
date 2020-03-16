@@ -1,0 +1,123 @@
+<!-- 
+
+Aula 02.017. Corrigindo Bug Exclusao
+
+1. Bom, como todo software em um bugzinho, o nosso nao foi diferente, e o Ismael, ai, ja depois do curso lancado, reportou um Bugzinho, aqui, na exclusao, e eu resolvi gravar essa aula, aqui, para explicar como eu acho que deve ser a correcao desse bug.
+
+2. Beleza? Deixa eu te mostrar o bug acontecendo, primeiro.
+
+3. Vou tentar excluir esse Titulo, aqui, oh, Titulo de Codigo 23. Entao, eu vou clicar, aqui, em excluir, e vou cancelar. Vou clicar em excluir novamente, e vou cancelar. Vou clicar em excluir, e vou excluir de fato, agora.
+
+4. Olha o que que vai acontecer.
+
+5. Vai dar um erro. E olha so o que que apareceu, aqui em cima, na URL, oh, http://localhost:8080/titulos/23/23/23, significa o que? Ele esta acumulando toda vez que eu clico, aqui, em excluir, e cancelo, excluir, cancela, ele vai acumulando na URL, na action, o codigo.
+
+6. E da para a gente ver isso claramente. Se a gente vier aqui, mandar inspecionar a Tela de Modal, vamos dar uma olhada aqui, oh, ele ja colocou, aqui, na action, 'titulos/23'. Se eu cancelar, ele nao tirou, la, deixou la, '/titulos/23'.
+
+7. Se eu vier, aqui, e clicar em excluir, de novo, oh, ele foi concatenando. Entao, esse que foi o erro, o bugzinho que ficou na aplicacao, de eu recuperar a action e atualizar a propria action. Se eu resolver cancelar, eu nao estou voltando ao valor original.
+
+8. Okay? Entao, como eu acho que deve ser? 
+
+9. Por ja prever, quando o sistema estiver pronto, la na frente, voce vai entender o motivo, quando eu fizer o deploy desse projeto, por exemplo, no Tomcat, eu nao posso, quando eu clicar em Cancelar, existe um evento do Bootstrap, em que eu poderia fazer o Bind la, ou seja, quando eu fechar a telinha, eu poderia voltar ao valor '/titulos'. So que pode ser que eu esteja fazendo o deploy desse projeto no Tomcat externo, eu vou te mostrar isso la na frente.
+
+10. Entao, eu ja vou fazer de um jeito que funcione para todos os casos, okay?
+
+11. Que eh o seguinte.
+
+12. Primeiro, eu vou te mostrar, aqui, o codigo que da o problema, oh.
+
+13. Eu tenho a action, aqui, na Pagina DialogoConfirmacaoExclusao.html,
+
+    <form action="/titulos" method="POST">
+        ...
+    </form>
+
+, e, aqui, no Javascript, eu recupero, do formulario, a action, nao eh?, o atributo action,
+
+    var action = form.attr('action');
+
+, e atribuo, nao eh? seto, novamente, o valor da action, com ela modificada,
+
+    form.attr('action', action + codigoTitulo);
+
+14. E, da proxima vez que ele voltar aqui, ele vai recuperar a action, aqui,
+
+    var action = form.data('action');
+    
+ , e vai atualizar ela novamente,
+
+    form.attr('action', action + codigoTitulo);
+
+, entao, vai concatenando esses valores, ai.
+
+15. Okay? Entao, vamos la. O que que eu acho que a gente pode fazer aqui?
+
+16. Ao inves de eu deixar a action, aqui, direto, em '/titulos', 
+
+    <form action=" >>> /titulos <<< " method="POST">
+        ...
+    </form>
+
+, eu vou fazer o seguinte, eu vou colocar essa action em um atributo, 'th:attr', em um atributo data-, que eu vou chamar, aqui, oh, de 'url-base', como tem essa barra, aqui, '/', eu preciso colocar essa aspas simples, aqui, '/titulos',
+
+    <form th:attr="data-url-base='/titulos'" method="POST">
+        ...
+    </form>
+
+, senao, o Thymeleaf nao vai entender.
+
+17. Entao, 'url-base', agora, vai ser onde eu vou recuperar. Ao inves de eu recuperar do atributo 'action', em cobranca.js,
+
+        var action = form.attr('action');
+
+, eu vou recuperar do data('url-base'),
+
+        var action = form.data('url-base');
+    
+, que foi esse valor que eu defini aqui,
+
+    <form th:attr="data- >>> url-base <<< ='/titulos'" method="POST">
+        ...
+    </form>
+
+18. Okay?
+
+19. So isso. Agora, a action, eu vou pegar ela de um valor que vai estar fixo sempre,
+
+        var action = form.data('url-base');
+
+, e, ai, eu atualizo essa action, aqui,
+
+    form.attr('action', action + codigoTitulo);
+
+20. Vamos ver o que que vai acontecer?
+
+21. Agora, vamos recarregar, aqui, na Pagina de Pesquisa de Titulos. Oh, se a gente olhar, na Guia Elements do Chrome DevTools, se a gente olhar, agora, a url-base ja esta la, oh,
+
+        <form method="POST" >>> data-url-base="/titulos" <<<>
+            ...
+        </form>
+
+22. Eu posso, simplesmente, agora, oh, vamos ver aqui, se eu clicar aqui, no icone de excluir, agora, a action esta la, '/titulos/23', e a url-base esta '/titulos'. Vou cancelar. Oh, a url-base nao mudou, a action continua '/titulos/23'. Beleza, nao tem problema. Mas, ai, quando eu voltar aqui, e clicar em excluir novamente, olha la, [Guia Elements / Chrome DevTools], como eu peguei esse valor, 
+
+        <form method="POST" data-url-base=" >>> /titulos <<< " action="/titulos/23">
+            ...
+		</form>
+
+, e concatenei com o codigo, setei, aqui, novamente,
+
+        <form method="POST" data-url-base="/titulos" action=" >>> /titulos/23 <<< ">
+            ...
+		</form>
+
+, continuou o mesmo valor.
+
+23. Entao, agora, eu posso fazer isso aqui varias vezes, clicar em Cancelar, Excluir, Cancelar, Excluir, e, agora, eu vou excluir de fato. Agora, ele exclui com sucesso.
+
+24. Okay?
+
+25. Bom, entao, era isso aqui que eu queria mostrar para voce, como a gente corrigir esse bugzinho ai.
+
+26. Fim da Aula 02.017. Corrigindo Bug Exclusao.
+
+-->

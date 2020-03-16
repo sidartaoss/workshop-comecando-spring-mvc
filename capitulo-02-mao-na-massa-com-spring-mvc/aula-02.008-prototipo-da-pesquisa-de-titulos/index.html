@@ -1,0 +1,369 @@
+<!--
+
+Aula 02.008. Prototipo de Pesquisa de Titulos
+
+1. Agora, nos vamos criar o prototipo da pesquisa de titulos, okay?
+
+2. Eu quero criar essa telinha, aqui, oh, vamos lembrar, aqui, eh essa aqui, nos vamos comeca-la devagarzinho, como sempre. Entao, por exemplo, eu nao vou colocar essa pesquisa, aqui, agora, nos vamos simplesmente, ao acessar essa pagina, nos vamos ver essa tabela aqui com os dados preenchidos que a gente ja cadastrou no banco de dados, beleza?
+
+3. Entao, essa eh a ideia, as funcionalidades, aqui, ainda, do lapizinho, aqui, para editar, excluir, esse aqui, vai ser um Ajax, que a gente vai colocar para receber, a gente vai deixar um pouquinho mais para a frente.
+
+4. Beleza? Nesta aula, agora, eu quero criar, comecar este prototipo aqui, e, ai, depois, a gente vai linkando, o instrutor vai nos mostrar, aqui, partes repetidas desse codigo aqui, que estao em comum com o cadastro de titulo, a gente vai transformar isso em um layout, usando o Thymeleaf.
+
+5. Bom, entao, vamos la, eu vou criar, aqui, oh, no Eclipse, na pasta templates do Projeto, New / File / PesquisaTitulos.html. Vamos colocar o cabecalho, aqui,
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Pesquisa de titulos</title>
+</head>
+</html>
+
+, olha so, HTML5, 
+
+<!DOCTYPE html>
+
+, defini, aqui, o namespace xhtml, 
+
+    ... xmlns="http://www.w3.org/1999/xhtml"
+
+, ou seja, tem que abrir e fechar todos os elementos do html, certo?,
+
+, colocando, aqui, o namespace do Thymeleaf, para eu poder usar as tags do Thymeleaf, aqui, tambem.
+
+    ... xmlns:th="http://www.thymeleaf.org"
+
+, nos vamos usando-a aos poucos, a medida que o projeto for evoluindo, nos vamos usando mais ainda.
+
+6. Beleza? Bom, como eu disse, nos vamos repetir um pouco de codigo, aqui, com o CadastroTitulo.html, mas, depois, o instrutor for nos mostrar a respeito de templates, e nos vamos tirar essas repeticoes.
+
+7. Entao, vamos la, vamos copiar esse pedaco, aqui, de CadastroTitulo.html,
+
+<head>
+    <meta charset="UTF-8">
+
+    <title>Pesquisa de Titulos</title>
+
+    <link rel="stylesheet" href="/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+</head>
+
+, nao eh?, entao, tem o CSS do Boostrap, tem o CSS do style.css.
+
+8. Que mais que precisamos em CadastroTitulo.html?
+
+9. Vai comecar o body, ai, vem a parte de navegacao,
+
+<body>
+    <nav class="navbar navbar-inverse navbar-static-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">
+                    <img alt="AlgaWorks" src="/images/logo-algaworks.png" />
+                </a>
+            </div>
+        </div>
+    </nav>
+
+, em seguida, tem o form, que vai ser diferente, na nossa tela de Pesquisa, e, aqui, no final,
+
+<script src="/js/bootstrap.min.js"></script>
+
+, esta faltando algo, esta faltando o JavaScript do jQuery. Parao o Bootstrap funcionar, nos precisamos do jQuery. Vamos dar uma olhada aqui, vamos subir a Aplicacao, e o instrutor vai nos mostrar o problema de a gente nao colocar o jQuery aqui.
+
+10. Vamo em '/titulos/novo'. Oh, se eu acessar, aqui, esta tudo funcionando, mas, tem um errinho de JavaScript acontecendo aqui, se eu vier aqui, oh, no Chrome, em Developer Tools, se nos formos na Guia Console, olha so, ele mostra um erro, aqui,
+
+Uncaught Error: Bootstrap's JavaScript requires jQuery
+
+11. , ou seja, o JavaScript do Boostrap precisa do jQuery. Okay? Entao, por isso que esta com esse erro, aqui.
+
+12. A gente nao usou nada, ainda, do Bootstrap JavaScript, por isso que nao tivemos nenhum problema, mas, para corrigir isso, eh so a gente acessar, aqui, o site do jQuery, vir aqui, em Download, baixar, aqui, a versao 2.1.4, compressed, do jQuery, copio o arquivo jquery.min.js, em jquery-2.1.4\dist, e posso voltar e cola-lo dentro da pasta js, no meu Projeto no Eclipse.
+
+13. Entao, vamos colocar aqui, oh, antes do Bootstrap, eu vou colocar aqui o jquery.min.js,
+
+<script src="/js/jquery.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+
+14. Tem que colocar, tambem, em CadastroTitulo.html. Esta vendo o problema de nao usar layout?, tem que colocar, aqui, tambem, em CadastroTitulo.html.
+
+15. E, entao, futuramente, o instrutor vai tirar isso aqui para nos, o instrutor quer ir fazendo devagarzinho, para nos irmos vendo as diferencas.
+
+16. Beleza? Vou recarregar essa pagina, '/titulos/novo', esse erro, aqui, tem que sumir.
+
+17. Okay. Sumiu o errinho.
+
+18. Entao, vamos la.
+
+19. O que que eu preciso colocar, aqui, tambem? Eu vou usaro painel. Entao, o painel dessa mesma forma, aqui,
+
+    <nav class="navbar navbar-inverse navbar-static-top">
+        ...
+    </nav>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h1 class="panel-title">Novo Titulo</h1>
+        </div>
+
+        ...
+    </div>
+
+20. Okay? E, ai, nos vamos entrar no 'panel-body',
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+                <h1 class="panel-title">Novo Titulo</h1>
+        </div>
+        <div class="panel-body">
+
+        </div>
+    </div>
+
+, okay? Eu vou criar essa tabela ja responsivo. Nao, vou fazer o seguinte, eu vou deixar sem ser responsivo, agora. Quando eu mostrar para voce a gente acessando no Celular, no Browser simulando o Celular, a gente adiciona a parte responsiva. Okay? Entao, vamos la.
+
+21. Eu ja estou aqui, dentro do 'panel-body'.
+
+22. Entao, na nova pagina, eu ja criei esse painel, aqui, por fora, com o titulo 'Pesquisa de Titulos', o instrutor nao vai colocar o input de pesquisa agora, entao, o que eu preciso eh a tabela. 
+
+23. Beleza?
+
+24. Entao, vamos comecar a escrever, aqui, a tabela.
+
+25. Entao, eh um table,
+
+    <div class="panel-body">
+        <table>
+
+        </table>
+    </div>
+
+26. Quais as classe CSS que eu preciso para criar uma tabela com Bootstrap?
+
+27. 'table', eu quero que ela tenha borda, entao, 'table table-bordered'.
+
+28. Eu quero que as linhas fiquem uma cor mais cinza, outra mais branca, outra mais cinza, entao, isso se chama de striped, ou seja, 'table table-bordered table-striped',
+
+    <div class="panel-body">
+        <table class="table table-bordered table-striped">
+
+        </table>
+    </div>
+
+29. Beleza. Ai, nos vamos colocar, aqui, o 'thead', nao eh?, o cabecalho da tabela. O que que tem no cabecalho da tabela? Nos temos o 'tr'. Ai, a gente coloca os varios 'th's, que sao os varios titulos das colunas,
+
+    <div class="panel-body">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th></th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+
+30. Vamos olhar, aqui, novamente, no slide do instrutor, oh, o que que eu vou ter aqui? Esse jogo-da-velha, aqui, para mostrar os codigos, ai, tem a Descricao, Data de Vencimento, Valor e Status.
+
+31. Repare que o jogo-da-velha, aqui, esta centralizado. Ja o Descricao nao, eu coloquei-o a esquerda, alinhei a esquerda. Data de Vencimento esta centralizado. O Valor, eu alinhei a direita. O Status, eu ja coloquei centralizado. E, na ultima coluna, eu nao coloquei nada.
+
+32. Entao, nos vamos fazer isso aqui agora. Como eh que eu faco isso com o Bootstrap?
+
+33. Eu vou ter que ficar escrevendo CSS?
+
+34. Nao. A gente vai usar as classes CSS que o Bootstrap ja tem.
+
+35. Entao, para o jogo-da-velha, aqui, eu vou colocar a classe 'text-center',
+
+    <thead>
+        <tr>
+            <th class="text-center">#</th>
+        </tr>
+    </thead>
+
+36. E quantas colunas eu quero para a tabela, ali, dividindo a tela, eu quero para essa coluna?
+
+37. Entao, eu vou colocar, 'col-md-1', ou seja, eu quero a menor unidade possivel de uma coluna, aqui, do espaco que eu tenho da tela para colocar esse Titulo de Coluna, aqui. Entao, vai ser o menor possivel, ali,
+
+    <thead>
+        <tr>
+            <th class="text-center col-md-1">#</th>
+        </tr>
+    </thead>
+
+39. O proximo Titulo de Coluna eh o Descricao. Vou deixar assim,
+
+    <thead>
+        <tr>
+            <th class="text-center col-md-1">#</th>
+            <th>Descricao</th>
+        </tr>
+    </thead>
+
+40. Ou seja, quando eu nao coloco nada, o default dele eh alinhar a esquerda.
+
+41. Beleza? Vamos colocar outro 'th', Data de Vencimento,
+
+    <thead>
+        <tr>
+            <th class="text-center col-md-1">#</th>
+            <th>Descricao</th>
+            <th>Data de Vencimento</th>
+        </tr>
+    </thead>
+
+, a Data de Vencimento, eu ja vou definir, aqui, que eu quero que fique centralizado, 'text-center', e eu vou pegar duas colunas para ela, 'col-md-2',
+
+    <thead>
+        <tr>
+            <th class="text-center col-md-1">#</th>
+            <th>Descricao</th>
+            <th class="text-center col-md-2">Data de Vencimento</th>
+        </tr>
+    </thead>
+
+42. Ai, o instrutor nos aconselha a ficar brincando com as classes do Bootstrap, 'Ah, vou colocar 2, aqui, em col-md-2, vou ver o que que acontece, vou colocar 3, em col-md-3'. Ai, voce vai aprendendo e vendo como que o Bootstrap funciona.
+
+43. A proxima 'th', eu vou colocar o Valor,
+
+    <thead>
+        <tr>
+            <th class="text-center col-md-1">#</th>
+            <th>Descricao</th>
+            <th class="text-center col-md-2">Data de Vencimento</th>
+            <th class="text-right col-md-2">Valor</th>
+        </tr>
+    </thead>
+
+44. A proxima 'th', eu vou colocar o Status,
+
+    <thead>
+        <tr>
+            <th class="text-center col-md-1">#</th>
+            <th>Descricao</th>
+            <th class="text-center col-md-2">Data de Vencimento</th>
+            <th class="text-right col-md-2">Valor</th>
+            <th class="text-center col-md-2">Status</th>
+        </tr>
+    </thead>
+
+, e, para o final, ali, eu vou usar somente a menor unidade, tambem, 'col-md-1', que nao tem nada, ali, que vai ter o lapis, que vai ter o Xzinho, para excluir,
+
+    <thead>
+        <tr>
+            <th class="text-center col-md-1">#</th>
+            <th>Descricao</th>
+            <th class="text-center col-md-2">Data de Vencimento</th>
+            <th class="text-right col-md-2">Valor</th>
+            <th class="text-center col-md-2">Status</th>
+            <th class="col-md-1"></th>
+        </tr>
+    </thead>
+
+45. Beleza? Bom, agora, eu ja posso ir para o 'tbody' da tabela.
+
+    <table>
+        <thead>
+            <tr>
+                <th>...</th>
+                ...
+            </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+
+46. Bom, o que que eu terei nesse 'tbody'?
+
+47. Eu vou ter as linhas, eu vou ter que ter alguma coisa, assim, oh, eu nao vou fazer ainda nao, porque nos vamos preencher depois, eu so quero ver funcionando, aqui, mas eu vou ter algo do tipo, eu nao preciso ter varios 'tr's, lembra quando a gente fez, aqui, em CadastroTitulo.html, no 'option', eu usei o 'th:each', para percorrer todo os status do titulo? Entao, aqui, eu vou ter que fazer algo parecido, eu vou ter um 'th:each',
+
+    <table>
+        <thead>
+            ...
+        </thead>
+        <tbody>
+            <tr th:each="...">
+
+            </tr>   
+        </tbody>
+    </table>
+
+, aqui, eu vou percorrer todos os titulos, aqui, para serem gerados varios 'tr's. Beleza?
+
+48. Nos vamos deixar isso aqui para depois, beleza?, porque a gente esta criando apenas o Prototipo, agora, depois, a gente linka. O que eu vou fazer aqui eh o seguinte, oh, eu vou colocar um 'td', aqui, falando assim, oh, 'Nenhum titulo foi encontrado',
+
+    <tbody>
+        <tr>
+            <td>Nenhum titulo foi encontrado.</td>
+        </tr>
+    </tbody>
+
+
+49. Beleza? Esse cara, aqui, precisa de um 'colspan' de 6 colunas, que eh o numero total de colunas que nos temos na tabela,
+
+    <tbody>
+        <tr>
+            <td colspan="6">Nenhum titulo foi encontado.</td>
+        </tr>
+    </tbody>
+
+, ou seja, eu preciso pegar as 6 colunas e agrupa-las, para mostrar apenas uma linha com 'Nenhum titulo foi encontrado'.
+
+50. Beleza? Bom, acho que esse telinha, aqui, ta legal.
+
+51. Lembra, no Framework Action-Based, o que que eu preciso fazer para acessar essa tela?
+
+52. Acessar, primeiro, o Controller.
+
+53. Entao, vamos la, no Controller, TituloController.java.
+
+54. E, aqui, oh, como eu ja vou acessar, a pagina ja vai ser a pesquisa, direto, eu vou colocar, aqui, oh, vou colocar logo abaixo do metodo salvar(), aqui, oh, 
+
+    public String pesquisar() {
+
+    }
+
+, porque ja vai comecar pesquisando, nao eh? A ideia ja eh retornar preenchido, ali, com todos os titulos.
+
+55. Entao, aqui, vai retornar o nome da Pagina, 'PesquisaTitulos',
+
+    public String pesquisar() {
+        return "PesquisaTitulos";
+    }
+
+56. Mas, eu preciso fazer o @RequestMapping,
+
+    @RequestMapping
+    public String pesquisar() {
+        return "PesquisaTitulos";
+    }
+
+57. Okay? RequestMapping em quem? Em 'titulos'. Entao, nao preciso colocar ninguem,
+
+    @RequestMapping
+    public String pesquisar() {
+        return "PesquisaTitulos";
+    }
+
+, porque ja esta sendo mapeado aqui, em cima,
+
+@Controller
+@RequestMapping("/titulos")
+public class TituloController {
+
+    ...
+}
+
+58. Eu quero acessar titulos? Eu quero saber todos os titulos. Entao, GET em titulos, eu quero ver os titulos, concorda comigo? Entao, eh so colocar @RequestMapping, nao precisa adicionar mais nada. Beleza?
+
+59. Oh, aqui, eu acho que, aqui, eu ja consigo ver essa telinha. Vamos ver? Vamos dar uma reiniciada, aqui, no Servidor, rapidinho.
+
+60. Beleza. Eh so eu, agora, acessar, aqui, dar um GET, aqui, em '/titulos'. Vamos ver se funciona?
+
+61. Oh, apareceu a telinha. Entao, tem la, 'Pesquisa de Titulos', tem, aqui, a tabela que a gente criou, 'Nenhum titulo foi encontrado', porque a gente ainda nao linkou, nao fez a pesquisa, la, ainda, no banco de dados, e levou, jogou na tela.
+
+62. Bom, era isso aqui que eu queria mostrar nesta aula, a gente criando esse Prototipozinho, aqui, PesquisaTitulos.html, com o Bootstrap. Voce viu que nao eh complicado, nao eh?, a gente consegue criar uma tabelinha bonitinha, porque o Bootstrap facilita muito a nossa vida no layout, nao eh?
+
+63. Fim da Aula 02.008. Prototipo de Pesquisa de Titulos.
+
+-->

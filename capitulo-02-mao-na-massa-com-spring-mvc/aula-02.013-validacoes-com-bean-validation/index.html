@@ -1,0 +1,632 @@
+<!-- 
+
+Aula 02.013. Validacoes com Bean Validation
+
+1. Bom, vamos dar uma olhada, aqui, na nosso sistema, que tem uma coisa que nao ta legal.
+
+2. Eh a respeito das validacoes. Entao, olha so. Se eu nao informar a Descricao, Data de Vencimento, Valor, eu vou conseguir salvar um Titulo. Quer ver, oh, eu vou colocar so a data, aqui, oh, so para a gente ver a data la na telinha de pesquisa. Cliquei em Salvar, 'Titulo salvo com sucesso!', Voltei, aqui, para a pesquisa, olha so, que coisa feia, tem um cara, aqui, sem Descricao, sem Valor, nao eh? A Data de Vencimento, aqui, eu informei, mas, se eu nao informasse, tambem, daria certo, eu iria conseguir salvar.
+
+3. Entao, isso nao eh legal. Eu quero validar esses caras. E, para isso, eu vou o Bean Validation.
+
+4. O Bean Validation, eh usado, eh executado, no Servidor.
+
+5. Entao, nos vamos fazer uma validacao la do lado do Servidor. E Bean Validation, olha, veja esse nome, eh a Validacao no Bean. Qual Bean? A minha Entidade, aqui, oh, a minha Entidade Titulo. Entao, eu vou adicionar meta-informacoes, ou seja, anotacoes, aqui, nesse Titulo, para a gente falar o que eh obrigatorio, qual eh o valor minimo, o valor maximo, qual o tamanho de um campo, por exemplo, para a gente adicionar essas validacoes.
+
+6. Okay? Entao, vamos la. Vamos comecar, aqui, no Valor. Vamos comecar devagarzinho, e adicionar, aqui, no Valor, uma anotacao, @NotNull,
+
+import javax.validation.constraints.NotNull;
+
+    @NotNull
+    @NumberFormat(pattern = "#,##0.00")
+    private BigDecimal valor;
+
+7. Essa anotacao faz parte do BeanValidation, e ela diz o seguinte, esse campo nao pode ser null, claramente, assim, eh bem simples mesmo.
+
+8. Beleza? Mas, so isso aqui eh suficiente? Nao. So isso nao eh suficiente, nao. Por que? Porque eu, ainda, preciso ensinar, aqui, ao Spring, ao Thymeleaf, como validar e mostrar uma mensagem para o Usuario, nao eh?, que, quando eu clicar em Salvar, la, eu quero que apareca uma mensagem, aqui em cima, na tela, nao eh?, falando, 'Olha, voce nao informou o Valor'. 
+
+9. Entao, nos temos que fazer alguns ajustes, ainda.
+
+10. So isso aqui nao vai ser suficiente.
+
+11. Bom, a primeira coisa que eu preciso fazer, aqui, eh o seguinte. Quando eu estou mandando salvar, aqui, o Titulo, eu preciso falar para o Spring validar esse cara, em TituloController,
+
+    @RequestMapping(method = RequestMethod.POST)
+    public ModelAndView salvar(>>>Titulo titulo<<<) {
+        ...
+    }
+
+, entao, oh, Spring, vamos validar esse cara, aqui?
+
+12. Entao, como eh que eu falo isso?
+
+13. @Validated,
+
+import org.springframework.validation.annotation.Validated;
+
+    @RequestMapping(method = RequestMethod.POST)
+    public ModelAndView salvar(@Validated Titulo titulo) {
+        ...
+    }
+
+, ou seja, mando o Spring validar o Titulo.
+
+14. E, ai, o Spring vai validar esse cara usando as regras que eu defini, aqui, na minha Entidade.
+
+15. Beleza? Bom, validou. Vai validar.
+
+16. Se a gente executar isso daqui, eu acredito que vai dar um erro. Vamos fazer um teste, aqui.
+
+17. Entao, subiu a aplicacao, vamos voltar, aqui, em Novo titulo, tentar salvar, aqui, direto, assim. Vamos ver o que que vai acontecer,
+
+Tue Dec 04 09:58:39 BRST 2018
+There was an unexpected error (type=Bad Request, status=400).
+Validation failed for object='titulo'. Error count: 1
+
+18. Oh, deu um erro 400. Erro 400 foi erro nosso, nao eh?, a gente nao enviou alguma coisa que deveria.
+
+19. Provavelmente, o Spring validou, vamos ver, aqui, application.properties, vamos colocar, aqui, um negocio la de novo, oh, logging.level.root=DEBUG.
+
+20. Se eu colocar esse cara, aqui, ai, o Spring vai subir, aqui, em nivel de DEBUG, ai, vai ter log demais, aqui, mas eu vou conseguir ver o erro que o usuario cometeu, nao eh?, no caso, eu.
+
+21. Entao, subiu a Aplicacao, vou em Novo titulo, limpo o log, vou submeter assim, novamente, sem preencher os campos.
+
+22. Ai, vamos dar uma olhada, la, qual o erro que ele cometeu.
+
+23. Olha aqui. Se a gente olhar aqui, oh, tem um erro no objeto titulo, no campo valor. Oh, nao aceitou [null]. Por que? Porque eu coloquei, la, o valor eh [NotNull], ta vendo, oh?, o valor eh NotNull.
+
+24. Eu nao posso salvar, passar um cara, la, NotNull.
+
+25. So que essa mensagem para o Usuario,
+
+Whitelabel Error Page
+This application has no explicit mapping for /error, so you are seeing this as a fallback.
+
+Tue Dec 04 10:08:12 BRST 2018
+There was an unexpected error (type=Bad Request, status=400).
+Validation failed for object='titulo'. Error count: 1
+
+, ta muito feia, nao eh?
+
+26. Vamos melhorar isso daqui.
+
+27. Bom, a gente ja esta conseguindo validar. No pior dos casos, ja nao esta aceitando salvar, nao eh?
+
+28. Mas, esta muito feio, ainda, vamos melhorar isso.
+
+29. Como eh que eu faco para melhorar isso? Eu preciso mostrar, para o Usuario, aqui, uma mensagem de erro.
+
+30. Eu preciso mostrar para o Usuario, 'Olha, tem alguma coisa errada ai, e voce nao pode salvar esse objeto.'
+
+31. Entao, vamos la. A primeira coisa que eu vou fazer, aqui, eh o seguinte. O Spring validou,
+
+    @RequestMapping(method = RequestMethod.POST)
+    public ModelAndView salvar(@Validated Titulo titulo) {
+        ...
+    }
+
+, e deu alguma coisa errada, o Spring eh esperto o suficiente e ja cria, para mim, um objeto do tipo Errors, 
+
+import org.springframework.validation.Errors;
+
+    @RequestMapping(method = RequestMethod.POST)
+    public ModelAndView salvar(@Validated Titulo titulo, Errors errors) {
+        ...
+    }    
+
+, e, dentro desse objeto, tem as mensagens de erro do Titulo, ja vai saber, la, falar, 'Oh, o Titulo, no campo valor, tem um erro, e a mensagem eh essa.'
+
+32. Okay? Entao, ele vai colocar aqui dentro desse cara,
+
+    @RequestMapping(method = RequestMethod.POST)
+    public ModelAndView salvar(@Validated Titulo titulo, >>>Errors errors<<<) {
+        ...
+    }
+
+33. E, ai, se tiver algum erro, eu nao preciso nem chegar aqui nesse titulo aqui,
+
+    @RequestMapping(method = RequestMethod.POST)
+    public ModelAndView salvar(@Validated Titulo titulo, Errors errors) {
+        
+        titulos.save(>>>titulo<<<);
+        ...
+    }
+
+, o que que eu vou fazer?
+
+34. Oh, se eu tenho algum error, if (errors.hasErrors()), eu vou, simplesmente, retornar mv,
+
+    @RequestMapping(method = RequestMethod.POST)
+    public ModelAndView salvar(@Validated Titulo titulo, Errors errors) {
+        ModelAndView mv = new ModelAndView("CadastroTitulo");
+        if (error.hasErrors()) {
+            return mv;
+        }
+
+        titulos.save(titulo);
+
+        mv.addObject("mensagem", "Titulo salvo com sucesso!");
+        return mv;
+    }
+
+35. Okay? Ou seja, se deu algum erro, tem algum erro de validacao, eu ja volto para a mesma pagina, nem tento salvar esse titulo aqui.
+
+36. Okay? Vamos ver, aqui, o que que vai acontecer. A gente vai continuar, ainda, com os mesmos problemas ali.
+
+37. Se eu vier aqui, em Novo titulo, e tentar salvar, oh, voltou para a pagina. Ta vendo, oh, eu vou tentar salvar, ele esta continuando aqui na pagina.
+
+38. Beleza? Se tentar salvar, ele esta continuando aqui, na Pagina. Por que?
+
+39. Porque, na hora que ele verificou que tem algum erro, eu nem continuei, eu nem tentei salvar a mensagem, nao eh?, eu retornei direto.
+
+40. Bom, mas, ai, eu preciso mostrar, agora, aqui, para o usuario, eu vou adicionar uma mensagemzinha, aqui, na tela, falando que tem algum erro.
+
+41. Okay? Entao, vamos falar para o Usuario, aqui, que tem erro. Nos vamos fazer o seguinte, oh, nos vamos vir aqui, em CadastroTitulo.html, e vamos adicionar, aqui, um novo divzinho, aqui, com mensagens de erro, com as mensagens de erro.
+
+42. Entao, vamos la, logo abaixo do div com a mensagem de sucesso, 'alert-success',
+
+    <div class="alert alert-success" th:if="${!#strings.isEmpty(mensagem)}">
+        <span th:text="${mensagem}"></span>
+    </div>
+    <div class="">
+
+    </div>
+
+, vamos colocar, aqui, um div, o class dele eh 'alert ', so que, ao inves de 'alert-success', nos vamos colocar um 'alert-danger', okay? 
+
+    <div class="alert alert-danger">
+
+    </div>
+
+43. Esse 'alert-danger' so vai ser renderizado se tiver erros no Titulo. Ai, nos temos que dar um passinho um pouco a mais aqui, oh. Bom, eu vou colocar um 'th:if', e, assim, e so vou renderizar, aqui, esse cara, com as mensagens de erro, eu vou ter, aqui, um 'span', 'th:text', para mostrar as mensagens de erro,
+
+    <div class="alert alert-danger" th:if="">
+        <span th:text=""></span>
+    </div>
+
+, aqui, vao aparecendo as mensagens de erro. Mas, so se tiver erros. Se tiver erros onde? Nos campos do objeto que eu estou validando. Qual eh o objeto que eu estou validando? Vamos olhar aqui, oh,
+
+    @RequestMapping(method = RequestMethod.POST)
+    public ModelAndView salvar(@Validated Titulo >>>titulo<<<, Errors errors) {
+        ...
+    }
+
+, nao eh o objeto titulo?
+
+44. Sim. So que, para esse objeto titulo, para eu saber nao eh?, que eh esse objeto aqui, ele precisa estar disponivel aqui na pagina CadastroTitulo.html, para mim, no formulario, aqui, para mim.
+
+45. Entao, eu preciso, aqui, no form, oh, falar o seguinte, tem essa outra tag aqui, oh, 'th:object', e, eu vou colocar, aqui, '${titulo}', essa variavel 'titulo',
+
+<form class="form-horizontal" method="POST" action="/titulos" th:object="${titulo}">
+    ...
+</form>
+
+46. Entao, olha so, 'th:object', eu estou recebendo esse objeto 'titulo', e, ai, esse cara, sao os fields desse cara que eu quero validar.
+
+47. Entao, aqui,
+
+		<div class="alert alert-danger" th:if=" >>> <<< ">
+			<span th:text=""></span>
+		</div>
+
+, eu vou usar um objeto especial, um Utilitario #fields, chamando o metodo hasAnyErrors(), ou seja, ele ja vai pegar esse objeto que eu estou recebendo,
+
+<form class="form-horizontal" method="POST" action="/titulos" 
+    th:object=" >>>${titulo} <<<">
+    ...
+</form>
+
+, eu nao preciso informar, aqui, qual que eh,
+
+		<div class="alert alert-danger" th:if=" >>> ${#fields.hasAnyErrors()} <<<">
+			<span th:text=""></span>
+		</div>
+
+, mas, eu preciso falar para ele, oh, 'Nesse objeto que eu estou recebendo, aqui,',
+
+<form class="form-horizontal" method="POST" action="/titulos" 
+    th:object=" >>>${titulo} <<<">
+    ...
+</form>
+
+, do formulario, nesse objeto que tem, aqui, no formulario, ele tem algum erro?
+
+48. Se tiver, voce renderiza esse div aqui,
+
+		<div class="alert alert-danger" th:if="${#fields.hasAnyErrors()}">
+			<span th:text=""></span>
+		</div>
+
+49. Beleza? Eh isso que eu estou falando, aqui, para ele, nesse caso. Beleza? E, ai, se tiver error, eu posso ter varios e varios errors.
+
+50. Entao, eu vou colocar uma div para a gente percorrer, aqui, em todos esses errors,
+
+		<div class="alert alert-danger" th:if="${#fields.hasAnyErrors()}">
+			<div>
+                <span th:text=""></span>
+            </div>
+		</div>
+
+51. Entao, nessa div, eu vou usar um 'th:each', okay? E vou chamar, aqui, oh, vou colocar, aqui, em uma variavel, eu vou dar um nome, ali, para ela, eh o seguinte, oh, eu vou pegar esse cara em #fields.detailedErrors(), esse cara, aqui, ele vai me retornar uma lista de detailedErrors,
+
+		<div class="alert alert-danger" th:if="${#fields.hasAnyErrors()}">
+			<div th:each="${#fields.detailedErrors()}">
+                <span th:text=""></span>
+            </div>
+		</div>
+
+, okay? Esse aqui eh o objeto que ele esta me retornando,
+
+		<div class="alert alert-danger" th:if="${#fields.hasAnyErrors()}">
+			<div th:each=">>>detailedError<<< : ${#fields.detailedErrors()}">
+                <span th:text=""></span>
+            </div>
+		</div>
+
+52. Dentro desse objeto, eu posso pegar um, ter um getMessage(), onde eu pego a mensagem de erro que aconteceu.
+
+53. Entao, aqui, eu vou colocar assim, oh, <span th:text="${detailedError.message}"></span>
+
+		<div class="alert alert-danger" th:if="${#fields.hasAnyErrors()}">
+			<div th:each="detailedError : ${#fields.detailedErrors()}">
+                <span th:text="${detailedError.message}"></span>
+            </div>
+		</div>
+
+, eh um getMessage(), la, que me retorna exatamente a mensagem de erro para o Usuario. Entao, la, esta falando algo assim, 'Nao pode ser nulo', no caso, ali, o Valor nao pode ser nulo.
+
+54. Ai, a gente vai customizar essa mensagem, ali, agora.
+
+55. Beleza? Eh isso daqui que eu preciso colocar,
+
+		<div class="alert alert-danger" th:if="${#fields.hasAnyErrors()}">
+			<div th:each="detailedError : ${#fields.detailedErrors()}">
+                <span th:text=""></span>
+            </div>
+		</div>
+
+56. Se eu executar isso daqui, vai dar um erro, ainda, mas, eu ja te mostro por que que deu esse erro, e, ai, a gente corrige.
+
+57. Vamos ver, em /titulos/novo, ja deu erro, erro 500, porque deu um erro no Servidor. Tem uma coisa que eu programei errado, aqui.
+
+58. Entao, vamos la, olha so o erro que ele deu,
+
+java.lang.IllegalStateException: Neither BindingResult nor plain target object for bean name 'titulo' available as request attribute
+
+, ele ta falando assim, oh, 'Nao tem um objeto alvo de nome "titulo" disponivel ai na Requisicao'.
+
+59. Nao tem. Porque, quando eu acessei, ali, o '/titulos/novo', ai, ele vai procurar um objeto 'titulo', 
+
+<form class="form-horizontal" method="POST" action="/titulos" 
+        th:object=" >>>${titulo}<<< ">
+
+, nao eh?, com o nome 'titulo', aqui, para ele poder trabalhar com ele.
+
+60. Beleza? Mas, ele nao tem esse objeto. Por que que ele nao tem?
+
+61. Porque, quando eu acessei, aqui, em novo, oh,
+
+	@RequestMapping("/novo")
+	public ModelAndView novo() {
+		ModelAndView mv = new ModelAndView("CadastroTitulo");
+		return mv;
+	}
+
+, eu nao coloquei esse objeto disponivel. Entao, para eu poder fazer isso daqui, eu vou ter que vir aqui, oh, mv.addObject(), e passar, aqui, um new Titulo(), 
+
+	@RequestMapping("/novo")
+	public ModelAndView novo() {
+		ModelAndView mv = new ModelAndView("CadastroTitulo");
+        mv.addObject(new Titulo());
+		return mv;
+	}
+
+62. Agora, sim, ele vai reconhecer que tem esse objeto 'titulo' la no '/titulos/novo'.
+
+63. Beleza? Entao, eu passo esse cara,
+
+	@RequestMapping("/novo")
+	public ModelAndView novo() {
+		ModelAndView mv = new ModelAndView("CadastroTitulo");
+        mv.addObject( >>>new Titulo()<<< );
+		return mv;
+	}
+
+, ele vai validar? Ainda nao. Entao, esse errors, aqui,
+
+	@RequestMapping(method = RequestMethod.POST)
+	public ModelAndView salvar(@Validated Titulo titulo, Errors >>>errors<<< ) {
+
+        ...
+	}
+
+, para aquele field, nem chegou, porque isso, aqui, eh so quando eu clico no Salvar. Mas, quando ele esta carregando, aqui, a Pagina, olha, ele vem aqui, 
+
+<form class="form-horizontal" method="POST" action="/titulos" 
+        th:object=" >>>${titulo}<<< ">
+    ...
+</form>
+
+, ah, recebi esse objeto 'titulo', vai verificar se, nesse objeto, 
+
+<form class="form-horizontal" method="POST" action="/titulos" 
+        th:object=" >>>${titulo}<<< ">
+    ...
+</form>
+
+, tem algum erro para esse objeto aqui,
+
+		<div class="alert alert-danger" th:if=" >>>${#fields.hasAnyErrors()}<<< ">
+            ...
+        </div>
+
+, aqui? 
+
+64. Nao.
+
+65. Porque eu estou acabando de criar o objeto, aqui, nem validei, nem chamei o Validation, la, nao eh?, o Bean Validation nem foi usado, nao eh?, entao, nao vai dar nenhum erro, ele vai mostrar a pagina, aqui, para mim, oh.
+
+66. Agora que eu der um Refresh na pagina, em 'titulos/novo', aparecer sem problemas aqui.
+
+67. Beleza? Entao, por que? Eu passei esse cara, aqui, 
+
+	@RequestMapping("/novo")
+	public ModelAndView novo() {
+		ModelAndView mv = new ModelAndView("CadastroTitulo");
+		>>> mv.addObject(new Titulo()); <<<
+		return mv;
+	}
+
+, la, para a Pagina CadastroTitulo.html.
+
+68. Agora, quando eu clicar em Salvar, ele vai validar. Quando ele validar, vai dar erro. Ele vai entregar, aqui,
+
+	public ModelAndView salvar(@Validated Titulo titulo, Errors >>> errors<<< ) {
+        ...
+    }
+
+, um objeto errors, com erros para os fields, desse objeto 'titulo',
+
+	public ModelAndView salvar(@Validated Titulo >>> titulo <<<, Errors errors) {
+        ...
+    }
+
+69. E, ai, se tiver algum erro, a gente ja retorna, a gente nem tenta salvar, nem chega nessa linha, aqui, embaixo,
+
+	@RequestMapping(method = RequestMethod.POST)
+	public ModelAndView salvar(@Validated Titulo titulo, Errors errors) {
+		ModelAndView mv = new ModelAndView("CadastroTitulo");
+		if (errors.hasErrors()) {
+			return mv;
+		}
+	>>>	Long last = this.buscarUltimoRegistro(); <<<
+		titulo.setCodigo(++last);
+		this.titulos.save(titulo);
+		
+		mv.addObject("mensagem", "Titulo salvo com sucesso!");		
+		
+		return mv;
+	}
+
+70. E, ai, ele vai voltar, aqui, em CadastroTitulo.html, e a ideia eh que esse cara,
+
+		<div class="alert alert-danger" th:if="${#fields.hasAnyErrors()}">
+			<div th:each="detailedError : ${#fields.detailedErrors()}">
+				<span th:text="${detailedError.message}"></span>
+			</div>
+		</div>
+
+, mostre as mensagens de erro para a gente.
+
+71. Vamos ver? Recarregar a Pagina, em '/titulos/novo', clicar em Salvar.
+
+72. Olha la, exibiu a mensagem, 'nao pode ser nulo'.
+
+73. Ele ja mostrou, aqui, que nao pode ser nulo. Nao eh? O que? Ai, vamos customizar essa mensagemzinha, e vamos colocar, aqui, mais detalhes, para a gente poder entender melhor, para o Usuario, nao eh?, ter uma Usabilidade melhor.
+
+74. Para eu fazer isso, nao eh complicado. Eu venho, aqui, em @NotNull,
+
+    @NotNull
+    @NumberFormat(pattern = "#,##0.00")
+    private BigDecimal valor;
+
+, @NotNull(message =  ""), e coloco, aqui, assim, oh, 'Valor nao pode ser nulo.',
+
+    @NotNull(message = "Valor nao pode ser nulo")
+    @NumberFormat(pattern = "#,##0.00")
+    private BigDecimal valor;
+
+, por exemplo. Okay, espero o Servidor recarregar, aqui, vamos fazer, novamente, aqui, o teste, em '/titulos/novo', clicar em Salvar, olha la, exibiu 'Valor nao pode ser nulo.'
+
+75. Ja melhorou muito, nao eh? E, aqui, o cara fala, 'Opa, esqueci de informar o Valor'.
+
+76. So que eu consigo melhorar mais ainda isso aqui, deixando isso tudo aqui, ou seja, o campo Valor, e o Label Valor, vermelhinho, usando mais um pouquinho de coisas, aqui, oh, do Thymeleaf.
+
+77. Entao, vamos, no div, aqui, do 'form-group', aqui, do Valor,
+
+    <div class="form-group">
+        <label for="valor" class="col-sm-2 control-label">Valor</label>
+        <div class="col-sm-2">
+            <input type="text" class="form-control" id="valor" name="valor" />
+        </div>
+    </div>
+
+, e vamos adicionar uma classe, aqui, oh, 'th:classappend', nao eh?, se eu quero adicionar uma classe, eh 'classappend', nao eh?, e, ai, eu vou usar esse objeto #fields, #fields.hasErrors(), para quem? Para o 'valor'. Entao, eu vou verificar: 'Tem erro, aqui, para esse campo valor?', que eh o campo que esta recebendo do 'titulo',
+
+<form class="form-horizontal" method="POST" action="/titulos" 
+        th:object=" >>>${titulo}<<< ">
+
+
+, nao eh?, nao eh o objeto 'titulo'? Entao, tem erro para o campo 'valor', para o field 'valor', la?
+
+78. Tem. Se tem, eu quero que voce adicione a classe 'has-errors',
+
+    <div class="form-group" th:classappend="${fields.hasErrors('valor')} ? has-error">
+        <label for="valor" class="col-sm-2 control-label">Valor</label>
+        <div class="col-sm-2">
+            <input type="text" class="form-control" id="valor" name="valor" />
+        </div>
+    </div>
+
+, essa classe 'has-errors', aqui, ja eh do Bootstrap, ela ja vai deixar tudo vermelhinho, tanto o label, quanto esse cara aqui, oh, ou seja, o input.
+
+79. Vamos dar uma olhada? Okay, funcionou, pintou o Label e o Input Valor de vermelho, ao Submeter sem informar um valor no campo Valor.
+
+80. Essa expressao, aqui, ${#fields.hasErrors('valor')}, ja vai retornar 'true', e, ai, eu coloco, aqui, a classe 'has-error' depois.
+
+81. Essa classe, aqui, entao, 'has-error', eh do Bootstrap.
+
+82. Beleza? Comeca a dar uma cara mais legal para o sistema, nao eh? Comeca a ficar mais facil, para o Usuario, entender como eh que ele esta funcionando.
+
+83. Beleza? Que mais, entao? Vamos validar, vamos continuar a validacao, aqui, e colocar mensagens, aqui, no Titulo. Por exemplo, 'descricao', em Titulo.java, eu vou usar uma, aqui, oh, @NotEmpty,
+
+import org.hibernate.validator.constraints.NotEmpty;
+
+    @NotEmpty
+    private String descricao;
+
+84. Essa @NotEmpty eh do Hibernate. Ela diz o seguinte, "Nao posso ter,... ele vai dar um trim() na mensagem", um trim(), aqui, no valor do campo Descricao, se eu colocar espacos em branco, assim, ele tambem nao vai aceitar. Entao, eu coloco, aqui, @NotEmpty(), e coloco aqui, oh, message = "Descricao eh obrigatoria",
+
+    @NotEmpty(message = "Descricao eh obrigatoria.")
+    private String descricao;
+
+85. Eh melhor colocar 'obrigatorio/a', do que null, nao eh?, o Usuario, as vezes, nao sabe o que eh ser nulo, nao eh? Entao, vamos alterar, tambem, a mensagem de valor,
+
+    @NotNull(message = "Valor eh obrigatorio")
+    @NumberFormat(pattern = "#,##0.00")
+    private BigDecimal valor;
+
+86. Que mais que eu vou colocar, aqui? Vou colocar, aqui, um @Size(), tambem, do Bean Validation, max = 60, eu nao quero colocar uma mensagem maior do que 60 caracteres, message = 'A descricao nao pode conter mais de 60 caracteres.',
+
+import javax.validation.constraints.Size;
+
+    @NotEmpty(message = "Descricao eh obrigatoria.")
+    @Size(max = 60, message = "A descricao nao pode conter mais de 60 caracteres")
+    private String descricao;
+
+87. Na Data de Vencimento, tambem, @NotNull, beleza? @NotNull(message = "Data de vencimento eh obrigatoria.")
+
+87. No Valor, vamos colocar validacao, aqui, tambem, no Valor, oh, @DecimalMin, ou seja, qual eh o valor minimo que eu quero, aqui, para esse cara?
+
+    @NotNull(message = "Valor eh obrigatorio")
+    @DecimalMin(value = "0.01")
+    @NumberFormat(pattern = "#,##0.00")
+    private BigDecimal valor;
+
+, entao, tem que ter, pelo menos, 1 centavo. Ai, message = 'Valor nao pode ser menor que 0,01.', por exemplo,
+
+import javax.validation.constraints.DecimalMin;
+
+    @NotNull(message = "Valor eh obrigatorio")
+    @DecimalMin(value = "0.01", message = "Valor nao pode ser menor que 0,01")
+    @NumberFormat(pattern = "#,##0.00")
+    private BigDecimal valor;
+
+88. E o valor maximo? Tambem, @DecimalMax(value = "9999999.99", message = "Valor nao pode ser maior que 9.999.999,99"), lembra que, aqui, eu tenho que colocar no formato americano, nao eh?, ponto para o separador decimal,
+
+    @NotNull(message = "Valor eh obrigatorio")
+    @DecimalMin(value = "0.01", message = "Valor nao pode ser menor que 0,01")
+    @DecimalMax(value = "9999999.99", message = "Valor nao pode ser maior que 9.999.999,99")
+    @NumberFormat(pattern = "#,##0.00")
+    private BigDecimal valor;
+
+89. Bom, acho que eh isso, acho que ta legal essas validacoes, aqui. Vamos dar uma olhada, la, como eh que isso vai ficar na tela, '/titulos/novo', clicar em Salvar, validou os campos Descricao, Valor, Data de Vencimento como mandatorios.
+
+90. Vamos colocar os erros, aqui, tambem, para mostrar? Vamos pegar o 'classappend', aqui, e colocar, aqui, na Data de Vencimento e, aqui, na Descricao,
+
+<div class="form-group" th:classappend="${#fields.hasErrors('descricao')} ? has-error">
+...
+</div>
+
+<div class="form-group" 
+    th:classappend="${#fields.hasErrors('dataVencimento')} ? has-error">
+...
+</div>
+
+91. Okay? Vamos clicar, novamente, em Salvar, agora, todo mundo ficou vermelhinho.
+
+92. Vamos colocar a Descricao, 'Teste', e clicar em Salvar. Olha la, para a Descricao, saiu a mensagem de validacao do campo.
+
+93. Vamos colocar um Valor 0, aqui, por exemplo. Oh, 'Valor nao pode ser menor que 0,01'.
+
+94. Vamos colocar, aqui, entao, uma Descricao muito grande, e clicar em Salvar.
+
+95. Okay, exibiu a mensagem 'A descricao nao pode conter mais de 60 caracteres.'
+
+96. Nao eh? Entao, ele esta validando, aqui, tudo para mim, nao eh?, ja adicionando, mostrando as mensagens para o Usuario, deixando, aqui, os campos vermelhinhos, nao eh?, se eu informo, aqui, uma data, olha la, ele tirou a validacao da data, mas, depois, ele perde os dados. Nos vamos resolver isso, mais adiante, ele vai manter a data, e vai aparecer em vermelho os demais campos que nao foram informados, nos vamos resolver isso em uma proxima aula.
+
+97. O que eu queria, aqui, nesta aula, era mostrar para voce a respeito dessa parte das mensagens, aqui, do erro,
+
+<div class="alert alert-success" th:if="${!#strings.isEmpty(mensagem)}">
+    <span th:text="${mensagem}"></span>
+</div>
+<div class="alert alert-danger" th:if="${#fields.hasAnyErrors()}">
+    <div th:each="detailedError : ${#fields.detailedErrors()}">
+        <span th:text="${detailedError.message}"></span>
+    </div>
+</div>
+
+98. Por falar nisso, ja vamos aproveitar e criar, aqui, um template, aqui, na pasta template / New / File / Mensagem.html.
+
+99. Nesse cara, vamos pegar, aqui, como eh que eu fiz para o Cabecalho.html, por exemplo, copiar,
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:th="http://www.thymeleaf.org"
+		xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+</html>
+
+100. Venho, aqui, no CadastroTitulo.html, arranco esse cara, aqui,
+
+<div class="alert alert-success" th:if="${!#strings.isEmpty(mensagem)}">
+    <span th:text="${mensagem}"></span>
+</div>
+<div class="alert alert-danger" th:if="${#fields.hasAnyErrors()}">
+    <div th:each="detailedError : ${#fields.detailedErrors()}">
+        <span th:text="${detailedError.message}"></span>
+    </div>
+</div>
+
+, e colo em Mensagem.html. E, aqui, agora, em CadastroTitulo.html, eu simplesmente uso, como eu fiz, aqui, em LayoutPagina.html, eh, vamos usar uma div, mesmo, ao inves de um 'header',
+
+    <div layout:include="Mensagem"></div>
+
+101. Okay? Agora, toda vez que eu tiver uma tela de cadastro, eh so incluir, aqui, a div de Mensagem. Okay? Vamos ver se a gente estragou alguma coisa?
+
+102. Recarregar a Pagina Html. Vamos Salvar, oh, continua aparecendo as mensagens de validacao. Oh, se eu informar um Valor muito, muito grande, 9999999999999, por exemplo, esta validando tambem.
+
+103. Entao, beleza. Era isso, aqui, que eu queria mostrar, mostrar, nao eh?, esses #fields, que ele trabalha, nao eh?, mais uma vez, em cima do objeto que ele esta recebendo, aqui, no formulario,
+
+<form class="form-horizontal" method="POST" action="/titulos" 
+    th:object=" >>>${titulo}<<< ">
+    ...
+</form>
+
+104. Eu preciso passar esse objeto, aqui, oh, em TituloController,
+
+	@RequestMapping("/novo")
+	public ModelAndView novo() {
+		ModelAndView mv = new ModelAndView("CadastroTitulo");
+		>>> mv.addObject(new Titulo()); <<<
+		return mv;
+	}
+
+, quando eu estou acessando a primeira vez essa pagina, porque, senao, ele esta null, nao eh?, nao vai ter esse 'titulo' para ele poder trabalhar, nao eh?
+
+
+105. E o Spring ja preenche esse objeto Errors, aqui,
+
+	@RequestMapping(method = RequestMethod.POST)
+	public ModelAndView salvar(@Validated Titulo titulo, >>> Errors errors <<<) {
+        ...
+	}
+
+, para a gente, direto, nao eh?, com os erros ja fixos, ja definido com as mensagens que a gente colocou, aqui, do Bean Validation, em Titulo.java, por exemplo,
+
+	@NotEmpty(message = "Descricao eh obrigatoria.")
+	@Size(max = 60, message = "A descricao nao pode conter mais de 60 caracteres.")
+	private String descricao;
+
+106. Fim da Aula 02.013. Validacoes com Bean Validation.
+
+-->

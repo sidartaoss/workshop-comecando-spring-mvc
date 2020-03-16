@@ -1,0 +1,55 @@
+<!--
+
+Aula 01.003. O que eh um Framework Action Based?
+
+1. Vamos conversar, agora, sobre o que eh um Framework Action Based, que eh o caso do Spring MVC. Okay?, a gente vai trabalhar com Spring MVC, nesse Worshop, a gente vai criar o Projeto Web usando o Spring MVC, e nos precisamos entender como funciona um framework Action-Based.
+
+2. Okay? Ele eh bem diferente, se voce ja fez algum curso nosso de JSF, PrimeFaces, eh diferente o fluxo. O JSF, o PrimeFaces, sao conhecidos como frameworks Component-Based, okay? Sao diferentes desse caso, aqui.
+
+3. O instrutor ira mostrar, entao, as vantagens e desvantagens de um framework Action-Based.
+
+4. Primeiro, existe uma separacao muito clara entre as responsabilidades de quem trata as Requisicoes.
+
+5. Entao, o MVC, aqui, fica muito claro, a gente consegue ver separadinho quem que trata o que.
+
+6. Entao, eu tenho o Browser, estou la no Chrome, por exemplo, e vou acessar o endereco da nossa aplicacao.
+
+7. Entao, o Chrome vai la e faz uma Requisicao. Essa Requisicao nao vai cair direto na nossa aplicacao, primeiro, ela passa pelo Framework, no caso, aqui, o Spring MVC, a gente vai trabalhar com ele, entao, ele eh o cara que vai receber essa Requisicao.
+
+8. Bom, com essa Requisicao em maos, o Framework, Spring MVC ja mapeou tudo ali por tras, quando ele esta subindo a aplicacao, o Spring MVC vai mapear tudo que tem ali, todos os nossos controles, se ele digitar la, http://localhost:8080/titulos/alguma-coisa, ele vai conseguir falar algo assim, oh, 'Ah, essa URL, esse endereco, eh para mim entregar para esse Controller'.
+
+9. O Controller ja eh a gente que desenvolve. Entao, o Controller, voce vai criar, a gente vai criar como Desenvolvedor. O Framework, nao, o Spring, eh ele que recebe a Requisicao ali.
+
+10. Entao, o Controller que a gente escreveu, a gente vai falar assim, oh, 'A Requisicao /titulos eh para entregar para esse Controller, o Spring fez isso e entregou para nossa classe.'.
+
+11. Essa nossa classe, esse Controller, ele vai precisar comparar com os dados que ele recebeu, entao, ele passa esses dados para o Model. Ali no Model, a gente vai no banco de dados, salva, consulta, coloca as regras de negocio, etc., a gente vai colocar o Core da nossa Aplicacao fica no Model, okay?, uma parte importantissima ali, que acessa banco, e tem as regras de negocio, calculo de imposto, validacao, etc., vai ficar tudo no Model.
+
+12. Ai, eu olho, o Model fala assim, 'Beleza...', vamos falar para o Controller, 'Beleza, recebi aqui os dados, trabalhei, toma aqui os dados trabalhados de volta'.
+
+13. Ai, o Controller, pega esses dados, o Controller recebe, 'Muito obrigado pelos dados, Model que voce trabalhou, eu vou devolver aqui para o Framework, para o Spring MVC'.
+
+14. O Framework vai falar o seguinte, 'Ok', o Controller, pegando esses dados, vai falar assim, oh, 'Agora, eu quero que voce encaminhe isso para uma View, uma Pagina, e eu devolvo para o Framework'.
+
+15. O Framework vai saber onde encontrar essa Pagina, essa View, e, ai, ele entrega esses dados para a View. Ai, na View, a gente devolve para o Browser.
+
+16. Repare nessa frase que o instrutor falou, 'O Framework, ali, o Controller, a gente empurrou os dados para a View, a gente mandou os dados para a nossa telinha'. Isso eh muito importante entender isso, por que?
+
+17. Porque essa eh uma vantagem de se trabalhar com Action-Based. Porque, como eh o Controller que envia os dados para a View, nos teremos muita flexibilidade no Browser parra trabalhar esses dados. Entao, ali, eu consigo criar aplicacoes bem legais, bem flexiveis, porque os dados chegaram na View, e, agora, eu posso usar HTML, CSS, JavaScript, a vontade para trabalhar com esses dados.
+
+18. Mas, ai, isso se torna uma pequena desvantagem. Por que?
+
+19. Porque, ai, voce precisa conhecer mais sobre HTML, CSS e JavaScript. Okay?
+
+20. Como, entao, o Controller, envia, uma outra desvantagem eh que a gente nao consegue criar componentes controlados pelo Java, como no JSF, porque o fluxo, la, eh diferente.
+
+21. O fluxo do JSF eh a View que puxa os dados, okay, do Controller, entao, muda. Como la eh diferente, voce consegue ter aqueles componentes ricos, entao, tem um componente la que vai buscar os dados quando o componente precisa, entao, eh um pouco diferente do fluxo do JSF.
+
+22. Voltando, entao, aqui, para o Action-Based, entao, revisando, vantagens: como os dados sao enviados do Controller para a View, nos teremos muita flexibilidade no Browser para trabalhar esses dados.
+
+23. A desvantagem eh: nos nao vamos conseguir criar componentes controlados pelo Java, como eh o caso do JSF. E tambem a gente vai precisar conhecer mais sobre HTML, CSS e JavaScript para criar as nossas aplicacoes.
+
+24. Mas o instrutor quer que nos fiquemos com esse fluxo na cabeca, o MVC, ali, bem claro, o Model, a View e o Controller, MVC, bem claro, bem separado nesse desenho ali, e, quando a gente estiver construindo a aplicacao, o instrutor vai lembrando isso aqui para nos tambem.
+
+25. Fim da Aula 01.003. O que eh um Framework Action Based?
+
+-->

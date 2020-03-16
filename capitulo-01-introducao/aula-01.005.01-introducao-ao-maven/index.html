@@ -1,0 +1,650 @@
+<!--
+
+
+Aula 01.005.01. Comecando com Apache Maven em Projetos Java
+
+1. Quem esta comecando no mundo Java, as vezes, sente muita dificuldade de iniciar o trabalho, de comecar a programar, usando Maven para gerenciar os seus projetos.
+
+2. E eh isso que o instrutor quer, e é essa dificuldade que o instrutor quer quebrar, hoje, aqui.
+
+3. Entao, se voce ja eh um desenvolvedor experiente, ja usa Maven ha muito tempo, talvez, esta aula vai ser muito basica para voce.
+
+4. Agora, se voce esta comecando no Java, ainda esta ouvindo falar a respeito do Maven, o instrutor acha que pode ser bem interessante esta aula.
+
+5. O instrutor esta, aqui, no site do Maven, mas, a gente nao vai fazer Download nenhum, nao. So para nos mostrar que tem o Projeto ai, que faz parte da Apache, esse projeto é da Apache. Hoje, ele esta na versao 3.6.0. Em versoes passadas do Maven, era um pouquinho mais dificil de se trabalhar, tinha alguns bugs, no Maven, mas, hoje em dia, ja esta muito mais estavel, ja esta funcionando muito bem, e, depois que nos acostumarmos com o Maven, aprender o Maven, nos vamos querer programar sem ele nunca mais, porque eh muito mais facil.
+
+6. Entao, nesta aula aqui, o instrutor ira nos mostrar como criar um Projeto novo no Eclipse, usando o Maven. O instrutor ira nos mostrar, explicar, ali, a respeito das estruturas de diretorios do Maven, a gente vai conversar a respeito do pom.xml, que eh o arquivo principal dele. Tambem vai nos mostrar como é que eu posso importar um Projeto Web do GitHub para dentro do Eclipse, usando o Maven. 
+
+7. Okay? Entao, a gente vai importar esse projeto, faz um deploy la no Tomcat, é um Projeto muito, muito simples, que o instrutor criou, so para nos mostrar esse processinho, para nos comecarmos a brincar com o Maven. 
+
+8. Para voce que quer um pouco mais de um projeto simples, quer aprender mais sobre Java, especificamente o Java EE 7, com JSF, PrimeFaces, CDI, entre outras coisa, voce pode baixar o nosso e-book, gratis, so clicar nesse botao ai, que voce vai ser redirecionado para la, ou acessar https://alga.works/livro-javaee, e voce vai poder baixar esse e-book gratis, que vai nos mostrar um projeto bem mais completo, usando Maven por tras.
+
+9. Nos vamos usar o Eclipse. Qual versao do Eclipse? Essa versao do Eclipse, aqui, oh, a Luna, o instrutor sabe que ela ja vem com o plugin do Maven instalado, o instrutor nao tem certeza nas outras versoes passadas se tem o plugin do Maven, o instrutor usa a versao para Java EE Developers.
+
+10. Entao, vamos conversar um pouquinho sobre o Maven aqui.
+
+11. O que que é o Maven?
+
+12. É uma ferramenta que vai auxiliar, ai, a gente a Padronizar o Build. O que que é padronizar o build?
+
+13. É quando eu preciso fazer testes com dados, por exemplo, eu posso colocar as minhas classes numa estrutura de pacotes, que o Maven vai saber, 'Opa, as classes de teste estao nessa pasta, nessa outra pasta, eu vou executar esses testes'. 'Eu preciso gerar um WAR para fazer o deploy no meu servidor de aplicacao, no meu Tomcat, nos vamos fazer isso.'
+
+14. Entao, precisar estar, ali, toda uma estrutura pronta, o Maven ja sabe fazer isso tambem. Ele vai simplificar demais, e, ai, uma das grandes vantagens dele a respeito das Dependencias, tambem, que é a gente precisar, eu preciso baixar, sei la, o JSF, eu preciso baixar a biblioteca de PrimeFaces, eu preciso baixar o Hibernate, se voce nao estiver usando o Maven, nem uma outra ferramenta de gerenciamento, voce vai precisar entrar no site do Hibernate, do PrimeFaces, clicar la em Download, adicionar essa biblioteca dentro do seu projeto na mao, ou seja, vai perder um tempao.
+
+15. Entao, o Maven, ele vai gerenciar essas dependencias para a gente. É so colocar ali via texto, o instrutor vai nos mostrar, e ele ja vai fazer isso para a gente de uma forma muito, muito facil.
+
+16. Que mais? Repositorios.
+
+17. Onde que o Maven faz o Download dessas dependencias? Nos repositorios. Existe o Repositorio Central, que o instrutor ira nos mostrar agora mesmo, o endereco é https://search.maven.org, e la, vamos supor, se voce criar um projeto seu, e quiser colocar la, existem alguma regras, nao eh?, nao é tao facil assim, mas, por exemplo, o Hibernate tem la, o PrimeFaces, o JSF, todas essas bibliotecas estao no Repositorio Central do Maven. 
+
+18. Entao, é so voce usa-lo, esta la, disponivel para voce.
+
+19. Ele vai fazer esse, que esta la, no Repositorio Central, mas, ai, voce vai trabalhar na sua maquina. Entao, ele vai criar um Repositorio Local, no seu computador. Para que? Para a proxima vez, ele nao precisar baixar, sei la, vamos supor que é um JAR que tem 10MB, imagina 10 JAR's de 10MB, ficar baixando, entao, ele nao precisa fazer isso toda hora, ele baixa e coloca no seu Repositorio Local, vai ficar no seu computador.
+
+20. Normalmente, fica no Home do Usuario, na pasta m2, que, normalmente, esta oculta, no Linux e no Mac, comeca com ponto, entao, .m2, .m2/repository e, la dentro, vao estar todas essas bibliotecas.
+
+21. Entao, se voce estiver no Linux, por exemplo, no Mac, e for la dentro do seu \home, e der o comando 'cd .m2', e der um 'du -h', voce vai ver a quantidade de arquivos que tem ali, e vai ver o tamanho dela, depois que estiver usando um tempo, ja vai ter alguns Megas ali, e pode chegar ate a Gigas de bibliotecas que ele ja baixou para voce.
+
+22. E o Remoto, obviamente, sao repositorios que estao fora, para voce baixar e usar localmente.
+
+23. Ah, os Repositorios, tambem, nao existe so o Repositorio Central, como o instrutor ja disse, nao é tao simples voce criar um Projeto seu e colocar em um Repositorio Central do Maven. Mas, voce pode ter um Repositorio Remoto da sua empresa.
+
+24. Entao, dentro da empresa que voce trabalha, voce pode criar um Repositorio Remoto, usando, tem algumas ferramentas para fazer isso, e, ai, voce vai la e faz uma biblioteca e faz o Deploy nesse Repositorio. Ai, vai comecar um novo projeto, o cara chegou com a Maquina novinha, ele nao precisa fazer o Build daquele projeto na maquina dele, ele pode pode usar esse Repositorio Remoto para baixar essa biblioteca.
+
+25. Bom, e tem muito mais coisas a respeito do Maven, que a gente poderia ficar conversando, mas, para esta aula introdutoria, a gente ir comecando com o Maven, vamos la ja brincar com alguns exemplos.
+
+26. Bom, antes, aqui, oh, é https://search.maven.org mesmo, é aqui que voce, oh, se eu digitar, aqui, oh, hibernate, no input de busca, vai aparecer, aqui, oh, varias opcoes, ai, oh, ou, por exemplo, hibernate-entitymanager, entao, vao aparecer menos opcoes, e, no Dependency Information, é o trecho de codigo que nos precisamos colocar para o Maven fazer o Download para nos. E o legal eh que, no Maven, voce coloca essa dependencia,
+
+<dependency>
+  <groupId>org.hibernate</groupId>
+  <artifactId>hibernate-entitymanager</artifactId>
+  <version>5.4.0.CR1</version>
+</dependency>
+
+e, se essa dependencia aqui, que eh o hibernate-entitimanager, tiver outras dependencias, porque esse cara aqui,
+
+  <artifactId>>>hibernate-entitymanager<<</artifactId>
+
+, ele vai ter um outro arquivo para gerenciar ele tambem. Dentro desse arquivo, ele pode falar que depende de outros Projetos, de outras Libs, de outras Bibliotecas, e, ai, colocando essa unica dependencia aqui, ele vai baixar, ele pode baixar varias outras bibliotecas tambem.
+
+27. Beleza? Bom, era isso daqui. Vamos la para o Eclipse, para a gente criar um projetinho aqui, e explicar um pouquinho mais sobre o Maven.
+
+28. Bom, se voce vier aqui, na Perspectiva Java, em 'Package Explorer', New / Project... / Maven Project, dar um Next, marcar a opcao 'Create a single project (skip archetype selection)', para pular essa parte de archetype. O Archetype eh o seguinte, ele eh uma forma de criar um projeto um pouco mais complexo, que ja vem com algumas coisas prontas para voce. Aqui, eu estou criando um projeto cru, eh um projeto simples, mas, vamos imaginar que eu queira criar um projeto, eu crio toda hora um projeto que usa CDI, que usa PrimeFaces, usa algumas coisas assim, e eu ja quero que essas configuracoes iniciais venham prontas para o meu projeto.
+
+29. Entao, eu posso criar um archetype que, na hora que eu criar o meu projeto usando esse archetype, essas configuracoes ja vao vir prontas para mim, eu ja posso, ate, criar um archetype que ja vem com algumas classes prontas, por exemplo, um projeto ja vem com algumas classes de Hello World para, vamos supor, um projeto web, ja vem com uma pagina pronta, voce pode fazer isso.
+
+30. Existem varios archetypes disponiveis, ai, na Internet, voce pode procurar e pode criar o seu tambem.
+
+31. Beleza?
+
+32. Mas, para esta aula introdutoria, mais uma vez, vamos continuar aqui.
+
+33. Group Id. O que que seria Group Id?
+
+34. Eh o identificador, vamos supor, da empresa que esta criando esse projeto, e a sub-area, dentro da empresa, voce poderia colocar assim, ou seja, eh o grupo que esta criando esse projeto. Poderia criar assim oh, 
+
+Group Id: com.algaworks.
+
+, normalmente, a gente coloca como dominio ao contrario, comecando. Nao eh pacote isso daqui, posso escrever qualquer coisa aqui, que nao sejam caracteres invalidos, mas, normalmente, a gente coloca, entao, pelo nome da organizacao ao contrario,
+
+'com.algaworks.'
+
+, poderia colocar, aqui, o nome do projeto, ou da sub-area, dentro da empresa, dependendo do tamanho da empresa, alguma coisa assim.
+
+35. Vamos deixar assim, 'com.algaworks', para identificar esse grupo.
+
+36. E o Artifact Id eh o identificador do artefato, do projeto, no jargao do Maven, o artefato eh o JAR, ou o WAR, ou o que voce esta trabalhando ali. Okay? Entao, aqui, eu vou chamar de 'projeto-web'.
+
+37. Essa versao tambem eh uma outra coisa muito legal do Maven, o gerenciamento, aqui, da versao. Vamos conversar, aqui, um pouquinho, vamos comecar pelo numero, e, depois, o instrutor fala sobre esse SNAPSHOT aqui,
+
+'Version: 0.0.1-SNAPSHOT'
+
+38. Bom, esse numerozinho, aqui, '0.0.1', o ultimo, do lado direito, esse '1', aqui, ele significa pequenas mudancas, eu posso definir isso como 'pequenas mudancas'. Isso eh uma convencao que se adota, voce pode adotar outras convencoes, tambem, na sua empresa, ai, mas, normalmente, eh assim que o pessoal faz, dessa forma.
+
+39. O ultimo numero, entao, do lado direito, sao pequenas mudancas. 
+
+40. O que que sao pequenas mudancas?
+
+41. Ah, corrigir um bug, alguma coisa assim, nao estava funcionando muito bem aquilo, adicionei uma coisinha nova, ali, que nao fez tanta diferenca, eu so reorganizei o meu codigo. Eu poderia incrementar esse valor, do 0.0.1, passaria para o 0.0.2. Isso, depois que eu entreguei o projeto, nao eh?, entao, ele vai passando, 0.0.1, 0.0.2, 0.0.3, 0.0.4, por ai vai, a medida que eu vou fazendo essas correcoes.
+
+42. O numerozinho do meio, como eh que se costuma fazer? 
+
+43. O numerozinho do meio ja pode significar uma mudanca um pouquinho maior. Por exemplo, eu adicionei uma funcionalidade nova, que, antes, nao tinha, entao, esse numero poderia incrementar, de 0.0.1 para 0.1.0, por exemplo.
+
+44. Entao, adicionei mais outra funcionalidade, 0.2.0.
+
+45. Mas, essa nova funcionalidade nao faz o seu projeto quebrar, normalmente, ele nao vai quebrar, ou seja, quem esta usando a versao 0.1.0 e passou a usar a versao 0.2.0, o projeto continua funcionando, so que, na 0.2.0, tem algumas coisas a mais para ele, voce nao vai deixar quebrar o projeto da versao passada.
+
+46. E esse numero, aqui, o primeiro, '1.0.0', ja significa mudancas maiores.
+
+47. Ou seja, aqui, '1'.0.0, eu estava usando um framework e passei a usar outro. Eu tirei o metodo, um metodo publico, nao existe esse metodo mais, entao, voce passou, aqui, para a versao '2.0.0', para a versao '3.0.0', mudou muito o seu projeto.
+
+48. Entao, consegue reparar, comigo, que esse primeiro numero '1'.0.0, eh o que muda menos, depois, esse 1.'0'.0, depois, esse, 1.0.'0', nao eh?
+
+49. O ultimo numero, aqui, voce costuma ver algo assim, oh, 1.0.'12', 1.0.'14'. E esse primeiro, aqui, nao, ele fica na versao '1'.0.14, '2'.0.14, nao eh uma coisa que evolui tanto assim.
+
+50. Entao, em Version, vamos deixar como '1.0.0'.
+
+51. E esse SNAPSHOT? Snapshot significa que eu desenvolvendo, esta na fase de desenvolvimento do meu projeto. Ele ainda esta sendo desenvolvido, nao foi, ainda, gerado uma Release desse meu projeto.
+
+52. Quando eu gerar uma Release, eu posso tirar o SNAPSHOT e gerar a versao 1.0.0. Isso eh feito automaticamente, o Maven vai la e tira isso, faz a Release, tem os plugins para fazer isso, o instrutor vai nos falar um pouquinho sobre plugins, e, ai, ele vai la e tira essa versao e ja incrementa aqui para a proxima para voce, '1.0.1', ele consegue fazer tudo isso para a gente.
+
+53. Packaging. Qual que eh o tipo de empacotamento? Existem varios tipos de empacotamento que eu posso colocar, aqui, ele esta me mostrando esses tres so, 'jar', 'pom', 'war', mas tem outros tipos de empacotamento.
+
+54. O 'pom' eh quando eu tenho um projeto que, dentro dele, do projeto maven, vao ter varios outros projetos maven, tambem.
+
+55. Mas nos vamos colocar, aqui, como war, para a gente comecar a falar sobre um projeto web.
+
+56. Beleza?
+
+57. Aqui, em Name, eu poderia dar um nome e, em Description, uma descricao para o projeto. E, se eu estivesse herdando de um outro projeto, eu poderia colocar aqui, em Parent Project, mas, tambem, nao vamos falar mutio sobre isso nao.
+
+58. Vamos dar um Finish aqui, ele vai gerar o projeto. Se for a primeira veza que voce esta fazendo na sua maquina, pode ser que demore um pouquinho, okay?
+
+59. Mas vamos la. Eu cliquei aqui em pom.xml, ele abriu so em Design/Source, pode ser, quando voce clicar em abrir, que ele va abrir com esse cara aqui, oh, o Maven POM Editor [botao direito em pom.xml / Open With / Maven POM Editor], que ele vai ter algumas telinhas, aqui, oh, que sao interessantes, as vezes, para voce ver Dependencia, na Aba Dependencies, algumas coisas a mais. 
+
+60. Nos vamos trabalhar so, aqui, no arquivo XML, por enquanto, por isso que nos vamos deixar ele assim, so em XML Editor [botao direito em pom.xml / Open With / XML Editor].
+
+61. Olha so, ele gerou, aqui, o cabecalho do Maven
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+, esse <modelVersion>, ja tem um tempo que eh esse 4.0.0, nao muda, entao, eh esse modelVersion 4,
+
+      <modelVersion>4.0.0</modelVersion>
+
+62. Ele vai adicionar, lembra, aquelas configuracoes, lembra, que a gente adicionou, Group Id, Artifact Id, e Version, aqui, tambem,
+
+  <groupId>com.algaworks</groupId>
+  <artifactId>projeto-web</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+
+63. E o packaging 'WAR',
+
+  <packaging>war</packaging>
+
+64. Beleza? Vamos la, vamos comecar a configurar algumas coisas, aqui, nao eh so isso.
+
+65. Uma coisa que eu vou configurar, aqui, eh adicionar uma propriedade, vou copiar e colar, aqui, eu posso adicioinar, aqui, oh, nessa secao properties, e adicionar essa propriedade,
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+66. Estou falando que eu quero usar UTF-8 na hora de compilar, na hora de gerar tudo do meu projeto, eu quero que use UTF-8.
+
+67. Uma coisa que o instrutor nos recomenda fazer eh, inclusive, trocar de tudo, ai, se estiver no Windows, as vezes, pode dar um pouco mais de problema, entao, dar uma olhada, em Window / Preferences..., e digita ENCODING. Voce clicando em Workspace, embaixo, em 'Text file encoding', tem que estar marcado 'Default (UTF-8)', o 'New tex_file line delimiter', coloca o do Windows, em CSS Files, o Encoding tem que estar definido como UTF-8, assim como em HTML Files, JSP Files e XML Files, entao, da uma conferida nisso dai, sempre utilize o UTF-8, para voce nao ter problemas de caracter.
+
+68. Okay?
+
+69. O que mais que eu vou fazer aqui? Eu vou usar um plugin, dentro da tag <build>, eu posso colocar varios plugins, que eh o plugin que vai compilar, que eu configuro a versao que eu quero que o meu projeto compile.
+
+70. Entao, coloca, ai, 
+
+<artifactId>maven-compiler-plugin</artifactId>
+
+, qual que eh a versao que eu estou usando, temos a versao 3.1,
+
+<version>3.1</version>
+
+, e eu falo as configuracoes para esse plugin,
+
+<configuration>
+    <source>1.8</source>
+    <target>1.8</target>
+</configuration>
+
+71. Entao, o fonte, 
+
+    <source>1.8</source>
+
+e o  arquivo final que vai compilar, o bytecode, 
+
+    <target>1.8</target>
+
+vai ser na versao 1.8. Eh isso que eu estou falando aqui.
+
+72. Quando eu fiz isso aqui e salvei, o projeto ja ficou vermelhinho. Por que que ele ficou vermelhinho?
+
+73. Porque o Eclipse, aqui, oh, na hora que ele gerou, ele gerou com a do Java 1.5, e, ai, eu estou falando, 'Nao, eu quero que voce trabalhe na versao 1.8'. 
+
+74. Entao, eh facil a gente resolver, clicar com botao direito na raiz do projeto, vem aqui em Maven / Update Project..., e da um Ok.
+
+75. Ele ja vai passar, aqui, oh, para o Java 8.
+
+76. E uma coisa legal, aqui, importante salientar, tambem, destacar, a respeito do Maven / Update Project...
+
+77. Bom, lembra, ali, na teoria, que o Maven vai fazer o Download das dependencias, por exemplo, esse plugin, aqui, 
+
+<plugin>
+  			<artifactId>maven-compiler-plugin</artifactId>
+  			<version>3.1</version>
+  			<configuration>
+  				<source>1.8</source>
+  				<target>1.8</target>
+  			</configuration>
+          </plugin>
+          
+, ele fez o Download pra gente, foi la na Internet e buscou, se nao tiver o arquivo, ainda, vai demorar um pouquinho, pode ser que demore um pouquinho para baixar.
+
+78. E aqui, o que que pode acontecer? Se a sua Internet estiver ruim, vamos supor, caiu no meio ali, se tivermos uma Internet instavel, ele pode comecar a fazer o Download desse arquivo aqui e parar. E, na hora que ele parou, esse arquivo ficou corrompido, nao conseguiu continuar esse download. E isso ai pode ser um problema, porque, ai, o seu projeto nunca vai funcionar, porque ele esta dependendo de um arquivo corrompido.
+
+79. Entao, na hora em que voce for dar o Build, nao vai funcionar. Entao, voce pode vir aqui, oh, para resolver isso, clica com o botao direito na raiz do projeto / Maven / Update Project..., e marca essa opcao aqui, oh, 'Force Update of Snapshots/Releases'.
+
+80. Entao, ele vai forcar tudo o que esta usando no seu projeto, ele vai tentar fazer o update, ele vai ver, oh, vamos ver se tem alguma diferenca do que esta fora eo que esta aqui. Entao, se oseu arquivo estiver corrompido, vai estar diferente do que esta no Repositorio, entao, ele vai, baixa de novo.
+
+81. Entao, eh importante voce dar esse 'Force Update' aqui, ele vai comecar a baixar de novo todas as dependencias do seu projeto, a medida que voce tiver mais dependencias, nao eh?, aqui, eu nao tenho nenhuma dependencia ainda, o instrutor ja vai nos mostrar quando a gente importar o projeto do GitHub, algumas dependencias ai.
+
+82. Beleza?
+
+83. Bom, vamos dar uma olhada aqui nas pastinhas dele aqui, como eh que ele montou esse projeto web aqui.
+
+84. Ele montou uma pastinha 'src/main/java', eh onde eu vou colocar os meus arquivos, o meu codigo-fonte, o meu codigo de Producao, o codigo de verdade, ai, que vai fazer toda a logica de negocio.
+
+85. Eu posso colocar em uma pasta diferente, Normandes?
+
+86. Pode. Mas o Maven trabalha muito nessa ideia de 'Convencao Sobre', ao inves de 'Configuracao', ou seja, se voce seguir essa convencao, de colocar o seu codigo-fonte em 'src/main/java', voce nao precisa configurar nada diferente. Se voce quiser mudar isso aqui, 'src/main/java', pode, mas vai ter que vir aqui no pom.xml e configurar.
+
+87. 'src/main/resources' eh onde vao vir os arquivos auxiliares para o seu projeto funcionar, por exemplo, se voce estiver trabalhando com JPA, e quiser usar o persistence.xml, voce vai poder colocar ele aqui dentro. O Maven vai pegar esse cara e vai jogar la, empacotar dentro do seu projeto, tambem, para voce. Entao, voce nao vai jogar dentro de 'src/main/java', voce vai jogar dentro de 'src/main/resources'.
+
+88. 'src/test/java' eh onde voce vai colocar o seu codigo de teste. Entao, voce esta trabalhando com Teste Unitario, o instrutor nos recomenda, fortemente, tem que trabalhar-se com Teste Unitario, coloque aqui o Teste Unitario, 'src/test/java', para testar essas classes aqui, que estao no pacote de Producao, da pasta de Producao, ou seja, 'src/main/java'.
+
+89. 'src/test/resources' sao os arquivos importantes para a gente poder fazer os testes.
+
+90. Entao, se precisa de um arquivo especial, persistence.xml para os testes, sei la, alguma coisa assim, voce pode coloca-los aqui, em 'src/test/resources'.
+
+91. Okay? Ah, oh, esta faltando aqui, oh, 'src/main/webapp', que eh onde vai ficar os seus arquivos web, e tal, ele nao criou, aqui, a pasta WEB-INF, mas, aqui dentro, estaria a pasta WEB-INF, com web.xml, por ai vai.
+
+92. O que o instrutor costuma fazer aqui, oh. Costuma clicar aqui, na pasta webapp / Build Path / Configure Build Path... O instrutor vai na Guia Source / Add Folder..., e marca, adiciona essa pasta 'webapp' como Source Folder.
+
+93. Por que?
+
+94. Ela vai aparecer aqui, oh, 'src/main/webapp', fica mais facil de eu trabalhar, nao precisa ficar clicando, aqui, em src, main, webapp.
+
+95. Entao, adiciono ela ali como 'Source'.
+
+96. E tambem, botao direito na raiz do projeto / Build Path / Configure Build Path... / Guia Order and Export, troco a ordem, costumo colocar a ordem, se voce clicar nela, aqui, 'projeto-web/src/main/webapp', voce pode dar um Down aqui, oh, e dar um Ok, ela vai ficar aqui, oh, logo abaixo dos testes, ou seja, de 'src/test/java' e 'src/test/resources'.
+
+97. Bom, essa eh a estrutura geral, por enquanto, nao tem nenhum arquivo para valer, uma classe, para a gente trabalhar, mas nos vou importar o Projeto para vermos como eh que se faz isso, e, ai, nos ja vamos ver, poderemos ver mais sobre as dependencias, no Maven.
+
+98. Entao, por enquanto, aqui, o que que a gente viu?
+
+99. Como eh que a gente cria o projeto? O que que sao os Group Id's, Artifact Id's, a respeito do empacotamento, <packaging>war</packaging>, das <properties>, vimos o <plugin>, como eh que a gente configura, adiciona o plugin. Existem varios, varios plugins que voce pode usar no Maven para fazer as mais diversas tarefas.
+
+100. Se voce precisa fazer alguma coisa, preciso empacotar o meu projeto, mandar-lo para nao sei aonde, procura, ai, que, as vezes, existe um plugin que faz isso para voce.
+
+101. Entao, vamos la. Eu vou apagar esse projeto, porque nos vamos importar um projeto chamado projeto-web tambem. 
+
+102. Vamos la.
+
+103. Aqui, oh, o instrutor deixou no GitHub, no repositorio da algaworks, https://github.com/algaworks/aula-comecando-com-maven, vou copiar essa URL aqui, vou vir aqui no git, dar um comando,
+
+> git clone https://github.com/algaworks/aula-comecando-com-maven
+
+, entao, estou baixando esse projeto agora.
+
+104. Baixou. O que eu vou fazer agora?
+
+105. Eu vou vir aqui no Eclipse e importar esse projeto, oh, botao direito / Import...
+
+106. Eh um Projeto Existente do Maven, se eu vier aqui, oh, 'Existing Projects into Workspace', nao vai funcionar, por que?
+
+107. Porque nao tem. Quando, aqui, a gente olhar dentro do codigo-fonte do projeto-web, nao eh comitado o .classpath e o .project, que sao os arquivos do Eclipse, que sabem montar o projeto dentro do Eclipse.
+
+108. Entao, eles nao estao aqui disponiveis. O que eu tenho eh so o Projeto Maven.
+
+109. Entao, eu vou marcar como eu quero importar um Projeto Existente Maven, 'Existing Maven Projects', dentro do meu Eclipse.
+
+110. Okay? E eu vou selecionar onde esta esse projeto.
+
+111. Bom, esse projeto, ele esta em C:\Users\SEMPR\aula-comecando-com-maven, selecionar, entao, esse caminho. Ele, entao, identificou o pom.xml, falor, 'Ah, tem um pom.xml aqui, que eh o WAR', que ele vai montar, aqui, como um Projeto Maven, dentro do meu Eclipse.
+
+112. Montou. Vamos abrir aqui. A Configuracao la da Source Folder, ele nao vai deixar, foi a configuracao que o instrutor deixou do Eclipse. Entao, eu vou vir aqui, oh, botao direito na raiz do projeto / Properties / Java Build Path / Guia Source / Add Folder... / marcar webapp de novo. Depois, na Guia Order and Export, Down em webapp para depois dos pacotes de test.
+
+113. Agora, sim, esta, aqui, o webapp aparecendo. E eh onde, como o instrutor nos disse, uma pasta chamada WEB-INF, com web.xml, as minha classes, estao aqui, okay?, e o meu pom.xml, que o instrutor vai nos mostrar, agora, antes de a gente passar, ali, pelo projeto.
+
+114. Ate aqui, a gente tinha visto,
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.algaworks</groupId>
+	<artifactId>projeto-web</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+
+	<packaging>war</packaging>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+		</plugins>
+    </build>
+    
+
+115. Vamos ver, aqui, essa parte, agora, que eh uma das partes mais legais do Maven, que eh, justamente, o Gerenciamento de dependencias.
+
+116. Olha so, eu coloco aqui, <dependency>,
+
+    <dependencies>
+        <dependency></dependency>
+    </dependencies>
+
+, lembra quando o instrutor fez a pesquisa, la, do Hibernate, no Repositorio Central? Esse cara, aqui, aparece la para mim, oh, 
+
+		<dependency>
+			<groupId>org.primefaces</groupId>
+			<artifactId>primefaces</artifactId>
+			<version>5.1</version>
+			<scope>compile</scope>
+        </dependency>
+        
+, entao, oh, Group Id, 'org.primefaces', Artifact Id, 'primefaces', a versao, e eu defino, aqui, o escopo, 
+
+<scope>compile</scope>
+
+, escopo 'compile' significa que, quando eu empacotar esse meu projeto, e gerar o WAR dele, eu quero que ele va junto. Entao, ele vai pegar essa dependencia, e tudo que ele depender, daqui, e empacotar junto do meu projeto, la, dentro da pastinha lib.
+
+117. A dependencia do JSF,
+
+		<dependency>
+			<groupId>org.glassfish</groupId>
+			<artifactId>javax.faces</artifactId>
+			<version>2.2.8-02</version>
+			<scope>compile</scope>
+        </dependency>
+        
+, e a dependencia do JUnit,
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+			<scope>test</scope>
+        </dependency>
+        
+, Artifact Id, 'JUnit', versao 4.11.
+
+118. O que que eh o JUnit? O JUnit eh para a gente fazer teste unitario. O instrutor deixou, aqui, uma classe aqui, oh, MeuTest.java, que nao faz nada, so esta dando um assertTrue(true), so para nos vermos o Maven executando teste daqui a pouco, mas o escopo, eu ja defino como 'test'. Por que eu vou definir esse escopo como 'test'?
+
+119. Porque eu nao quero que empacote o JUnit dentro do meu WAR, JUnit eh so na hora de eu compilar, ali, na hora em que eu estou estou executando os meus testes, ele vai executar e, depois, eu nao preciso mais dele.
+
+120. Vamos mandar executar aqui, oh, botao direito em MeuTest.java / Run As / JUnit Test, que ele vai passar, nao tem nada fazendo de importante,
+
+package com.algaworks;
+
+import static org.junit.Assert.assertTrue;
+
+import org.junit.Test;
+
+public class MeuTest {
+
+    @Test
+    public void primeiroTest() throws Exception {
+        assertTrue(true);
+    }
+
+}
+
+, entao, ele vai dar verdinho. Se ele nao passasse, o Maven iria parar a compilacao. Voce pode ate testar, coloca, aqui, oh, false,
+
+    @Test
+    public void primeiroTest() throws Exception {
+        assertTrue(false);
+    }
+
+, nao eh?, o teste nao vai passar, e, ai, tenta, depois que voce aprender, gerar, de novo, o WAR.
+
+121. Vais ver que nao vai passar, porque ele vai parar la, ele vai falar, 'Oh, tem um teste que nao passou'. 
+
+122. Entao, isso eh legal. Por que?
+
+123. Imagina voce ter um monte de testes, e, ai, voce quer, 'Deixa eu empacotar esse projeto, aqui', e voce esqueceu de executar os testes, antes, aqui, nao eh?, como o instrutor fez aqui, pegou o JUnit para executar. Quando o Maven for empacotar, ele vai executar os testes. E, ai, se algum teste nao passar, ele nao vai empacotar e vai falar, 'Oh, esta com erro, o teste falhou.'.
+
+124. Okay? Entao, para isso que serve o escopo 'test', para nao empacotar essa biblioteca la dentro para a gente.
+
+125. Okay? Bom, aqui, a gente acabou de percorrer o pom.xml, tem mais configuracoes, tem varias configuracoes que a gente pode colocar, mas vamos parar por aqui, e vamos dar uma olhada aqui, oh, no projeto.
+
+126. Nao tem muita coisa aqui, eh um projeto muito, muito simples, em ExemploBean.java,
+
+package com.algaworks.controller;
+
+import java.io.Serializable;
+
+import javax.faces.bean.ManagedBean;
+
+@ManagedBean
+public class ExemploBean implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    private String nome;
+
+    public void nomeAlterado() {
+        this.nome = nome.toUpperCase();
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+}
+
+, que eu, simplesmente, pego uma variavel nome ali, na telinha, e vou passar para maiusculo. Estou usando o PrimeFaces para isso. Aqui, a telinha,
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    lang="pt-BR">
+<h:head>
+    <meta charset="UTF-8" />
+    <title>Exemplo</title>
+</h:head>
+<h:body>
+    <h:form id="frm">
+        <h:panelGrid columns="2" style="margin-top: 20px" id="painel" cellspacing="10px">
+            <p:outputLabel value="Nome:" for="nome" />
+            <p:inputText id="nome" size="20" value="#{exemploBean.nome}">
+                <p:ajax event="keyup" update="saida" listener="#{exemploBean.nomeAlterado}" />
+            </p:inputText>
+            <p:outputLabel value="Nome maiusculo:" for="saida" />
+            <h:outputText id="saida" value="#{exemploBean.nome}" style="color: red; font-size: 1.3em" />
+        </h:panelGrid>
+
+    </h:form>
+</h:body>
+
+</html>
+
+, o nome que eu digito, aqui, no inputText, na hora em que eu levantar o dedo, ele vai alterar o nome, passando para maiusculo, e vai mostrar o nome em maiusculo na tela. Esta indo la via Ajax. Isso aqui faz parte do PrimeFaces, nao precisa de tantos detalhes, aqui.
+
+127. Okay? Aqui, sao arquivos de configuracao tambem, web.xml, o instrutor deixou configurado, aqui, para o PrimeFaces, e o faces-config.xml, para o JSF poder funcionar, falando que eu estou usando pt-BR,
+
+	<application>
+		<locale-config>
+			<default-locale>pt_BR</default-locale>
+		</locale-config>
+    </application>
+    
+128. Ah, uma parte muito importante, que o instrutor nao mostrou, aqui, ainda, no Eclipse, Maven Dependencies. Vamos dar uma olhada aqui, oh.
+
+129. Quando eu faco o Download, la, da dependencia, ou seja, coloquei a dependencia do primefaces, por exemplo, lembra que o instrutor falou para nos que ele vai fazer o Download e colocar dentro da nossa maquina, ele fez o Download, entao, no caso do Mac, o \home do usuario eh \Users\normandes\.m2\repository, e a partir daqui, ele vai colocar as dependencias para mim.
+
+130. Entao, aqui, no caso do Primefaces, oh, ele vai colocar repository e, ai, ele coloca o Group Id, ou seja, 'org.primefaces', depois, o Artifact Id, ou seja, primefaces, e, depois, a versao, ou seja, 5.1.
+
+131. Entao, se voce ja trabalhou ja com 6 versoes do PrimeFaces, se voce entrar dentro desse diretorio, C:\Users\SEMPR\.m2\repository\org\primefaces\primefaces\5.1, vao ter la todas as 6 versoes que ja foram feitos os downloads para nos.
+
+132. Entao, ele fez todos esses downloads, esse JAR da Internet, e esta usando, aqui, no meu Projeto.
+
+133. Uma outra parte muito importante, que o instrutor ajuda direto alguns alunos a configurar, as vezes, quando ele importa o projeto aqui no Eclipse, o Eclipse, as vezes, da um probleminha, na configuracao, aqui, do Deployment Assembly, ou seja, botao direito na raiz do Projeto / Properties / Deployment Assembly. Isso aqui eh para ele falar como ele vai montar o seu projeto para fazer o deploy dele no servidor de aplicacao.
+
+134. Entao, olha la, o 'src/main/java' tem que estar dentro de WEB-INF/classes, o 'src/main/resources' tambem, tem que estar dentro de WEB-INF/classes.
+
+135. O 'src/main/webapp' tem que estar dentro da raiz la do cara que foi empacotado, mas ele nao precisa estar dentro de 'WEB-INF/classes'.
+
+136. Entao, o que que eu vou fazer?
+
+137. Eu vou clicar, aqui, em 'src/main/webapp - WEB-INF/classes' e vou remover.
+
+138. Tambem o target/m2e-wtp/web-resources, eu nao preciso desse cara, entao, vou remover.
+
+139. E as dependencias do Maven, vai para WEB-INF/lib.
+
+140. Okay? Entao, tem que ficar dessa forma aqui,
+
+'src/main/java  -  WEB-INF/classes'
+'src/main/resources  -  WEB-INF/classes'
+'src/main/webapp  -  /'
+'Maven Dependencies  -  WEB-INF/lib'
+
+, para o nosso Projeto funcionar legal.
+
+141. Beleza. 
+
+142. Configurar o Servidor Tomcat no Eclipse.
+
+143. Clicar na raiz do projeto e arrastar para a Aba do Servidor Tomcat. Iniciar o Servidor Tomcat e a gente pode ver o Projeto funcionando, http://localhost:8080/projeto-web.
+
+143. Apareceu 2 Labels e um Input Text na tela. Se eu digitar, no input text, tudo minusculo, ele vai colocando, no label debaixo, tudo em maiusculo.
+
+144. Esse eh o projeto. Mas a ideia era mostrar como o Maven gerencia o projeto.
+
+145. E, para finalizar, o instrutor ira nos mostrar, agora, como a gente pega esse projeto, oh, paramos o Tomcat e fazemos o deploy do WAR no Tomcat do lado de fora, agora.
+
+146. O instrutor ira fazer o seguinte, oh, ele vai clicar, aqui, oh, botao Run Configurations..., da para clicar na raiz do projeto / Run As / Maven build..., aqui, ja vai direto, oh.
+
+147. E, aqui, eu posso fazer o seguinte, oh, clean install, por exemplo.
+
+148. O clean install, 'clean', ele vai dar uma limpada no seu projeto para poder compilar. Existem varias fases no Maven, varios Goals, aqui, que ele pode executar, entre os mais importantes, ai, esta 'clean'. Tem o 'compile', que ele vai parar ate o compilar. Tem o 'install', 'install', ele passa por alguns outros Goals, inclusive o 'compile'. Tem, tambem, o 'deploy', que ele poderia fazer o deploy, o que seria um pouco mais a frente, ele poderia fazer o deploy no seu servidor remoto, como o instrutor ja nos disse, no repositorio remoto, ele poderia fazer isso la, mas nos vamos deixar, aqui, como 'clean install'.
+
+149. Vou dar um Apply e vou dar um Run.
+
+150. Vamos acompanhar, aqui, oh, o que que ele vai fazer.
+
+151. Oh, no Clean, ele esta deletando algumas informacoes. Olha so, entao, na fase do Clean, ele apagou o que ele ja tinha gerado, depois, ele comecou a compilar.
+
+152. Ai, ele compilou, e chegou a parte de execucao dos Testes. 
+
+153. Ai, ele vai executar, oh, ele vai falar, 'Eu estou executando a classe 'MeuTeste'', ele executou 1 teste, e o resultado foi um teste executado com sucesso.
+
+154. Se tivesse dado alguma falha, algum erro, ele teria mostrado aqui e nao teria dado essa mensagem final de sucesso, teria dado um erro aqui, dizendo que nao passou nos testes.
+
+155. E, ai, ele gerou o WAR para mim, oh, Building war, que esta nesse caminho, aqui,
+
+[INFO] Building war: C:\Users\SEMPR\aula-comecando-com-maven\projeto-web\target\projeto-web.war
+
+156. Okay? Eu vou copiar daqui mesmo, como o instrutor disse, voce, normalmente, poderia usar um plugin do Maven com script ant, por exemplo, para fazer o deploy nesse Servidor Separado. Se voce estiver usando outras tecnologias, voce pode fazer esse deploy direto em uma maquina virtual, ou seja, tem como fazer muitas coisas.
+
+157. O que o instrutor quer fazer eh copiar na mao, aqui, para o prompt de comando. Eu ja estou no eu Tomcat, oh, em 'C:\Users\SEMPR\apache-tomcat-9.0.13', vou dentro da pasta 'webapps'
+
+> cd webapps
+
+158. E vou copiar o meu 'WAR',
+
+[INFO] Installing C:\Users\SEMPR\aula-comecando-com-maven\projeto-web\target\projeto-web-0.0.1-SNAPSHOT.war to C:\Users\SEMPR\.m2\repository\com\algaworks\projeto-web\0.0.1-SNAPSHOT\projeto-web-0.0.1-SNAPSHOT.war
+
+para ca,
+
+> copy C:\Users\SEMPR\aula-comecando-com-maven\projeto-web\target\projeto-web-0.0.1-SNAPSHOT.war .
+
+159. Agora, eu vou dentro da pasta 'C:\Users\SEMPR\apache-tomcat-9.0.13\bin', 
+
+> cd..
+
+> cd bin
+
+> startup.bat
+
+160. , para iniciar o Tomcat.
+
+161. E, ai, vamos voltar, aqui, em http://localhost:8080/projeto-web/, para nos vermos se vai rodar o meu projeto.
+
+162. Nao abriu. O Tomcat acessou, mas nao rodou o meu Projeto. Por que?
+
+163. Olha o nome do arquivo que ele gerou aqui, oh, 'projeto-web-0.0.1-SNAPSHOT',
+
+[INFO] Installing C:\Users\SEMPR\aula-comecando-com-maven\projeto-web\target\projeto-web-0.0.1-SNAPSHOT.war to C:\Users\SEMPR\.m2\repository\com\algaworks\projeto-web\0.0.1-SNAPSHOT\projeto-web-0.0.1-SNAPSHOT.war
+
+, esse aqui deveria ser o nome que eu preciso colocar em http://localhost:8080/projeto-web-0.0.1-SNAPSHOT. Agora, sim, ele vai aparecer, e esta funcionando.
+
+164. 'Ah, Normandes, mas ele colocou esse nome, aqui, 001-SNAPSHOT', nao eh?, colocou a versao no nome do arquivo, eu nao quero que coloque isso.
+
+165. Beleza, eh so a gente configurar. A gente pode vir aqui, oh, em pom.xml,
+
+    <build>
+        <finalName></finalName>
+
+, e, ai, para voce nao ter que ficar escrevendo, aqui, na mao, voce pode usar essa tag aqui do <artifactId>, voce pode vir aqui, e faz o seguinte, oh,
+
+    <finalName>${artifactId}</finalName>
+
+, ou seja, eu quero que seja o nome do meu ArtifactId,
+
+	<groupId>com.algaworks</groupId>
+	<artifactId>projeto-web</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    
+, ou seja,
+
+    <finalName>${project.artifactId}</finalName>
+
+, eh so definir dessa forma: 'project', que eh para falar que eh deste projeto, e artifactId.
+
+166. Beleza? E vou mandar dar o Clean Install novamente, oh, ele esta aqui, no botao Debug do Eclipse, conforme a ultima vez que eu executei.
+
+167. Oh, compilou com sucesso, olha, agora, o nome que ele gerou,
+
+[INFO] Building war: C:\Users\SEMPR\aula-comecando-com-maven\projeto-web\target\projeto-web.war
+
+, ele gerou sem aquela versao SNAPSHOT.
+
+168. Entao, o que que eu vou fazer? Eu vou parar, aqui, o Tomcat,
+
+> shutdown.bat
+
+, vou remover o projeto, tem que remover o .WAR e a pastinha que ele extraiu. Agora, eu vou copiar para ca, o projeto.war, aqui, 
+
+> copy C:\Users\SEMPR\aula-comecando-com-maven\projeto-web\target\projeto-web.war .
+
+de novo, e posso voltar la, e iniciar o Tomcat de novo,
+
+> cd..
+
+> cd bin
+
+> startup.bat
+
+169. Agora, essa versao, http://localhost:8080/projeto-web-0.0.1-SNAPSHOT, nao vai funcionar mais, e so colocar o endereco http://localhost:8080/projeto-web, que vai voltar a funcionar.
+
+170. Bom, era isso que o instrutor gostaria de deixar para nos, nesta aula de comecando com o Maven, okay?
+
+171. Fim da Aula 01.005.01. Comecando com Apache Maven em Projetos Java.
+
+-->
+
+
+
+
+
+
+
+
+

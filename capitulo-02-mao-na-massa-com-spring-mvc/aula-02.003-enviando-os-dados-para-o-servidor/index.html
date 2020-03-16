@@ -1,0 +1,678 @@
+<!--
+Aula 02.003. Enviando os Dados para o Servidor
+
+1. Bom, agora que a gente ja esta com o Prototipo na tela pronto, vamos dar, ate, uma olhadinha nele, la, o Prototipo esta em CadastroTitulo.html, gerenciado, aqui, controlado, nao eh?, pelo TituloController.java, entao, eh '/titulos/novo', 
+
+http://localhost:8080/titulos/novo
+
+, a gente esta, aqui, com o Prototipo da tela, nao eh?
+
+2. Essa tela nao esta fazendo nada. Nos vamos linka-la, agora, com o nosso Controller, para a gente poder salvar no banco de dados, beleza?
+
+3. Bom, o que que eh essa linkagem?
+
+4. Eh eu pegar esses dados que eu vou digitar, aqui, entao, a Descricao, Data de Vencimento, Valor, Status, o que eu escrever aqui, entao, por exemplo, 'Condominio Apto 102', a Data de Vencimento, aqui, sei la, 10/01/2018, Valor 150.00, por enquanto, com ponto aqui, selecionar o Status, e isso ser enviado para o Banco de Dados.
+
+5. Beleza? Eh isso que nos vamos fazer nesta aula, agora. Na proxima aula, nos vamos conectar no MySQL, para nos podermos ver, beleza? 
+
+6. Mas, por enquanto, vamos fazer aqui.
+
+7. Nao, da para a gente fazer uma coisa legal. O H2, aqui, ele tem uma telinha web que da para a gente adicionar um carinha la no pom.xml, que a gente vai conseguir ver o que a gente salvou aqui no H2, ainda sem o MySQL. Se quiser desenvolver tudo sem o MySQL, eh possivel, tambem, aqui, beleza?
+
+8. Entao, vamos la, o que eu quero fazer eh isso daqui, na hora que eu clicar em Salvar, isso tudo ser enviado para o Servidor e ser salvo no Banco de Dados.
+
+9. Entao, beleza, como eh que nos vamos fazer isso daqui? Bom, como eh que vai funcionar isso, primeiro?
+
+10. A primeira coisa que eu vou fazer eh criar a Entidade que eu preciso salvar no Banco de Dados.
+
+11. Nao eh?, entao, eu gosto de comecar por la. Entao, eu vou ter o meu Modelo, eu vou criar uma nova classe, aqui, que estara no pacote 'com.algaworks.cobranca.model', e ela vai chamar-se Titulo, okay?, ele representa o Titulo que eu estou salvando. Deixa eu parar, aqui, oh, o Servidor, porque, senao, agora, a gente vai mexer muita coisa, toda hora ele vai ficar recarregando, aqui,
+
+package com.algaworks.cobranca.model;
+
+public class Titulo {
+
+}
+
+12. Entao, vamos anotar essa classe com @Entitly, javax.persistence.Entity, 
+
+package com.algaworks.combranca.model;
+
+import javax.persistence.Entity;
+
+@Entity
+public class Titulo {
+
+}
+
+, uma Entidade JPA, que eu estou criando, aqui, okay?, e, ai, eu vou colocar as propriedades, aqui, nao eh?, os atributos dela, que sao relacionados ao que eu vou salvar, aqui, nao eh?, na tela de CadastroTitulo.html, que, consequentemente, cada um desses campos eh uma coluna no Banco de Dados, tambem.
+
+13. Entao, 'private Long codigo', eu preciso colocar o codigo, apesar de nao aparecer o codigo na tela, nao eh?, uma Entidade vai precisar do codigo, eh o identificador, o ID, dela,
+
+@Entity 
+public class Titulo {
+
+    private Long codigo;
+
+}
+
+14. Que mais? Tem a descricao, 'private String descricao', tem, tambem, 'private java.util.Date dataVencimento', 'private java.math.BigDecimal valor', e, ja vou, ate, criar, aqui, o Enum Status, 'private StatusTitulo status',
+
+@Entity 
+public class Titulo {
+
+    private Long codigo;
+    private String descricao;
+    private Date dataVencimento;
+    private BigDecimal valor;
+    private StatusTitulo status;
+
+}
+
+, esse Enum nao existe, vai ficar no pacote .model, mesmo,
+
+package com.algaworks.cobranca.model;
+
+public enum StatusTitulo {
+
+}
+
+, ai, eu vou cadastrar, aqui, oh, vou adicionar 2 Enums, PENDENTE e RECEBIDO,
+
+public enum StatusTitulo {
+
+    PENDENTE,
+    RECEBIDO;
+}
+
+, beleza?
+
+15. E, ai, para mostrar mais bonitinho, aqui, oh, na tela, o PENDENTE com P Maiusculo e o resto minusculo, se tivesse acento, cedilha, eu vou colocar numa String, passada, aqui, para o construtor do Enum, entao, aqui, eu vou colocar, PENDENTE ("Pendente"), RECEBIDO ("Recebido").
+
+16. Vou criar, em seguida, o construtor,
+
+    StatusTitulo (String descricao) {
+        
+    }
+
+, descricao deste Status, okay?
+
+17. E eu vou salvar esse cara com uma variavel, aqui, do Enum, instancia do Enum, para cada um desses enums, aqui, ou seja, PENDENTE, RECEBIDO,
+
+    private String descricao;
+
+    StatusTitulo (String descricao) {
+        this.descricao = descricao;
+    }
+
+18. E, ai, eu posso criar, aqui, um metodo getDescricao(), 
+
+    public getDescricao () {
+        return descricao;
+    }
+
+19. Beleza? Entao, tem esse Enum, aqui,
+
+    private String descricao;
+
+    StatusTitulo (String descricao) {
+        this.descricao = descricao;
+    }
+
+    public getDescricao () {
+        return descricao;
+    }
+
+20. Beleza, voltando, aqui, para a Titulo.java, eu vou gerar os Getters And Setters,
+
+@Entity
+public class Titulo {
+
+    private Long codigo;
+    private String descricao;
+    private Date dataVencimento;
+    private BigDecimal valor;
+    private StatusTitulo status;
+
+	/**
+	 * @return the codigo
+	 */
+	public Long getCodigo() {
+		return codigo;
+	}
+
+	/**
+	 * @param codigo the codigo to set
+	 */
+	public void setCodigo(Long codigo) {
+		this.codigo = codigo;
+	}
+
+	/**
+	 * @return the descricao
+	 */
+	public String getDescricao() {
+		return descricao;
+	}
+
+	/**
+	 * @param descricao the descricao to set
+	 */
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
+
+	/**
+	 * @return the dataVencimento
+	 */
+	public Date getDataVencimento() {
+		return dataVencimento;
+	}
+
+	/**
+	 * @param dataVencimento the dataVencimento to set
+	 */
+	public void setDataVencimento(Date dataVencimento) {
+		this.dataVencimento = dataVencimento;
+	}
+
+	/**
+	 * @return the valor
+	 */
+	public BigDecimal getValor() {
+		return valor;
+	}
+
+	/**
+	 * @param valor the valor to set
+	 */
+	public void setValor(BigDecimal valor) {
+		this.valor = valor;
+	}
+
+	/**
+	 * @return the status
+	 */
+	public StatusTitulo getStatus() {
+		return status;
+	}
+
+	/**
+	 * @param status the status to set
+	 */
+	public void setStatus(StatusTitulo status) {
+		this.status = status;
+    }
+    
+21. No Eclipse, com CTRL+3, ele vem para o Quick Access, ai, digitando 'ggas', 'Generate Getters And Setters', ai, abre a caixa de dialogo, voce seleciona todos os atributos, da um <ENTER>, e ele ja gera para voce, oh.
+
+22. Okay?
+
+23. Vou gerar, tambem, o hashCode() e o equals(), entao, CTRL+3, 'ghc', ja eh o 'Generate hashcode() and equals()', em cima do 'codigo', vai gerar so em cima do codigo, mesmo,
+
+@Override
+public int hashCode() {
+	final int prime = 31;
+	int result = 1;
+	result = prime * result + ((codigo == null) ? 0 : codigo.hashCode());
+	return result;
+}
+
+@Override
+public String equals(Object obj) {
+	if (this == obj) {
+		return true;
+	}
+	if (obj == null) {
+		return false;
+	}
+	if (!(obj instanceof Titulo)) {
+		return false;
+	}
+	Titulo other = (Titulo) obj;
+	if (codigo == null) {
+		if (other.codigo != null) {
+			return false;
+		}
+	} else if (!codigo.equals(other.codigo)) {
+		return false;
+	}
+	return true;
+}
+
+
+24. Bom, o que mais esta faltando, aqui, nessa Entidade? Falta mapea-la, aqui, @Id, 'javax.persistence.Id'
+
+	@Id
+	private Long codigo;
+	private String descricao;
+	...
+
+, porque essa propriedade, codigo, eh o que identifica a Entidade, que eu estou gerando, certo?, que eu estou salvando.
+
+25. Como que eu quero que esse Id seja gerado?
+
+26. Devemos definir, para tal, @GeneratedValue, passando, como parametro, a estrategia. Qual eh a estrategia que eu quero usar?
+
+27. GenerationType.IDENTITY, ou seja, eu deixo o banco de dados tomar conta disso para mim,
+
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+
+public class Titulo {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long codigo;
+	private String descricao;
+	...
+
+}
+
+28. Beleza? Para 'descricao', eu nao preciso colocar nada, aqui em 'dataVencimento', @Temporal, do tipo DATE, TemporalType do tipo DATE, ou seja, nao estou salvando hora, minuto, nao eh?, essas coisas, eu so quero que salve a data, nao eh?,
+
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+public class Titulo {
+
+	@Id
+	@GeneratedValue(strategy = GEnerationType.IDENTITY)
+	private Long codigo;
+	
+	private String descricao;
+
+	@Temporal(TemporalType.DATE)
+	private Date dateVencimento;
+
+	...
+
+}
+
+29. A Data de Vencimento eh uma data, eu nao preciso saber o horario exato.
+
+30. No 'valor', eu nao preciso colocar nada, e, no 'status', @Enumerated, do tipo STRING,
+
+import javax.persistence.Enumerated;
+import javax.persistence.EnumType;
+
+public class Titulo {
+
+	...
+
+	@Enumerated(EnumType.STRING)
+	private StatusTitulo status;
+
+	...
+
+}
+
+, o instrutor gosta de colocar como STRING, porque ele vai salvar esse valor, aqui, 
+
+public enum StatusTitulo {
+
+	>>>PENDENTE<<<("Pendente"),
+	>>>RECEBIDO<<<("Recebido");
+
+}
+
+, no banco de dados.
+
+31. O instrutor gosta de ver isso daqui,
+
+public enum StatusTitulo {
+
+	>>>PENDENTE<<<("Pendente"),
+	>>>RECEBIDO<<<("Recebido");
+
+}
+
+, porque, se eu estiver fazendo um SELECT so no banco de dados, eu consigo ver qual que eh o status, la, sem precisar ter que confirmar assim, oh, 'Ah,  0 eh o PENDENTE, 1 eh o RECEBIDO', caso eu coloque, aqui,
+
+public class Titulo {
+
+	...
+
+	@Enumerated(EnumType.>>>STRING)<<<
+	private StatusTitulo status;
+
+	...
+
+}
+
+, ORDINAL, por exemplo.
+
+32. Entao, eu vou deixar, aqui,
+
+public class Titulo {
+
+	...
+
+	@Enumerated(EnumType.>>>STRING)<<<
+	private StatusTitulo status;
+
+	...
+
+}
+
+, como STRING, mesmo.
+
+33. Beleza? Entao, essa Entidade minha esta pronta. Vai ter mais coisas, a gente, ainda, vai mexer nela, aqui, a respeito de validacoes, mas, por enquanto, esta pronta para esse primeiro cadastro, a gente ver algo funcionando.
+
+34. Entao, o que que o Spring MVC faz para a gente de bem legal, aqui?
+
+35. Se eu criar, aqui na Pagina HTML, os nomes desses campos, aqui, serem os mesmos nomes da Entidade, aqui, ou seja, 'descricao', 'dataVencimento', escrito exatamente assim, 'valor', 'status', quando eu submeter os dados, ou seja, eu clicar aqui em Salvar, com esses dados preenchidos, com o endereco de um Controller, nao eh?, a gente vai colocar, la, o Controller mapeado, o Spring ja converte esses dados, cria o objeto para mim e entrega no meu Controller o Objeto pronto. Mas tem que estar com o nome certinho. Vamos fazer isso?
+
+36. Deixa eu te mostrar como isso vai ser feito, oh.
+
+37. Vai ser assim. Eu vou ter um metodo, aqui, no Controller TituloController.java, vou colocar 'void', aqui, por enquanto, 'public void salvar()', e, aqui, eu vou salvar no Banco de Dados,
+
+import org.springframework.stereotype.Controller;
+
+@Controller
+public class TituloController {
+
+	@RequestMapping("/titulos/novo")
+	public String novo() {
+		return "CadastroTitulo";
+	}
+
+	public void salvar() {
+		//TODO: Salvar no banco de dados
+	}
+}
+
+38. Okay? Bom, eu preciso salvar o que no banco de dados?
+
+39. O objeto. Imagina se eu tivesse que colocar, aqui,  tudo dessa forma, assim, oh, 
+
+	...
+
+	public void salvar(String descricao, Date dataVencimento) {
+
+		//TODO: Salvar no banco de dados
+
+	}
+
+	...
+
+, nao eh?, imagina eu ter que fazer isso toda hora, nao eh?, ficar definindo para cada uma das propriedades.
+
+40. O Spring MVC eh um carinha muito esperto. Entao, eu posso, ja, colocar, aqui, direto assim, oh,
+
+	public void salvar(Titulo titulo) {
+
+		// TODO: Salvar no banco de dados
+
+	}
+
+41. E ai, quando eu submeter para esse metodo salvar(), aqui, esses dados, ele ja vai conseguir converter, para mim, aqui, em Titulo, oh, ja vai me entregar.
+
+42. Como eh que eu faco para falar qual que eh a URL que ele vai enviar, aqui?
+
+43. @RequestMapping.
+
+44. Eu quero que ele envie para 'titulos', via, ah, ai, eu vou ter que colocar, aqui, value = '/titulos', via, ou seja, qual eh o metodo que eu quero que ele use, method = RequestMethod.POST,
+
+	@RequestMapping(value = '/titulos', method = RequestMethod.POST)
+	public void salvar(Titulo titulo) {
+
+		// TODO: Salvar no banco de dados
+
+	}
+
+45. Olha so. Se eu estiver fazendo um 'POST', para '/titulos', ele vai pegar os dados que estao vindo na Requisicao, ou seja, 'Titulo titulo', e ja converter para mim, o objeto Titulo, automaticamente. Legal, nao eh?
+
+46. Muito simples, eh so o que? Esses campos, na tela da Pagina Html, esses campos aqui terem os nomes dos atributos la na classe Titulo.java.
+
+47. Okay? E, aqui, em TituloController, eu ja posso dar uma melhorada no meu projeto. Ta vendo que eu to repetindo isso aqui, oh, 
+
+	@RequestMapping("/>>>titulos<<</novo")
+	public String novo() {
+		return "CadastroTitulo";
+	}
+	
+	@RequestMapping(value = "/>>>titulos<<<", method = RequestMethod.POST)
+	public void salvar() {
+		//TODO: Salvar no banco de dados
+	}
+
+, ou seja, 'titulos', em @RequestMapping?
+
+48. Entao, eu vou fazer o seguinte, oh, eu vou adicionar esse @RequestMapping aqui, oh, junto ao nome da classe,
+
+@Controller
+@RequestMapping("/titulos")
+public class TituloController {
+
+	...
+}	
+
+, ai, eu tiro 'titulos' nos metodos,
+
+	@RequestMapping("/novo")
+	public String novo() {
+		return "CadastroTitulo";
+	}
+	
+	@RequestMapping(method = RequestMethod.POST)
+	public void salvar() {
+		//TODO: Salvar no banco de dados
+	}
+
+, por que?
+
+49. Ele faz um acumulo, aqui,
+
+@Controller
+@RequestMapping("/titulos")
+public class TituloController {
+
+	...
+}	
+
+, entao, nao eh 'novo', na verdade, em,
+
+	@RequestMapping("/novo")
+	public String novo() {
+		return "CadastroTitulo";
+	}
+
+, eh '/titulos/novo'. Aqui,
+
+	@RequestMapping(method = RequestMethod.POST)
+	public void salvar() {
+		//TODO: Salvar no banco de dados
+	}
+
+, eh '/titulos', okay? Entao, quando eu faco um POST em 'titulos', significa que eu quero salvar um novo Titulo. Beleza?
+
+50. E, aqui,
+
+	@RequestMapping(method = RequestMethod.POST)
+	public void salvar() {
+		//TODO: Salvar no banco de dados
+	}
+
+, quando eu salvar, ele vai submeter os dados, aqui, para o meu Controller, e eu preciso devolver, lembra la do fluxo do framework ACTION-BASED? Eu preciso retornar o nome de uma View.
+
+51. Entao, eu vou colocar, aqui, para retornar uma String,
+
+	@RequestMapping(method = RequestMethod.POST)
+	public String salvar() { 
+		//TODO: Salvar no banco de dados
+	}
+
+, e vou retornar, aqui, oh, 'CadastroTitulo', por enquanto, so para, poderia retornar para uma Pagina, uma Pagina nova, assim, 'TituloSalvoComSucesso', alguma coisa assim, mas eu vou retornar para a mesma Pagina, se aparecer la, eh porque deu certo.
+
+52. E, ai, so para voce ver que chegou alguma coisa aqui, eu vou colocar um 'print', com algo assim, oh, '>>>' + titulo.getDescricao(),
+
+	System.out.println(">>>" + titulo.getDescricao());
+
+, so para a gente ver se a descricao chegou aqui no Controle, beleza?
+
+53. Okay, entao, nos estamos subindo, aqui, nao eh? O meu Model esta pronto, nao estou fazendo, ainda, a parte, ali, do Repositorio que vai realmente salvar no Banco de Dados, so para a gente ver funcionando esse fluxo aqui, e, ai, daqui, esta faltando, agora, eu mexer na Pagina, para fazer aquilo que eu te falei, colocar os nomes dos inputs exatamente os mesmos nomes da Entidade que eu quero salvar.
+
+54. Entao, eu vou colocar aqui, oh, name='descricao', name='dataVencimento', name='valor', e name='status', okay?,
+
+	<div class="form-group">
+		<label for="descricao" class="col-sm-2 control-label">Descrição</label>
+		<div class="col-sm-4">
+			<input type="text" class="form-control" id="descricao" name="descricao" />
+		</div>
+	</div>
+	<div class="form-group">
+		<label for="dataVencimento" class="col-sm-2 control-label" >Data de Vencimento</label>
+		<div class="col-sm-2">
+			<input type="text" class="form-control" id="dataVencimento" name="dataVencimento" />
+		</div>
+	</div>
+	<div class="form-group">
+		<label for="valor" class="col-sm-2 control-label">Valor</label>
+		<div class="col-sm-2">
+			<input type="text" class="form-control" id="valor" name="valor" />
+		</div>
+	</div>
+	<div class="form-group">
+		<label for="status" class="col-sm-2 control-label">Status</label>
+		<div class="col-sm-2">
+			<select class="form-control" name="status">
+				<option>Pendente</option>
+				<option>Recebido</option>
+			</select>
+		</div>
+	</div>
+
+55. Okay? Bom, para onde eu vou enviar esse formulario? Se eu submeter aqui, eu tenho que mudar algumas coisas. 
+
+56. Primeiro, no '<form>', eu tenho que falar qual que eh o metodo que eu estou fazendo,
+
+	<form class="form-horizontal" method="POST">
+
+	</form>
+
+, entao, eu estou fazendo um 'POST'. 
+
+57. Para onde? 
+
+58. Tem que enviar isso para algum lugar.
+
+59. Qual lugar?
+
+60. Para '/titulos',
+
+	<form class="form-horizontal" method="POST" action="/titulos">
+
+	</form>
+
+61. Beleza? Entao, tem que falar isso daqui, para '/titulos', onde eu quero salvar, que eh onde eu mapeei aqui no meu Controller, ta vendo aqui, oh,
+
+@Controller
+@RequestMapping(">>>/titulos<<<")
+public class TituloController {
+
+	...
+}
+
+, eh onde ele vai enviar.
+
+62. Bom, eh bem possivel que eu esteja esquecendo alguma coisa, vai dar um erro, e, dai, a gente identifica.
+
+63. Vamos ver aqui, ou seja, vamos subir o Servidor.
+
+64. Ele fez, aqui, o mapeamento, oh, no Console do Servidor, '/titulos', methods=[POST], okay? Vamos limpar esse log aqui do Servidor, vou voltar, deixa eu dar um Refresh, aqui, nessa Pagina, http://localhost:8080/titulos/novo, e vamos preencher aqui, oh, Descricao 'Condominio Apto 102', Data de vencimento '10/01/2016', vamos colocar, aqui, 300.00, com . (ponto) aqui, e Salvar. Vamos ver se vai dar algum erro?
+
+65. Deu um erro de Validacao,
+
+Thu Nov 29 15:29:26 BRST 2018
+There was an unexpected error (type=Bad Request, status=400).
+Validation failed for object='titulo'. Error count: 1
+
+, deu um erro de Validacao do objeto 'titulo'.
+
+66. Bad Request, ou seja, eu enviei alguma coisa errada.
+
+67. Quando eu vejo um Status 4##, significa que eu enviei alguma coisa errada. Nao foi um erro, assim, la no Servidor, foi eu que mandei algo muito errado para o Servidor.
+
+68. Entao, o que que eu vou fazer? Para identificar certinho qual que eh esse problema, eu vou abrir aqui, oh, esse arquivo application.properties, okay?
+
+69. E o que que eu vou colocar nesse arquivo application.properties?
+
+70. Eu vou mudar o nivel de log para eu poder ver certinho qual foi o erro, aqui, que eu cometi. Entao, eu vou colocar, aqui, oh, em application.properties,
+
+logging.level.root=DEBUG
+
+71. Okay? 
+
+72. Normandes, que arquivo eh esse application.properties?
+
+73. Esse arquivo eh um arquivinho do Spring Boot, o Spring Boot esta lendo-o, e o que que ele faz? O Spring Boot  eh cheio de configuracoes default para a gente. 
+
+74. Tem um monte de coisas que ja vem definido. Se voce quiser customizar algumas delas, varias delas sao possiveis de customizar, eh so vir aqui nesse arquivo, application.properties, e customizar.
+
+75. Beleza? Se eu vier aqui, oh, spring boot application.properties, no Google, provavelmente, a gente vai cair na documentacao, https://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html, exatamente, oh, e voce viu que eu digitei no Google? O primeiro link, aqui, que apareceu, ele mostra todas as configuracoes default desse arquivo application.properties. Entao, oh, sao varias, oh,vou descer aqui, bem rapido, senao, se a gente for olhar uma por uma...
+
+76. E sao varias propriedades default que voce pode customizar.
+
+77. Entao, voce, vamos olhar aquela que eu configurei, vamos procurar por 'logging.level.root', ou seja, o default para todas as classes, ali, nao eh?
+
+78. Entao, coloquei DEBUG, para eu ver mais detalhes, quando estiver executando a minha aplicacao.
+
+79. Poderia ter colocado esse asterisco, aqui, tambem,
+
+logging.level.*=DEBUG
+
+80. Entao, vamos voltar aqui, no Eclipse, vamos subir a Aplicacao.
+
+81. Limpo o Log do Console, volto aqui na Pagina Html, se eu mandar dar um Refresh na Pagina, eu acho que ele vai submeter de novo.
+
+82. Vamos ver?
+
+2018-11-29 15:56:24.214  WARN 24648 --- [nio-8080-exec-2] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.validation.BindException: org.springframework.validation.BeanPropertyBindingResult: 1 errors
+
+Field error in object 'titulo' on field 'status': rejected value [Pendente]; codes [typeMismatch.titulo.status,typeMismatch.status,typeMismatch.com.algaworks.cobranca.model.StatusTitulo,typeMismatch]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [titulo.status,status]; arguments []; default message [status]]; default message [Failed to convert property value of type 'java.lang.String' to required type 'com.algaworks.cobranca.model.StatusTitulo' for property 'status'; nested exception is org.springframework.core.convert.ConversionFailedException: Failed to convert from type [java.lang.String] to type [@javax.persistence.Enumerated com.algaworks.cobranca.model.StatusTitulo] for value 'Pendente'; nested exception is java.lang.IllegalArgumentException: No enum constant com.algaworks.cobranca.model.StatusTitulo.Pendente]]
+
+83. Oh, ta vendo que esse Erro eh tratado em nivel de WARN. Entao, ele ta falando, aqui, oh, ele nao aceitou  valor 'Pendente' no campo 'status'. Por que?
+
+84. Olha so. Aqui, oh, em CadastroTitulo.html, 
+
+						<select class="form-control" name="status">
+							<option>>>>Pendente<<<</option>
+							<option>Recebido</option>
+						</select>
+
+, eu estou enviando 'Pendente'. So que, na verdade, eu nao quero enviar 'Pendente', nao eh?, para ele conseguir converter, eu preciso enviar assim, oh,
+
+						<select class="form-control" name="status">
+							<option value="PENDENTE">Pendente</option>
+							<option value="RECEBIDO">Recebido</option>
+						</select>
+
+85. <option value="PENDENTE". E, aqui em Recebido, <option value="RECEBIDO". 
+
+86. Agora, sim. Agora, ele vai conseguir converter, porque o meu StatusTitulo, oh, o valor eh esse daqui, oh,
+
+public enum StatusTitulo {
+
+	>>>PENDENTE<<<("Pendente"),
+	>>>RECEBIDO<<<("Recebido");
+}
+
+87. Okay? Eu so quero apresentar algo diferente. Bom, vamos la, vamos subir de novo a Aplicacao e Re-testar, na Pagina Html, http://localhost:8080/titulos/novo. Informar os dados, novamente, e clicar em Salvar.
+
+88. Okay, voltou para a mesma pagina e imprimiu, no Console, >>>Condominio Apto 102, conforme o esperado.
+
+89. Isso significa que o que aconteceu, aqui? Eu consegui submeter os dados. O Spring transformou aqueles dados, aqui, para mim, no objeto Titulo, aqui,
+
+	@RequestMapping(method = RequestMethod.POST)
+	public String (Titulo >>>titulo<<<) {
+
+		...
+	}
+
+, certo? Ele transformou isso, mostrou, aqui, para mim, esse Titulo, e eu retornei para aquela Pagina.
+
+90. Falta, agora, eu salvar isso no Banco de Dados. Para esta aula nao ficar grande demais aqui, o instrutor vai parar por aqui e, na proxima aula, a gente cria o Repositorio para a gente salvar isso no Banco de Dados.
+
+91. Fim da Aula 02.003. Enviando os Dados para o Servidor.
+
+ -->

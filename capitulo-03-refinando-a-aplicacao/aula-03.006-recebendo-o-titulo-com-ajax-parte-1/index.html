@@ -1,0 +1,455 @@
+<!-- 
+
+Aula 03.006. Recebendo o titulo com Ajax - parte 1
+
+1. Nesta aula, agora, a gente vai receber um Titulo via Ajax.
+
+2. E, ai, eu prefiro, eu preciso que voce acompanhe, aqui, com bastante atencao essas aulas sobre esse assunto, okay?
+
+3. Bom, nao eh que eh dificil, nao eh?, fala, 'Nossa, mas, entao, eh mutio dificil, nao eh?'. Nao, nao eh que eh dificil, mas sao alguns detalhezinhos, ali, vao envolver JavaScript, ali, tambem, usando jQuery para a gente fazer o Ajax, entao, acompanha bem comigo essa parte, ai, mas nao eh dificil nao. Eh so a gente ir devagarzinho, evoluindo, e voce vai conseguir entender bem.
+
+4. So para a gente lembrar, o que que eu vou fazer?
+
+5. Eu vou adicionar, a primeira coisa aqui, um iconezinho novo, aqui, do lado direito, na Tela de Pesquisa de Titulos, com um desenho de um checkbox, como se fosse Recebendo.
+
+6. Entao, assim, quando for Pendente, eu quero que ele apareca, ai, eu vou clicar, quando eu clicar nesse carinha, a gente vai, via Ajax, a gente vai implementar la no Javascript, via jQuery, via Ajax, no Servidor, a gente cai la, atualiza, e volta aqui, na Pagina, e atualiza a telinha.
+
+7. Beleza? Essa eh a ideia dessas proximas aulas, ai, a respeito do Ajax.
+
+8. Entao, vamos comecar devagar.
+
+9. Vamos comecar colocando o iconezinho, aqui, com as classes do Bootstrap.
+
+10. Entao, vamos la, eh em PesquisaTitulos.html. Entao, eu venho aqui, embaixo, oh, eu vou adicionar um novo linkezinho, aqui, vamos colocar a classe dele, aqui, "btn btn-link btn-xs", sao exatamente as mesmas, aqui,
+
+<a class="btn btn-link btn-xs" th:href="@{/titulos/{codigo}(codigo=${titulo.codigo})}" 
+        title="Editar" rel="tooltip" data-placement="top">
+    <span class="glyphicon glyphicon-pencil"></span>
+</a>
+<a class="btn btn-link btn-xs" data-toggle="modal" data-target="#confirmacaoExclusaoModal"
+        th:attr="data-codigo=${titulo.codigo}, data-descricao=${titulo.descricao}"
+        title="Excluir" rel="tooltip" data-placement="top">
+    <span class="glyphicon glyphicon-remove"></span>
+</a>
+<a class="btn btn-link btn-xs">
+</a>
+
+, okay? E vai ser um span, com a classe do checkzinho, "glyphicon glyphicon-check", aqui, para a gente dar uma olhada, la, na Tela de Pesquisa de Titulos,
+
+<a class="btn btn-link btn-xs">
+    <span class="glyphicon ghyphicon-check"></span> 
+</a>
+
+11. Vamos ver na pagina de Pesquisa de Titulos. Olha la, eh exatamente isso daqui.
+
+12. Ah, vamos aproveitar e colocar o tooltip, aqui.
+
+13. Vamos colocar, aqui, o tooltip de Receber.
+
+14. Entao, eh esse cara aqui, nao eh?,
+
+<a class="btn btn-link btn-xs" title="Receber" rel="tooltip" data-placement="top">
+    <span class="glyphicon ghyphicon-check"></span> 
+</a>
+
+15. Vamos ver como eh que esta ficando. Olha la, Receber, Excluir, Editar. Beleza?
+
+16. Entao, vamos la. Eu quero fazer o que? Ah, e ja vamos editar, aqui, tambem. Esta aparecendo o icone de Receber aqui, tambem, no Recebido. Ja esta Recebido, para que que tem que aparecer o Receber?
+
+17. Entao, vamos fazer ele sumir quando for Recebido.
+
+18. E, ai, a gente vai usar o operador ternario, igual a gente fez, aqui, em cima, na Pagina de Pesquisa de Titulos,
+
+<span class="label" th:text="${titulo.status.descricao}"
+    th:classappend="${titulo.pendente ? 'label-danger' : 'label-success'}"></span>
+
+, para adicionar o labelzinho, nao eh?, se for Pendente, fica vermelhinho, se ja tiver recebido, colocar o -success. Entao, nos vamos usar esse metodo, aqui, 'pendente',
+
+<span class="label" th:text="${titulo.status.descricao}"
+    th:classappend="${titulo. >>> pendente <<< ? 'label-danger' : 'label-success'}"></span>
+
+, que a gente tem la em Titulo, e usar o operador ternario, so que, ao inves de 'classappend', nos vamos usar o 'th:if', okay?
+
+<a class="btn btn-link btn-xs" th:if=""
+    title="Receber" rel="tooltip" data-placement="top">
+    <span class="glyphicon ghyphicon-check"></span> 
+</a>
+
+, que eh o carinha que faz o que? Se retornar true, ele renderiza, senao, ele nao renderiza,
+
+<a class="btn btn-link btn-xs" th:if=""
+    title="Receber" rel="tooltip" data-placement="top">
+    <span class="glyphicon ghyphicon-check"></span> 
+</a>
+
+, entao, eh so colocar, aqui, ${titulo.pendente}, ele vai la executar, se for Pendente, ele vai retornar true, e, ai, ele vai adicionar esse link inteiro aqui, vamos ver?
+
+19. Recarregar a Pagina HTML.
+
+20. Olha so, ja sumiu daqui, esta aparecendo so onde eh Pendente.
+
+21. Okay?
+
+22. Bom, acho que eh isso daqui, por enquanto. Ainda tem mais coisas para a gente adicionar. 
+
+23. Vamos fazer o seguinte. Vamos adicionar o JavaScript que, quando eu clicar nesse link, eh acionado.
+
+24. Okay?
+
+25. Para isso, eu vou adicionar uma classe, aqui, de marcacao,
+
+<a class="btn btn-link btn-xs >>> <<< " th:if="${titulo.pendente}"
+    title="Receber" rel="tooltip" data-placement="top">
+    <span class="glyphicon ghyphicon-check"></span> 
+</a>
+
+, entao, eu vou colocar, aqui, uma classe, 'js-atualizar-status',
+
+<a class="btn btn-link btn-xs js-atualizar-status" th:if="${titulo.pendente}"
+    title="Receber" rel="tooltip" data-placement="top">
+    <span class="glyphicon ghyphicon-check"></span> 
+</a>
+
+27. Essa aqui eh uma classe so de marcacao do CSS, para, coloca o 'js' na frente, falando, oh, eu estou usando isso la no JavaScript, eu vou selecionar esse elemento atraves dessa classe, aqui.
+
+28. Entao, quando eu clicar nesses links, quando eu clicar aqui, em Receber, eu nao quero que o comportamento do href seja executado, nao eh?, do link, seja executado. Eu quero que ele va la para o Javascript. Entao, nos vamos fazer algumas coisinhas, aqui,
+
+<a class="btn btn-link btn-xs js-atualizar-status" th:if="${titulo.pendente}"
+    title="Receber" rel="tooltip" data-placement="top">
+    <span class="glyphicon ghyphicon-check"></span> 
+</a>
+
+29. A primeira delas eh colocar uma funcao atrelada a esse link, aqui. Vamos la? Entao, para isso, oh, nos vamos em cobranca.js.
+
+30. Quando a pagina inteira carregar, a pagina for carregada, ele cai aqui nessa funcao, nao eh?,
+
+$(function () {
+
+    ...
+});
+
+31. E, aqui, dentro dessa funcao, eu vou adicionar, aqui, oh, via jQuery, o seguinte, oh,
+
+$(function () {
+
+    ...
+
+    $('.js-atualizar-status').;
+
+});
+
+, na hora que ele terminar de carregar, ele vai selecionar os elementos que tem essa classe, '.js-atualizar-status', entao, sao todos os links, la, que tem essa classe, nao eh?, e eu vou colocar aqui, oh, 
+
+    $('.js-atualizar-status').on('click')
+
+, ou seja, toda vez que eu clicar nesse cara, eu vou executar essa funcao, aqui, 
+
+    $('.js-atualizar-status').on('click', function() {
+
+
+    });
+
+, okay? Essa eh a ideia. Aqui, eu posso receber o evento, evento do clique para eu recuperar esse link, que foi clicado,
+
+    $('.js-atualizar-status').on('click', function(event) {
+
+    });
+
+32. Entao, vamos ver se isso daqui esta funcionando? Eu posso fazer de duas formas, eu posso colocar um alert(), aqui, e ver se foi clicado, alguma coisa assim, mas eu costumo usar mais esse cara aqui, oh, console.log(), e falar assim, oh, console.log('clicou'), por exemplo.
+
+33. E, ai, o que que esse console.log() faz? Se eu vier aqui no Chrome, em Chrome DevTools, na Guia Console, o que eu escrever la naquele console() vai aparecer impresso aqui, na Guia Console.
+
+34. Beleza? Entao, quando eu clicar aqui, em Receber, se deu certo aquele bind la, que eu fiz, aquela amarracao, aqui, em Console, vai aparecer 'clicou'.
+
+35. Vamos ver?
+
+36. Okay, apareceu, la no Console, 'clicou'.
+
+37. Toda vez que eu clico, ele esta chamando essa funcao JavaScript, aqui,
+
+    $('.js-atualizar-status').on('click', function(event) {
+        console.log('clicou');
+    });
+
+38. Okay? O que que a gente pode fazer agora?
+
+39. Vamos pegar a URL que eu vou chamar la no meu Controller.
+
+40. Beleza? Qual que eh a URL que eu devo, que eu tenho que usar para Receber esse Status?
+
+41. Ou seja, la, no TituloController, eu vou criar, aqui, um RequestMapping, aqui, nao eh?, eu vou adicionar aqui um RequestMapping, ainda vai retornar uma coisa diferente, aqui, mas vai ser um metodo mais ou menos assim, nao eh?,
+
+    @RequestMapping
+    public void receber() {
+
+    }
+
+, provavelmente, eu vou receber o codigo aqui,
+
+    @RequestMapping
+    public void receber(Long codigo) {
+
+    }
+
+, eu quero receber esse codigo. E, ai, eu preciso colocar, aqui, a URL. Qual que eh essa URL, aqui, que eu vou colocar?
+
+    @RequestMapping(value = "?????")
+    public void receber(Long codigo) {
+
+    }
+
+42. Vamos pensar aqui nela aqui? Depois a gente implementa isso daqui.
+
+43. Vamos voltar aqui, em PesquisaTitulos.html.
+
+44. Essa URL eu vou criar da seguinte forma, vou colocar aqui embaixo, oh,
+
+<a class="btn btn-link btn-xs js-atualizar-status" th:if="${titulo.pendente}" 
+    title="Receber" rel="tooltip" data-placement="top"
+    >
+    <span class="glyphicon glyphicon-check"></span>
+</a>
+
+, seria um href, so que vai ser um th:href, porque eu vou precisar do codigo, e eu vou colocar assim, oh, 'th:href="/titulos/{}"', aqui, eu vou colocar o codigo, 'th:href="/titulos/{codigo}"', e, depois, eu vou colocar 'receber', ou seja, 'th:href="/titulos/{codigo}/receber"'. Ou seja, eu vou fazer uma atualizacao no 'titulos/', nesse '{codigo}', e a atualizacao eh '/receber' aquele titulo,
+
+<a class="btn btn-link btn-xs js-atualizar-status" th:if="${titulo.pendente}" 
+    title="Receber" rel="tooltip" data-placement="top"
+    th:href="/titulos/{codigo}/receber">
+    <span class="glyphicon glyphicon-check"></span>
+</a>
+
+45. Okay? So que nao vai ser via GET. Eu vou fazer isso via PUT, via JavaScrit, via Ajax.
+
+46. Mas eu preciso montar a URL. E, para eu montar essa URL, eu vou aproveitar o Thymeleaf aqui,
+
+<a class="btn btn-link btn-xs js-atualizar-status" th:if="${titulo.pendente}" 
+    title="Receber" rel="tooltip" data-placement="top"
+    >>> th:href="/titulos/{codigo}/receber" <<< >
+    <span class="glyphicon glyphicon-check"></span>
+</a>
+
+, porque esse codigo, aqui, 
+
+<a class="btn btn-link btn-xs js-atualizar-status" th:if="${titulo.pendente}" 
+    title="Receber" rel="tooltip" data-placement="top"
+    th:href="/titulos/ >>> {codigo} <<< /receber">
+    <span class="glyphicon glyphicon-check"></span>
+</a>
+
+, que eh um Parametro Variavel, eu vou passar aqui, oh, (codigo=${titulo.codigo}), ou seja, ele recebe o codigo, aqui,
+
+    (>>> codigo <<< =${titulo.codigo})
+
+, que vai ser esse cara, aqui,
+
+    th:href="/titulos/{ >>> codigo <<< }/receber(codigo=${titulo.codigo})"
+
+, ele recebe o titulo.codigo,
+
+    th:href="/titulos/{codigo}/receber(codigo=${ >>> titulo.codigo <<< })"
+
+47. Eu nao estou percorrendo, aqui, todos os titulos?
+
+    <tr th:each="titulo : ${titulos}">
+        ...
+    </tr>
+
+, entao, eu tenho, aqui, essa variavel titulo,
+
+    <tr th:each=" >>> titulo <<< : ${titulos}">
+        ...
+    </tr>
+
+, para eu colocar o codigo, aqui,
+
+    th:href="/titulos/{codigo}/receber(codigo=${ >>> titulo.codigo <<< })"
+
+48. Assim,
+
+    th:href="/titulos/{codigo}/receber(codigo=${titulo.codigo})"
+
+, eu monto essa URL, aqui, la na tela.
+
+49. Vamos dar uma olhada la?
+
+50. Deu erro,
+
+org.thymeleaf.exceptions.TemplateProcessingException: Could not parse as expression: "/titulos/{codigo}/receber(codigo=${titulo.codigo})" (PesquisaTitulos:56)
+
+51. Ah, ta, eu preciso colocar como link, nao eh?, ou seja, '@{...}',
+
+    th:href="@{/titulos/{codigo}/receber(codigo=${titulo.codigo})}"
+
+, mesma ideia que na edicao,
+
+<a class="btn btn-link btn-xs" th:href="@{/titulos/{codigo}(codigo=${titulo.codigo})}"
+...
+</a>
+
+, eu preciso colocar esse cara como link, aqui.
+
+52. Beleza? Agora, ele nao deve ter dado erro. Vamos voltar, aqui, dar um Refresh, esta aparecendo os icones de Receber, se eu mandar inspecionar esse elemento de Receber, vamos ver se ele colocou, la, a URL certa.
+
+53. Okay, deu certo, ele montou essa URL correta para mim.
+
+54. So que, ai, tem uma coisa. Entao, a URL esta certa, eu vou submeter por aquilo. Apesar que eu nao mapeei ainda. Entao, se eu clicar aqui, no icone de Receber, ele vai tentar ir para '/titulos/2/receber', vai retornar um 404, nao eh?
+
+55. Vamos so clicar para a gente ver.
+
+56. Olha la, retornou um 404, porque a gente nao mapeou.
+
+57. Beleza. Ate ai, tudo bem, mas ele montou a URL correta, que era o que eu queria.
+
+58. So que eu nao quero que ele faca isso daqui via GET.
+
+59. Nao eh? Eu quero que ele simplesmente deixe essa URL aqui,
+
+<a class="btn btn-link btn-xs js-atualizar-status" th:if="${titulo.pendente}" 
+    title="Receber" rel="tooltip" data-placement="top"
+    >>> th:href="@{/titulos/{codigo}/receber(codigo=${titulo.codigo})}"> <<<
+...
+</a>
+
+, e eu vou trabalhar com isso aqui no JavaScript, em cobranca.js,
+
+	$('.js-atualizar-status').on('click', function(event) {
+			
+            ...
+
+	});
+
+60. Okay? Para o Javascript, aqui, 
+
+	$('.js-atualizar-status').on('click', function(event) {
+			
+            >>> <<<
+
+	});
+
+, nao submeter, para o comportamento do link nao ser o comportamento default, eu vou pegar, aqui, no evento, que eh o evento que disparou, quem disparou nao foi o link? Entao, eu vou colocar assim, oh, 
+
+	$('.js-atualizar-status').on('click', function(event) {
+			
+       event.preventDefault();
+
+	});
+
+61. O que que eu estou falando, aqui?
+
+62. Nao faz o comportamento default do link, que eh o que? Encaminhar aquela Requisicao, nao eh?, fazer a funcao daquele link.
+
+63. So colocando isso daqui, eu vou colocar, aqui, um console.log('clicou'), mais uma vez, aqui,
+
+ 	$('.js-atualizar-status').on('click', function(event) {
+			
+       event.preventDefault();
+
+       console.log('clicou');
+
+	});
+
+64. Okay? Deu refreshzinho aqui, vamos ver o Console? Vou clicar aqui, oh, em Receber, olha la, exibiu clicou.
+
+65. E perceba que a tela nao piscou, nao eh? Entao, ele esta entrando la no Javascript, mas ele nao esta indo la, oh, para '/titulos/2/receber', porque eu parei o comportamento, aqui, do link, neste momento.
+
+66. Okay? 
+
+67. E, ai, para a gente so finalizar esta aula, aqui e, depois, a gente continuar na proxima aula, para voce evoluir ate esse ponto, deixa eu pegar aquele link aqui.
+
+68. Beleza? Entao, eu vou pegar, primeiro, esse botaozinho, aqui, da tela, de Receber,
+
+ 	$('.js-atualizar-status').on('click', function(event) {
+			
+       event.preventDefault();
+
+       var botaoReceber = 
+
+	});
+
+, como eh que eu pego ele? Eu vou pegar ele com um objeto jQuery,
+
+ 	$('.js-atualizar-status').on('click', function(event) {
+			
+       event.preventDefault();
+
+       var botaoReceber = >>> $(); <<<
+
+	});
+
+, vai ser event.currentTarget,
+
+ 	$('.js-atualizar-status').on('click', function(event) {
+			
+       event.preventDefault();
+
+       var botaoReceber = $(event.currentTarget);
+
+	});
+
+69. Esse cara, aqui, eh o currentTarget, porque ele esta vindo de um link.
+
+70. Entao, peguei o botao Receber.
+
+71. E, ai, eu vou colocar, aqui, vou pegar, aqui, oh, vamos chamar isso aqui de,
+
+    var urlReceber = 
+
+, eu vou pegar, aqui, do botao,
+
+    var urlReceber = botaoReceber.attr('href');
+
+, e vamos ver esse cara, aqui, no Console,
+
+ 	$('.js-atualizar-status').on('click', function(event) {
+			
+       event.preventDefault();
+
+       var botaoReceber = $(event.currentTarget);
+
+       var urlReceber = botaoReceber.attr('href');
+
+       console.log('urlReceber', urlReceber);
+
+	});
+
+72. Beleza? Bom, vamos ver se isso daqui funciona? Recarregar Pagina Html.
+
+73. Vamos dar uma olhada, aqui, no Console, vou clicar, aqui, no icone Receber, olha la,
+
+urlReceber /titulos/2/receber
+urlReceber /titulos/3/receber
+urlReceber /titulos/4/receber
+
+74. Entao, eu consegui, nao eh? com sucesso, parar o click do botao,
+
+ 	$('.js-atualizar-status').on('click', function(event) {
+			
+       >>> event.preventDefault(); <<<
+
+       var botaoReceber = $(event.currentTarget);
+
+       var urlReceber = botaoReceber.attr('href');
+
+       console.log('urlReceber', urlReceber);
+
+	});
+
+, pegar a URL, 
+
+ 	$('.js-atualizar-status').on('click', function(event) {
+			
+       event.preventDefault();
+
+       var botaoReceber = $(event.currentTarget);
+
+       >>> var urlReceber = botaoReceber.attr('href'); <<<
+
+       console.log('urlReceber', urlReceber);
+
+	});
+
+, e, com essa URL aqui, nos vamos fazer a Requisicao Ajax.
+
+75. Fim da Aula 03.006. Recebendo o titulo com Ajax - parte 1.
+
+-->

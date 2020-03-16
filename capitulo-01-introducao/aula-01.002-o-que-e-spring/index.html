@@ -1,0 +1,90 @@
+<!-- 
+
+Aula 01.002. O que eh Spring?
+
+1. Vamos falar nesta aula, agora, sobre o que eh o Spring.
+
+2. As vezes, voce ja viu alguma coisa sobre Spring, ja usou, ate, alguma coisa com Spring, mas nao sabe muito bem o que que ele eh, para que que ele serve.
+
+3. Bom, vamos la, vamos comecar mostrnado o logo atual o Spring, e ai esta o by Pivotal, mas Pivotal eh a empresa principal que suporta o Spring, que mais contribui para o Spring.
+
+4. Entao, o Spring eh um framework, sao, na verdade, varios frameworks, um conjunto de frameworks, de bibliotecas, que nos auxiliam nas mais diversas tarefas.
+
+5. Entao, nos nao podemos falar que o Spring eh apenas um framework, sao varios.
+
+6. Eh muito, muito grande.
+
+7. Voce pode usar uma parte do Spring, e nunca usar uma outra parte, voce pode usar o Spring Data, mas, as vezes, nao usar o Spring Cloud, nos seus projetos.
+
+8. Entao, vai depender da sua necessidade.
+
+9. O legal do Spring eh que ele tem projeto para quase tudo que voce for precisar. Okay? Entao, assim, oh, quero fazer isso, bom, se esta trabalhando em um Projeto Spring, sera que eu nao consigo achar algo assim, la? E, ai, a gente pode la, dar uma olhada na documentacao, pesquisar na Internet, e pode ser que nos encontremos isso sim. 
+
+10. O instrutor lembra, quando ele comecou a estudar o Spring, e, ai, a equipe dele queria fazer uma chamada de um metodo assincrono, e, ai, ele pensou, 'Sera que o Spring tem alguma coisa assim?', 'Deve ter', ai, o instrutor ia la, pesquisava, e via, 'Ah, tem sim, olha so, que legal'.
+
+11. 'Quero fazer isso, sera que no Spring tem?', o instrutor ia la, pesquisava, 'Ah, tem.'.
+
+12. E, ai, o instrutor foi aprendendo assim nos projetos.
+
+13. Bom, entao, o Spring, entao, sao varios frameworks, varias bibliotecas, suportadas, principalmente, pela Pivotal.
+
+14. O site principal, o endereco principal, eh so voce digitar https://spring.io, que a gente vai entrar no site dele.
+
+15. Vamos dar uma olhada la, para a gente dar uma navegada, como eh que ele funciona.
+
+16. Entao, o site esta com essa carinha aqui, entao, ja vai nos fazendo as propagandas sobre o Spring. Ele tem varios Guias, que eh uma forma bem legal de estudar o Spring, tambem, entao, a gente pode ir la, https://spring.io/guides, eu quero ver como eh que funciona alguma parte do Spring, sei la, fazer o Upload de Arquivos, ai, tem aqui, https://spring.io/guides/gs/uploading-files/, ele vai nos mostrar, tem um pequeno tutorialzinho aqui, como eh que faz upload de arquivos.
+
+17. Entao, a documentacao do Spring eh uma documentacao bem legal, tambem.
+
+18. O Spring Tool Suite, eh um Eclipse tunado, para a gente trabalhar com Spring.
+
+19. O instrutor ira usar o STS neste curso, vai nos mostrar, mais para frente, o STS.
+
+20. Vamos la, Spring Projects. Sao varios Spring's, entao, tem varios projetos aqui, de Spring, ai, ele fala la, da configuracao ate seguranca, aplicacoes web ate big data, qualquer coisa que voce precisar, pode ser que tenha um projeto Spring para nos ajudar a construir.
+
+21. Okay? Bom, o instrutor ira falar a respeito de Suporte, primeiro.
+
+22. Entao, Suporte da Comunidade, se nos acessarmos aqui, https://spring.io/questions, eles usam pelo StackOverflow.
+
+23. Entao, no StackOverflow, tem a parte do Spring,entao, nos queremos saber sobre o Spring Security, ai, ele tem as tags la relacionadas ao Spring Security, por exemplo, por exemplo, [spring-security], em:
+
+https://stackoverflow.com/questions/tagged/spring-security
+
+24. Entao, o lugar de tirar duvidas na Comunidade, eh pelo StackOverflow.
+
+25. 'Ah, Normandes, mas, aqui, na minha empresa, na empresa em que estou trabalhando, a gente quer uma coisa mais profissional, um suporte profissional'.
+
+26. Beleza, eles oferecem, entao, nos vamos ver, aqui, em Suporte, em spring.io/services, tem Consultoria, Desenvolvimento, e tal, tudo isso eh provido, aqui, pela empresa Pivotal, okay? Ela eh que vai nos ajudar, vai nos vender isso ai, e, ai, eh um suporte pago, obviamente, nos vamos conseguir ter esse suporte.
+
+27. O que mais que eh legal a gente olhar aqui? 
+
+28. Olhar o Blog, https://spring.io/blog.
+
+29. Aqui no Blog, tambem, sempre esta saindo noticias aqui, alguma coisa sobre Spring, entao, eh bem legal, olha la, eu quero saber, esta semana no Spring, https://spring.io/blog/2018/11/20/this-week-in-spring-november-20th-2018.
+
+30. Ai, aqui, ele ja conta o que que esta acontecendo, entao, eh facil de nos ficarmos antenados sobre o que esta aconecendo com o Spring, para onde ele esta indo.
+
+31. Okay?
+
+32. Entao, o Blog eh um lugar legal para se manter atualizado sobre Spring.
+
+33. Entao, eles falam sobre coisas tecnicas, sobre coisas que aconteceram, la, no Spring, e tal, dao alguns tutoriais, de vez em quando, tambem, e, aqui, em Projects, https://spring.io/projects, aqui, estao os principais projetos, tem varios projetos, mas nao sao so esses, tem outros projetos.
+
+34. Vamos pegar, aqui, como exemplo, o Spring Data, por exemplo, https://spring.io/projects/spring-data.
+
+35. Entao, eu entro, aqui, no Spring Data, e, aqui, ele vai explicar, vai dar algumas caracteristicas, e tal, ai, oh, alguns modulos do Spring Data, entao, tem o Commons, que, provavelmente, todos eles vao ter, ai, o JPA, se nos quisermos usar o MongoDB, Redis, Solr, e por ai vai.
+
+36. Entao, sei la, vamos entrar aqui no Spring Data JPA, https://spring.io/projects/spring-data-jpa, a gente vai usar esse carinha, aqui, neste projeto.
+
+37. Aqui nesse quadro aqui, na Guia Learn, a gente consegue olhar quais as versoes que ja foram liberadas do Spring, atualmente, esta na versao 2.1.2, a recomendada para Producao.
+
+38. Se eu clicar aqui, em API, https://docs.spring.io/spring-data/jpa/docs/2.1.2.RELEASE/api, a gente vai para o JavaDoc, dar uma olhada la nas classes e interfaces. Se eu clicar aqui em Reference, https://docs.spring.io/spring-data/jpa/docs/2.1.2.RELEASE/reference/html/, eu vou aqui, para uma Documentacao de Referencia bem legal. O Spring, a documentacao dele eh bem legal, eh bem grande, oh, para voce dar uma olhadinha aqui, oh, ta vendo, oh, o tanto de documentacao que tem, para falar sobre o Spring Data JPA.
+
+39. Okay? Entao, sei la, eu quero definir, eu quero saber, aqui, oh, como eh que faco para criar Query Methods, ai, eu venho aqui, tem o codigo aqui parra eu dar uma olhada, nao eh?, como eh que ele faz, ai, a gente vai passando, aqui, e olhando, e aprendendo um pouco mais sobre o Spring, nesse caso, Data JPA.
+
+40. Entao, a gente chega na conclusao, desta aula, que o Spring sao conjuntos de Projetos, sao varios projetos, que vao nos ajudar nas mais diversas tarefas, no nosso dia-a-dia, para construir uma aplicacao enterprise, okay?
+
+41. Fim da Aula 01.002. O que eh Spring?
+
+
+-->

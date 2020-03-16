@@ -1,0 +1,70 @@
+<!--
+
+Aula 01.004. Ambiente de Desenvolvimento
+
+1. O instrutor ira falar para nos, agora, o que nos vamos usar no nosso Ambiente de Desenvolvimento para a gente criar essa Aplicacao que nos vamos desenvolver neste curso, okay?
+
+2. Bom, a primeira coisa que a gente precisa eh do JDK, do Java, okay? O instrutor ira usar o JDK 8, nos podemos usar o JDK 8, que nao tem problema nenhum. 
+
+3. Nos vamos utilizar, tambem, o Maven, para gerenciar o Projeto para a gente, okay?, entao, a gente vai ter uma aula, se voce nunca usou o Maven, fique tranquilo, o instrutor ira fazer uma aula introdutoria para nos, sobre o Maven, daqui a pouquinho.
+
+4. Nos vamos usar o Eclipse, ou melhor dizendo, nos vamos o Spring Tool Suite, que eh uma ferramenta que a Spring criou em cima do Eclipse, entao, eh um Eclipse tunado, para a gente trabalhar com o Spring.
+
+5. O STS tem algumas facilidades, ali, interessantes para a gente, que esta trabalhando com Projetos Spring, utilizando essa ferramenta.
+
+6. Nos vamos trabalhar com o Thymeleaf, e isso aqui, o instrutor vai nos mostrar mais detalhes a medida que a gente for evoluindo o Projeto, que nada mais eh do que um conjunto de bibliotecas para a gente trabalhar na parte da View do nosso Sistema, lembra la do MVC?, la na parte do View, entao, ela eh um cara onde a gente trabalha com HTML5, a gente trabalha somente com HTML, e a gente consegue fazer a ligacao, ali, do que esta vindo para a telinha, a gente consegue desenhar ali com o Thymeleaf, fica bem legal, esta crescendo bastante esse Projeto, o instrutor acha que nos iremos gostar, se nos nunca usamos.
+
+7. Como banco de dados, o instrutor ira usar o MySQL, o instrutor ira mostrar, tambem, um pouquinho, de como a gente faz para instala-lo, onde a gente baixa-o, e o Tomcat tambem, que vai ser o Servidor que a gente vai usar para subir a nossa aplicacao.
+
+8. Entao, vamos la, o instrutor vai falar um pouquinho sobre essas tecnologias.
+
+9. Entao, o Java, se nao tivermos o Java instalado, so lembrando, https://oracle.com, em Downloads, Java for Developers, vai aparecer o JDK para Download. Nos temos que baixar eh o JDK, para funcionar.
+
+10. Aceitar os termos da licenca, e, ai, nos vamos baixar, aqui, o que for para o nosso sistema, se for linux, se for mac, se for windows, estao ali as distribuicoes.
+
+11. E, ai, so para confirmar, no STS, no Menu Window / Preferences, formos em Java / Installed JREs, aqui vai aparecer que eu estou com o JDK 8 instalado, e, muito importante, repare que eh o JDK, nao eh o JRE, o instrutor ve direto, nas aulas, as vezes, os alunos falando, 'Nao esta funcionando, nao esta compilando', eh porque instalou o JRE e nao o JDK.
+
+12. Eh importante instalar, entao, o JDK.
+
+13. Sobre o Maven.
+
+14. O Maven, eh um carinha que gerencia, esta relacionado, diretamente, com esse arquivinho aqui, oh, pom.xml. O instrutor ira mostrar o codigo dele, aqui.
+
+15. Esse xml que o instrutor esta exibindo, ele foi gerado, o instrutor ira mostrar para nos, quando nos formos criar um projeto do zero, e, ali, tem as dependencias do nosso projeto.
+
+16. Uma coisa legal do Maven, uma das coisas que o instrutor mais gosta no Maven, na verdade, eh o Gerenciamento de Dependencias.
+
+17. Nos colocamos, ali, uma linha, ou algumas linhas, ali, no caso, 4 linhas, ali, e falamos que o nosso projeto depende dessa dependencia aqui, o Maven vai la na Internet e baixa para a gente, sozinho, eh bem legal.
+
+18. Okay? O Spring Tool Suite, que eh essa ferramenta que o instrutor esta usando, onde que a gente baixa-o? 
+
+19. Se nos acessarmos o site do Spring, https://spring.io, e nos descermos, ali, vai estar o STS ali, Spring Tool Suite. Se nos acessarmos la embaixo no site, tambem, tem um linkezinho, TOOLS, ou, diretamente, https://spring.io/tools, e, aqui, esta o Spring Tool Suite, e, ai, nos ja podemos fazer o Download.
+
+20. Em See all versions, nos veremos a versao para Windows, para Mac e para Linux.
+
+21. Okay? Entao, nos podemos baixar e eh so descompactar, nao tem segredo nenhum, eh so descompactar, no caso do Windows, vai ter, la, um .exe, e do Mac, tem la .app, e do Linux, provavelmente, tem la um .sh, para executa-lo.
+
+22. Entao, devemos baixa-lo tambem. Depois de ter instalado o JDK, vamos la e baixamos o Spring Tool Suite, para nos termos esse ambientezinho aqui.
+
+23. Que mais? Thymeleaf, entao, o carinha que a gente vai usar, entao, https://www.thymeleaf.org, dar uma olhadinha, tem a paginazinha dele aqui, tem uma documentacao ate razoavel, nao eh 100% nao, mas eh uma documentacao que da para a gente se basear, aprender bastante coisa nela, okay?, entao, olha la, eh uma biblioteca Java, mas eh uma template-engine, ou seja, a gente vai escrever, ali, HTML, a gente vai escrever HTML com as tags do Thymeleaf ali, e ele vai gerar, para a gente, o HTML, que eh o que o Browser reconhece. 
+
+24. Okay? Entao, tem uma integracao, ai, com Spring MVC para a gente poder fazer isso. Entao, olha so, ele fala aqui, oh, tem um modulo opcional para integrar com Spring MVC, entao, a gente pode usa-lo como um completo substituto do JSP nas nossas aplicacoes, e a gente pode usar HTML5 nele. E a gente vai comecar com esse cara, aqui, tambem, o instrutor vai nos mostrar como eh que ele funciona, com mais detalhes, quando estivermos desenvolvendo o Projeto.
+
+25. Okay? Vamos ver, aqui, o MySQL. O MySQL, voce vai baixar, na primeira parte, aqui, do Projeto, a gente nao vai usar MySQL, so nas primeiras aulas, so para a gente ver funcionando, e, depois, a gente coloca, mas, se voce ja quiser fazer o Download, entao, vem aqui, acessou www.mysql.com, www.mysql.com/downloads, e, ai, eh importante, o instrutor vai nos mostrar aqui, oh, tem a versao Enterprise, que eh uma versao comercial, mas tem, aqui embaixo, oh, MySQL Community Edition. Essa versao aqui, nos podemos usa-la gratuitamente, okay? Tem que olhar a licenca GPL, mas normalmente, nos podemos usar, para fazer este curso, nos podemos usar sem nenhum problema.
+
+26. Entao, olha la, MySQL Community Server, clicou ali, e, aqui embaixo, vao aparecer as opcoes para Download.
+
+27. Entao, aqui, tem para Mac, tem para Linux, Windows, varias plataformas. Uma coisa importante, aqui, que o instrutor ja reparou que alguns alunos tem dificuldade tambem eh quando eu vou baixar para o Windows. Quando voce seleciona, aqui, para o Windows, a primeira opcao que ele destaca eh essa aqui com um Installer MSI. Se voce nao sabe o que eh esse Installer MSI, baixa, aqui, baixa uma dessas outras opcoes, aqui, .ZIP, ou, se o seu Windows for 32 bits ou 64 bits, voce baixa uma dessas duas aqui, e, ai, la, vai ter um arquivo .exe para voce continuar a instalacao.
+
+28. Eh importante, quando voce estiver fazendo essa instalacao, lembrar que vai pedir a senha do 'root' ali. Voce pode decidir, fala assim, oh, 'Eu quero criar o usuario root, e definir uma senha para ele, ou deixar assim em branco', fica a seu criterio.
+
+29. Mas eh importante voce lembrar essa senha, que a gente vai precisar configurar la no curso.
+
+30. Bem, esse eh o ambiente de desenvolvimento, que o instrutor queria nos mostrar, as principais tecnologias, o JDK 8, o STS, e o MySQL. Thymeleaf a gente vai usar a partir do Maven, la no Spring Tool Suite.
+
+31. Ai, voce pode estar se perguntando, 'Ah, Normandes, dai eu tenho que instalar um plugin do Maven aqui no STS?'. Nao, nao precisa, porque, se voce vier aqui em Window / Preferences / Maven / Installations, no STS, ele ja vem com uma versao 'EMBEDDED', do Maven instalado nele. Para esse Projeto nosso aqui, vai funcionar perfeitamente, nao tem nenum problema, voce pode usar essa versao do Maven que vem junto com o STS aqui, o Spring Tool Suite.
+
+32. Fim da Aula 01.004. Ambiente de Desenvolvimento.
+
+
+-->

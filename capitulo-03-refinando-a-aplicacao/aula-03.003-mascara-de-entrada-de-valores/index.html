@@ -1,0 +1,104 @@
+<!--
+
+Aula 03.003. Mascara de Entrada de Valores
+
+1. Nesta aula aqui, eu acredito que vai ser bem rapida, nos vamos configurar um componente aqui para, quando a gente ir digitando no Campo Valor, ele ja ir colocando o ponto (.), separador de milhar, e a virgula para o separador decimal.
+
+2. Okay? Para a gente nao errar na hora de informar os digitos aqui.
+
+3. Okay? Entao, vamos la. Eh o jQuery maskmoney, procurar no Google.
+
+4. So digitar isso ai no Google, esse primeiro link, aqui, mesmo, https://github.com/plentz/jquery-maskmoney, ta la no GitHub, se a gente vier aqui em 'dist', jquery.maskMoney.min.js, clicar no botao Raw, e fazer o Download dele.
+
+5. Salvei aqui, beleza. Agora, deixa eu copiar ele para a gente colar aqui, no Projeto, dentro da pasta js.
+
+6. Coloquei aqui, nao posso esquecer de vir aqui no LayouPadrao.html, vamos colocar aqui, oh, 
+
+	<script src="/js/jquery.min.js"></script>
+	<script src="/js/bootstrap.min.js"></script>
+	<script src="/js/bootstrap-datepicker.min.js" />
+    <script src="/js/bootstrap-datepicker.pt-BR.min.js" />
+    <script src="/js/jquery.maskMoney.min.js" />
+	<script src="/js/cobranca.js"></script>
+
+7. Beleza, esse cara ja esta aqui, nao eh? Eu vou dar uma olhada aqui, como eh que ele funciona, em https://github.com/plentz/jquery-maskmoney.
+
+8. Olha so. Olha o exemplo que ele da, aqui, para a gente usar. Ele fala assim, oh, 'Vamos supor, voce tem, la, oh, um input "text", com id "currency"', e, ai, ele pega, usando jQuery, oh, na hora em que iniciou, na hora em que o jQuery carregou, a Pagina foi carregada, voce seleciona o elemento e chama a funcao maskMoney().
+
+9. E existem alguma opcoes que a gente pode passar, como thousands, decimal, okay?, se a gente permitir zero, ou nao, okay? Entao, o decimal, o default eh o ponto, e eu quiser trocar para virgula, e o thousands eh a virgula, e eu quiser trocar para ponto. Eu vou permitir zero, por exemplo, ele colocar zero, 'allowZero', so para a gente ver como eh que funciona isso dai.
+
+10. Beleza? Entao, vamos la. Vamos configurar esse cara, aqui, la. So que, ao inves de eu usar tambem com id, assim,
+
+<body>
+    <input type="text" id="currency" />
+</body>
+<script>
+    $(function() {
+        $('#currency').maskMoney();
+    })
+</script>
+
+, eu vou fazer a selecao por uma classe CSS, que eu acho que eh a forma mais recomendada, ai, para a gente fazer isso.
+
+11. Okay? Entao, vamos la, aqui, em CadastroTitulo.html, no input do Valor, 
+
+    <input type="text" class="form-control" id="valor" th:field="*{valor}" />
+
+, eu vou colocar uma classe assim, oh, 'js-currency',
+
+    <input type="tetxt" class="form-control js-currency" th:field="*{valor}" />
+
+, no meu CSS. Por isso que eu coloco, ate, esse 'js', aqui, em 'js-currency', eh uma forma de eu falar assim, 'Essa classe eh uma classe de marcacao para esse meu campo, por exemplo, Valor'. Entao, eu estou marcando ela que ela sera selecionada, ela pode estar sendo selecionada por algum Javascript. Okay? Entao, eu coloquei esse js-currency, aqui, vamos la no meu cobranca.js.
+
+12. Na hora em que carregar a pagina, 
+
+$(function() {
+    $('[rel="tooltip"]').tooltip();
+});
+
+, eu vou fazer o seguinte, oh, eu vou buscar as classes,..., eu vou falar para ele, oh, 'Carregou a Pagina, encontra todos os elementos que tem a classe js-currency, e eu vou chamar, aqui, a funcoa maskMoney()',
+
+$(function() {
+    $('[rel="tooltip"]').tooltip();
+    $('.js-currency').maskMoney();
+});
+
+, como esta falando la na documentacao, so que eu posso passar algumas opcoes, okay?
+
+13. Aqui, na pasta demo, na pagina de documentacao, ele mostra, oh, como eh que ele pode fazer, oh, esta la, ele esta trocando, aqui, como eh que ele faz as coisas, ta vendo?, entao, eh dessa forma que vai usar, aqui, tambem.
+
+14. Entao, .maskMoney(), abre chaves, e, ai, eu vou escrever, .maskMoney({decimal: ','}), decimal, no Brasil, eh virgula, nao eh?, depois, separo por virgula, aqui, thousands, eh ponto, allowZero true, ou seja, eu posso permitir zero, apesar de o sistema nao aceitar, mas, eh so para voce ver como eh que funciona essa configuracao,
+
+$(function() {
+    $('[rel="tooltip"]').tooltip();
+    $('.js-currency').maskMoney({decimal: ',', thousands: '.', allowZero: true});
+});
+
+15. Okay? Entao, eu posso configurar passando strings, aqui, oh, para o decimal, ele vai usar a virgula, agora, para o separador de milhar, o ponto, allowZero ele permite eu deixar um zero la, okay?, fica um campo zero la no input.
+
+16. Salvei aqui, oh, acredito que eh isso, ja deve estar funcionando. Vamos ver la na tela de Cadastro de Titulo, no campo Valor, ou seja, clicar no campo Valor. Cliquei, ja aparece zero. Entao, eu ja posso ir digitando, oh, que ele ja vai colocando os valores e, inclusive, o ponto, ali, decimal, tambem, oh. Ta vendo, eu vou apagando, e fica mais legal assim, nao eh?
+
+17. Entao, eu vou colocar, aqui, oh, 'Condominio Apto 2', Data de Vencimento 22/01/2016, vou colocar o Valor, aqui, 1256,49, por exemplo. Salvar, Voltar para a pesquisa, ta aqui, oh, o registro salvo com sucesso.
+
+18. Quando eu mandar editar, ja vai aparecer, tambem, formatado, no campo Valor. Entao, eu ja posso clicar, aqui, no campo Valor, e apagar 12,56, oh, 125,61, beleza? Posso salvar, aqui, Voltar para pesquisa, olha la, o registro esta editado, volto para a edicao, ja cai formatado, certinho, em Valor. Se eu tiver um valor grande, ao clicar em Salvar e Voltar para pesquisa, esta aparecendo com separador de milhar e decimal. Quando eu voltar para editar, tambem, ja vai estar formatado, aqui, o campo Valor, ele ja saber formatar, para a gente, tanto na ida quanto na volta.
+
+19. Beleza? Entao, nesta aula, aqui, eu copiei, la, jquery.maskMoney, no GitHub, coloquei ele aqui, no nosso Projeto, nao pode esquecer de adicionar ele aqui, nos imports do LayoutPadrao.html, ai, eu ja posso usar na Pagina, CadastroTitulo.html, por exemplo. No caso, aqui, 
+
+<div class="col-sm-2">
+    <input type="text" class="form-control >>> js-currency <<< " id="valor" th:field="*{valor}" />
+</div>
+
+, eu siplesmente defini uma classe CSS, de marcacao, e, ai, eu venho, aqui, em cobranca.js, e falo,
+
+$(function() {
+	$('[rel="tooltip"]').tooltip();
+	$('.js-currency').maskMoney({decimal: ',', thousands: '.', allowZero: true});
+});
+
+, o ponto do jQuery, aqui, significa: busque todas as classes 'js-currency', e chame a funcao maskMoney() para esses componentes que tem essa classe 'js-currency', falando que o campo decimal eh virgula, o milhar eh ponto, e eu posso deixar com zero la.
+
+20. Beleza?
+
+21. Fim da Aula 03.003. Mascara de Entrada de Valores.
+
+-->

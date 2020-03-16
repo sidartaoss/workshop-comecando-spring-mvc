@@ -1,0 +1,699 @@
+<!--
+
+Aula 02.015. Implementando a Edicao
+
+1. Nesta aula, nos vamos implementar a Edicao.
+
+2. Eu vou adicionar, aqui, na tela de Pesquisa, um icone, um linkezinho com um icone de um desenho de um lapis, okay?, e, quando eu clicar nesse lapis, eu vou voltar para a tela de cadastro, eu venho, aqui, para a tela de Cadastro, so que com os dados preenchidos, para eu poder editar e clicar em Salvar.
+
+3. Okay? Entao, nos vamos mexer, aqui, nessa tela de Pesquisa.
+
+4. Bom, nos vamos vir, aqui, nessa coluna, de Pesquisa Titulos, que eh essa coluna aqui, na tela, 
+
+<tr th:each="titulo : ${titulos}">
+<td class="text-center" th:text="${titulo.codigo}"></td>
+<td th:text="${titulo.descricao}"></td>
+<td class="text-center" th:text="${{titulo.dataVencimento}}"></td>
+<td class="text-right" th:text="|R$ ${{titulo.valor}}|"></td>
+<td class="text-center">
+    <span class="label" th:text="${titulo.status.descricao}"
+        th:classappend="${titulo.pendente ? 'label-danger' : 'label-success'}"></span>		 			 			
+</td>
+<td class="text-center">
+    >>> <<<
+</td>
+</tr>
+
+, e adicionar um link com esse desenho.
+
+5. Eu vou usar esse cara, aqui, do Bootstrap, acho que ele esta em Components, https://getbootstrap.com/docs/3.3/components/, eu quero usar esse carinha, aqui, oh, glyphicon glyphicon-pencil, esse icone do desenho de lapis, oh, tem varios desses carinhas, aqui, para a gente poder usar, e eh so ver, oh, como eh que eles fazem para,..., oh, tah vendo, coloca um button, e, dentro, coloca um 'span', com as classes e ja vai aparecer o inconezinho la.
+
+6. Entao, vamos colocar aqui, oh, vou colocar um link, eh um botao, no formato de link, class="btn btn-link", um botao pequeno, 'btn-xs',
+
+<td class="text-center">
+    <a class="btn btn-link btn-xs"></a>
+</td>
+
+, vamos colocar, aqui, um span, class="", e, aqui, la o que eu copiei, 'glyphicon glyphicon-pencil', e fechamos, aqui,
+
+<td class="text-center">
+    <a class="btn btn-link btn-xs">
+        <span class="glyphicon glyphicon-pencil"></span>
+    </a>
+</td>
+
+7. Salvei, vamos dar uma olhada, aqui, na Pagina de Pesquisa.
+
+8. Oh, ja apareceu, nao eh?, por causa do LivReload, que esta habilitado, ja apareceu, aqui, o lapizinho.
+
+9. Entao, o que eu tenho que implementar eh o click desse link, aqui, nao eh?, desse lapizinho, aqui, para a gente voltar, la, para aquela tela.
+
+10. Okay? Entao, vamos la. Eu vou colocar, aqui, vamos implementar o link, aqui.
+
+11. Seu eu colocar, aqui, href="", assim, eu vou mandar,..., qual que deve ser a URL para edicao?
+
+12. A URL para edicao, normalmente, vai ser ser assim, oh, o nome do Recurso, que, no caso, eh 'titulos', barra o codigo, 'titulos/{codigo}'
+
+13. Entao, se eu quero editar esse aqui, oh, o 'Condominio do Apto 102', eu vou editar, aqui, o cara de codigo 1,
+
+    http://localhost:8080/titulos/1
+
+14. Entao, se eu der um GET em '{recurso}/codigo', eu estou querendo edita-lo, beleza?, eu estou querendo recuperar esses dados e, ao recuperar esses dados, eu vou conseguir editar.
+
+15. Beleza? Entao, eh isso que eu quero fazer. Entao, eh 'titulos/{codigo}'. 
+
+16. Se eu colocar, aqui, href="", e fizer isso daqui, oh,
+
+<td class="text-center">
+    <a class="btn btn-link btn-xs" href="/titulos/1">
+        <span class="glyphicon glyphicon-pencil"></span>
+    </a>
+</td>
+
+, por exemplo, eu vou editar sempre o cara de codigo 1, depois que eu configurar no Controller, porque o Controller precisa receber, a gente nao esta recebendo isso daqui,
+
+<td class="text-center">
+    <a class="btn btn-link btn-xs" href=" >>>/titulos/1<<< ">
+        <span class="glyphicon glyphicon-pencil"></span>
+    </a>
+</td>
+
+, em lugar nenhum.
+
+17. Vamos executar la, para voce ver que vai dar um erro, nao eh?, vai falar, 'Eu nao consigo mapear esse cara.'
+
+18. Na Pagina de Pesquisa, se eu colocar o mouse em cima, aqui, do lapis, e voce olhar aqui, embaixo, bem no cantinho esquerdo inferior do Browser, oh, ele esta mostrando, la, que, quando eu clicar, ele vai para a URL '/titulos/1'.
+
+19. Entao, vou clicar, vai dar um erro, 404, Pagina Nao Encontrada.
+
+20. Por que que ele deu 404? Porque nao tem ninguem, nao tem nenhum Controller mapeado para '/titulos/{alguma-coisa}', '/1', '/{codigo}', nao eh?, nao tem.
+
+21. E eu consigo fazer isso daqui no Controller?
+
+22. Consigo.
+
+23. Vamos la, oh. Vamos vir aqui embaixo, embaixo do pesquisar(), em TituloController.java, eu vou colocar um novo metodo, @RequestMapping, nesse @RequestMapping, eu vou colocar, aqui, oh, public ModelAndView edicao(), uma edicao, porque nao esta a acao de editar, nao eh?, o salvar(), eu vou usar o mesmo metodo, aqui, o salvar(), ele ja vai fazer isso para mim, nao eh?, ja esta pronto, aqui, ja esta implementado, eu reaproveita-lo, eu so preciso chegar na parte de edicao. Entao, para eu chegar, aqui, na edicao, eu vou retornar um ModelAndView,
+
+    @RequestMapping
+    public ModelAndView edicao() {
+
+    }
+
+24. Bom, como eh que eu preciso mapear, aqui?
+
+25. Ah, um detalhe, aproveitando que eu vi aqui, oh, se eu tentar deixar @RequestMapping dessas duas formas,
+
+	>>> @RequestMapping <<<
+	public ModelAndView pesquisar() {
+		List<Titulo> todosTitulos = titulos.findAll();
+		ModelAndView mv = new ModelAndView("PesquisaTitulos");
+		mv.addObject("titulos", todosTitulos);
+		return mv;
+	}
+	
+	>>> @RequestMapping <<<
+	public ModelAndView edicao() {
+		
+	}
+
+, vai dar errado, na hora em que estiver subindo. Por que?
+
+26. Esses caras sao iguais, ta vendo?, esse mapeamento.
+
+27. Entao, eu nao posso ter 2 RequestMapping's iguais.
+
+28. Okay? Eu tenho que modificar esse cara, aqui.
+
+29. Bom, como eu disse, eu quero ter um mapeamento assim, nao eh?, recurso 'titulos', e um codigo, aqui, '/titulos/{codigo}'.
+
+30. O 'titulos', eu ja estou fazendo, aqui, no Controller, 
+
+@Controller
+@RequestMapping(' >>> /titulos <<< ')
+public class TituloController {
+
+}
+
+, entao, aqui,
+
+	@RequestMapping( >>> <<< )
+	public ModelAndView edicao() {
+		
+	}
+
+, eu so preciso receber o codigo. Mas esse codigo eh variavel, concorda comigo? Pode ser o 1, pode ser o 2, 3, 4..., pode ser qualquer um.
+
+31. E como eh que eu faco para deixar isso variavel, aqui, no Controller? Eu abro chaves, e escrevo aqui, oh, {codigo},
+
+    @RequestMapping("{codigo}")
+    public ModelAndView edicao() {
+
+    }
+
+32. E, ai, com esse codigo, aqui, eu posso ter algo assim, oh, eu vou colocar aqui, oh, public ModelAndView edicao( >>> Long codigo <<<), para receber esse {codigo} que esta vindo, aqui, 
+
+    @RequestMapping(" >>> {codigo} <<<")
+    public ModelAndView edicao() {
+
+    }
+
+, so que eh uma variavel do Path, do caminho, entao, eu anoto, aqui, @PathVariable,
+
+import org.springframework.web.bind.annotation.PathVariable;
+
+    @RequestMapping("{codigo}")
+    public ModelAndView edicao(@PathVariable Long codigo) {
+
+    }
+
+33. Okay? E, ai, ele ja vai transformar, nao eh?, vai pegar esse codigo aqui,
+
+    @RequestMapping(" >>> {codigo} <<<")
+    public ModelAndView edicao(@PathVariable Long codigo) {
+
+    }
+
+, e me entregar nesse parametro, aqui, de entrada, codigo,
+
+    @RequestMapping("{codigo}")
+    public ModelAndView edicao(@PathVariable >>> Long codigo <<<) {
+
+    }
+
+34. Vamos dar uma olhada, para a gente ver? Entao, vamos colocar, aqui, oh, System.out.println(">>>> codigo recebido: " + codigo);
+
+    @RequestMapping("{codigo}")
+    public ModelAndView edicao(@PathVariable >>> Long codigo <<<) {
+        System.out.println('>>>> codigo recebido: ' + codigo);
+    }
+
+, depois, eu vou te mostrar uma coisa mais legal, ainda, que o Spring faz.
+
+35. E eu vou retornar, aqui, deixa eu criar, aqui, um ModelAndView, ModelAndView mv = new ModelAndView(); return mv, 
+
+    @RequestMapping("{codigo}")
+    public ModelAndView edicao(@PathVariable >>> Long codigo <<<) {
+        System.out.println('>>>> codigo recebido: ' + codigo);
+        ModelAndView mv = new ModelAndView();
+        return mv;
+    }
+
+36. E, aqui, eu vou usar a Pagina, a View que eu vou usar vai ser "CadastroTitulo". Como eu estou repetindo essa String CadastroTitulo, vamos fazer o seguinte oh, vamos criar uma constante, 
+
+	private static final String CADASTRO_VIEW = "CadastroTitulo";
+
+, e vamos substituir dentro dos metodos da classe TituloController.java,
+
+    @RequestMapping("{codigo}")
+    public ModelAndView edicao(@PathVariable >>> Long codigo <<<) {
+        System.out.println('>>>> codigo recebido: ' + codigo);
+        ModelAndView mv = new ModelAndView(CADASTRO_VIEW);
+        return mv;
+    }
+
+37. Entao, vamos ver, oh, nao vai aparecer nada la, ainda, na Pagina. Deu um erro, aqui, eh porque ele ja tentou vir para ca, 
+
+    @RequestMapping("{codigo}")
+    public ModelAndView edicao(@PathVariable >>> Long codigo <<<) {
+        System.out.println('>>>> codigo recebido: ' + codigo);
+        ModelAndView mv = new ModelAndView(CADASTRO_VIEW);
+        return mv;
+    }
+
+, e eu mandei-o para 'CadastroTitulo',
+
+        ModelAndView mv = new ModelAndView(CADASTRO_VIEW);
+
+, vamos fazer o seguinte, vamos fazer diferente,... nao, ele deve ter mostrado, entao, um pouquinho aqui em cima, oh, >>>> codigo recebido: 1, eh isso mesmo, vamos fazer o seguinte, vamos mandar ele dar um Redirect, entao, so para a gente, um redirct para '/titulos/novo',
+
+    @RequestMapping("{codigo}")
+    public ModelAndView edicao(@PathVariable >>> Long codigo <<<) {
+        System.out.println('>>>> codigo recebido: ' + codigo);
+        ModelAndView mv = new ModelAndView("redirect:/titulos/novo");
+        return mv;
+    }
+
+38. Beleza, salvei, ai, ele vai tentar dar um Refresh la, nao eh, entao, se eu colocar, aqui, oh, http://localhost:8080/titulos/1, por exemplo, e, ai, eu vou deixar o Console aberto, aqui, no Eclipse, dar um <ENTER>, na URL, no Browser, apareceu la, '>>>> codigo recebido: 1', ai, eu dei um Redirect. Mas, se eu colocar, aqui, oh, http://localhost:8080/titulos/10, e dar um <ENTER>, vamos dar uma olhada, oh, apareceu, la, no Console, '>>> codigo recebido: 10'. Se eu colocar, la, na URL, no Browser, '/titulos/20', apareceu, la, no Console, '>>> codigo recebido: 20'.
+
+39. Entao, ta vendo que todo o codigo que eu coloco la, eu estou recebendo aqui na variavel, nesse parametro de entrada, aqui, codigo,
+
+    @RequestMapping("{codigo}")
+    public ModelAndView edicao(@PathVariable >>> Long codigo <<<) {
+        System.out.println('>>>> codigo recebido: ' + codigo);
+        ModelAndView mv = new ModelAndView("redirect:/titulos/novo");
+        return mv;
+    }
+
+40. Beleza? Eu estou imprimindo-o aqui. Ele deu aquele erro, la, antes, porque, se eu redirecionar para o CadastroTitulo, eu tenho que passar um novo Titulo, lembra?,
+
+	@RequestMapping("/novo")
+	public ModelAndView novo() {
+		ModelAndView mv = new ModelAndView(CADASTRO_VIEW);
+		>>> mv.addObject(new Titulo()); <<<
+		return mv;
+	}
+
+, entao, por isso que eu coloquei isso daqui,
+
+        ModelAndView mv = new ModelAndView("redirect:/titulos/novo");
+
+, e por isso que estava dando aquele erro la.
+
+41. Bom, entao, estou recebendo, aqui, o codigo 1. E, ai, o que que eu poderia fazer?
+
+42. Vou voltar, aqui, agora, oh, para o CadastroTitulo,
+
+    @RequestMapping("{codigo}")
+    public ModelAndView edicao(@PathVariable Long codigo) {
+        System.out.println('>>>> codigo recebido: ' + codigo);
+        ModelAndView mv = new ModelAndView(CADASTRO_VIEW);
+        return mv;
+    }
+
+, com esse codigo, aqui,
+
+    @RequestMapping("{codigo}")
+    public ModelAndView edicao(@PathVariable Long codigo) {
+        System.out.println('>>>> codigo recebido: ' + codigo);
+
+
+
+        ModelAndView mv = new ModelAndView(CADASTRO_VIEW);
+        return mv;
+    }
+
+, la no Repositorio, Repositorio Titulos, aqui, eu tenho um metodo, Titulo titulo = titulos.findOne(), e eu posso passar o ID,
+
+    @RequestMapping("{codigo}")
+    public ModelAndView edicao(@PathVariable Long codigo) {
+        System.out.println('>>>> codigo recebido: ' + codigo);
+
+        Titulo titulo = titulos.findOne(codigo);
+
+        ModelAndView mv = new ModelAndView(CADASTRO_VIEW);
+        return mv;
+    }
+
+, e, ai, eu recuperei o titulo daquele ID. Okay? Eu recupero o titulo daquele ID, e, ai, eu venho, aqui, agora, no mv, e faco, mv.addObject(), e passo o titulo,
+
+    @RequestMapping("{codigo}")
+    public ModelAndView edicao(@PathVariable Long codigo) {
+        System.out.println('>>>> codigo recebido: ' + codigo);
+
+        Titulo titulo = titulos.findOne(codigo);
+
+        ModelAndView mv = new ModelAndView(CADASTRO_VIEW);
+        mv.addObject(titulo)
+        return mv;
+    }
+
+, para ele nao dar mais aquele erro. Agora, eu estou passando um Titulo. So que, ao inves de eu passar um Titulo zerado, aqui, 
+
+	@RequestMapping("/novo")
+	public ModelAndView novo() {
+		ModelAndView mv = new ModelAndView(CADASTRO_VIEW);
+		>>> mv.addObject(new Titulo()); <<<
+		return mv;
+	}
+
+, eu estou passando um titulo que eu busquei do banco de dados.
+
+43. Vou tirar esse print, aqui, agora,
+
+    @RequestMapping("{codigo}")
+    public ModelAndView edicao(@PathVariable Long codigo) {
+        /** System.out.println('>>>> codigo recebido: ' + codigo); **/
+
+        Titulo titulo = titulos.findOne(codigo);
+
+        ModelAndView mv = new ModelAndView(CADASTRO_VIEW);
+        mv.addObject(titulo)
+        return mv;
+    }
+
+, okay?, recuperei o titulo, ai, eu vou passar esse cara que eu recuperei pelo codigo aqui no ModelAndView.
+
+44. Vamos ver, agora, como eh que vai funcionar?
+
+45. Salvei, ele vai dar uma recarregada, ai. Se eu editar, aqui, oh, por exemplo, esse, aqui, na Tela de Pesquisa, eh o Titulo 4, que foi o que eu coloquei fixo, la, vou clicar aqui, no lapizinho, ele vai voltar, la, na URL, com o '/titulos/4', olha la, o formulario com os campos preenchidos, ta vendo?
+
+46. Se eu clicar em outro registro, nao vai adiantar, porque eu deixei fixo, la, a URL '/titulos/1'.
+
+47. Entao, oh, ta sempre vindo o 'Condominio Apto 102', aqui, para eu editar.
+
+48. Bom, vamos, entao, deixar esse link, aqui, colocando a URL dinamicamente.
+
+49. E, depois, a gente vai, ainda, melhorar o metodo edicao() um pouquinho mais.
+
+50. Vamos la,
+
+    <td class="text-center">
+        <a class="btn btn-link btn-xs" href=" >>> /titulos/1 <<<">
+            <span class="glyphicon glyphicon-pencil"></span>
+        </a>
+    </td>
+
+, ao inves dele colocar esse titulo, esse '1' aqui, fixo, sabe o que que a gente pode fazer? Usar o ${titulo.codigo}, eh esse cara, aqui, nao eh?,
+
+    <td class="text-center" th:text="${titulo.codigo}"></td>
+
+, eu preciso desse cara aqui. So que, ai, para isso, eu nao posso usar o href, eu tenho que usar o 'th:href', para eu poder usar uma variavel, aqui, do Thymeleaf. Entao, o que que eu vou fazer aqui, oh? Ele vai funcionar dessa forma aqui, oh, se eu colocar, aqui, '/titulos/{codigo}', eu quero passar, aqui, o codigo, onde o codigo, vai ser igual, nao eh?, '/titulos/{codigo}(codigo=) a esse cara, aqui, que eu estou chamando, ou seja, {codigo}, eu dei um nome, aqui, para essa variavel, {codigo}, e esse (codigo=) eh igual a ${titulo.codigo},
+
+<td class="text-center">
+ <a class="btn btn-link btn-xs" th:href="/titulos/{codigo}(codigo=${titulo.codigo})">
+    <span class="glyphicon glyphicon-pencil"></span>
+ </a>
+</td>
+
+51. Okay? Vamos ver se isso aqui da certo. Nao vai dar certo. Pelo seguinte, eu vou precisar usar esse @ aqui,
+
+<td class="text-center">
+ <a class="btn btn-link btn-xs" th:href="@{/titulos/{codigo}(codigo=${titulo.codigo})}">
+    <span class="glyphicon glyphicon-pencil"></span>
+ </a>
+</td>
+
+, agora, vai funcionar, quer ver?
+
+52. Recarregou o Servidor, aqui, vamos dar uma olhada, aqui, na URL dos lapizinhos, na Pagina de Pesquisa.
+
+53. Funcionou. Deixa eu clicar, aqui, no lapizinho e mandar Inspecionar, para voce ver, oh. 
+
+54. Entao, aqui, ficou , '/titulos/1'. 
+
+55. Se eu Inspecionar o 'Condominio Apto 104', vamos dar uma olhada aqui. Olha la, ta o '/titulos/4'.
+
+56. Entao, ele funcionou, ele colocou o link, aqui, para mim, dinamicamente.
+
+57. E, ai, deixa eu explicar para voce um pouco desse '@', aqui.
+
+58. Eu te falei que eu ia te explicar isso aqui mais para frente, eu, ainda, vou te explicar mais beneficios desse '@'.
+
+59. Primeiro, eu vou explicar so porque que eu coloquei ele aqui,
+
+<a class="btn btn-link btn-xs" th:href="@{/titulos/{codigo}(codigo=${titulo.codigo})}">
+    <span class="glyphicon glyphicon-pencil"></span>
+</a>
+
+, mas, depois, eu ainda te mostro mais um beneficio dele, quando a gente fizer o deploy desse projeto no Tomcat, direto, sem usar o Tomcat embutido aqui.
+
+60. Beleza? Entao, olha so, esse cara, aqui, o '@', eh para eu montar links, nao eh?, essa expressao do Thymeleaf, @{...}, eh para eu montar links. Entao, eu to falando o seguinte, 'O que eu quero montar aqui,
+
+    @{/titulos/{codigo}(codigo=${titulo.codigo})}
+
+, eh um link.
+
+61. Beleza? E esse link vai ser, ai, eu comeco a montar, aqui, oh, '/titulos/', e, ai, eu posso definir variaveis nesse link, para serem preenchidas depois, oh, que eh o que eu coloco aqui em frente, entre parenteses, depois, 
+
+    (codigo=${titulo.codigo})
+
+62. Entao, eu poderia ter mais variaveis aqui,
+
+    @{/titulos/ >>> {codigo}<<< (codigo=${titulo.codigo})}
+
+, e preencher os valores dessas variaveis aqui, depois, 
+
+    @{/titulos/{codigo} >>> (codigo=${titulo.codigo}) <<<}
+
+63. Entao, aqui, eu chmei de codigo, 
+
+    @{/titulos/ >>> {codigo} <<< (codigo=${titulo.codigo})}
+
+, poderia ser, aqui, vamos supor, x, logico que eh um nome feio, nao eh?, x, por exemplo, 
+
+    @{/titulos/{x}(x=${titulo.codigo})}
+
+, isso aqui daria certo, nao eh?, eu estou substituindo esse 'x' por ${titulo.codigo}, beleza?
+
+64. Entao, essa eh a ideia, tambem, do @, aqui, dessa expressaozinha, aqui, do Thymeleaf,
+
+    @{/titulos/{codigo}(codigo=${titulo.codigo})}
+
+65. Okay? Para eu poder montar links.
+
+66. Agora, com o @, aqui, e os links todos corretos, se eu clicar, aqui, no Apartamento 102, oh, olha la, vai para a Pagina de Cadastro com os dados do registro preenchidos nos campos do formulario.
+
+67. Vamos editar um outro registro. Okay, funcionou. 
+
+68. Entao, com isso, eu consigo, ja, criar uma URL dinamica, e, aqui,
+
+	@RequestMapping("{codigo}")
+	public ModelAndView edicao(>>> @PathVariable Long codigo <<<) {
+        ...
+	}
+
+, eu estou recebendo o codigo, buscando, adicionando o titulo,
+
+	@RequestMapping("{codigo}")
+	public ModelAndView edicao(@PathVariable Long codigo) {			
+			
+            >>> Titulo titulo = titulos.findOne(codigo); <<<
+			
+			>>> ModelAndView mv = new ModelAndView(CADASTRO_VIEW); <<<
+			mv.addObject(titulo);
+			return mv;
+	}
+
+, que eu acabei de buscar para o ModelAndView, e, ai, ele ja vai renderizar sozinho, la.
+
+69. Eh a mesma ideia de manter os valores, aqui, oh, 
+
+	@RequestMapping(method = RequestMethod.POST)
+	public String salvar(@Validated Titulo titulo, Errors errors, RedirectAttributes attributes) {
+		if (errors.hasErrors()) {
+			return CADASTRO_VIEW;
+		}
+		Long last = this.buscarUltimoRegistro();
+		titulo.setCodigo(++last);
+		this.titulos.save(titulo);
+		attributes.addFlashAttribute("mensagem", "Titulo salvo com sucesso!");
+		return "redirect:/titulos/novo";
+	}
+
+, quando a gente estava mantendo os valores no salvar(), quando eu tento, olha la, se, na tela de Cadastro, eu tentar salvar um cara sem informar a Descricao, ele nao vai validar? Ai, ele mantem o restante dos valores nos outros campos.
+
+70. Eh a mesma ideia. Vai funcionar. Por que funcionou assim?, nao eh?, voce fala, 'Nao, mas foi facil demais'. Foi por que?
+
+71. Porque, no CadastroTitul.html, aqui, oh, eu estou recebendo o 'titulo',
+
+    <form class="form-horizontal" method="POST" action="/titulos"
+        th:object="${titulo}">
+
+, e eu estou usando 'th:field', 
+
+<input type="text" class="form-control" id="descricao" >>> th:field="*{descricao}" <<< />
+
+, ta vendo?
+
+72. Entao, esse cara, aqui,
+
+<input type="text" class="form-control" id="dataVencimento" >>> th:field="*{dataVencimento}" <<< />
+
+, ajuda demais a gente a manter os valores e, na hora da edicao, tambem, okay?
+
+73. E, ai, 'Ah, entao, eh so isso, Normandes? Na hora que eu mandar salvar, ja vai funcionar?'
+
+74. Vamos testar aqui?
+
+75. Voltar para a Pagina de Pesquisa, entao, se eu vier, aqui, e editar, por exemplo, oh, o Apto 102, aqui, esta com 130,00, vamos imaginar que eu digitei errado, aqui, e falei, 'Opa, nao era 130,00, nao, era para ser 120,30', por exemplo. E, ai, eu clicar em Salvar, o que que eh para acontecer? Eh para ele editar aquele valor. Opa, nao editou, ficou o antigo registro, com 130,00 e ele adicionou um novo registro, com 120,30 para o campo Valor.
+
+76. O que que aconteceu? Por que que ele adicionou um novo registro?
+
+77. Ah, tah, acho que eh isso mesmo, eh o seguinte, como eh que ele vai saber, vamos voltar, aqui, na edicao, como eh que ele vai saber que esse cara, aqui, que eu estou recebendo, aqui, no Cadastro de Titulo, ele eh um cara que ja existe?
+
+78. Como eh que ele vai saber disso, nao eh? Entao, para eu descobrir, para, na hora que eu mandar Salvar, ele saber que esse cara ja existe, o que que uma Entidade ja salva no banco de dados tem? Ela ja tem o codigo, nao eh?
+
+79. Entao, se eu adicionar, la no Cadastro de Titulo, eu preciso adicionar, aqui, no Cadastro, no formulario, um campo oculto, aqui, eu vou colocar aqui no body, mesmo, eu vou adicionar aqui um input, type="hidden", ou seja, um campo oculto, okay?, e o 'th:field', dele, vai ser quem? Como eh edicao, nos colocamos *{codigo}, e nao ${titulo.codigo},
+
+    <div class="panel-body">
+        <input type="hidden" th:field="*{codigo}" />
+        ...
+    </div>
+
+, que eh o codigo que vem, aqui, desse objeto 'titulo',
+
+<form class="form-horizontal" method="POST" action="/titulos" 
+    >>> th:object="${titulo} <<< ">
+
+80. O que eu estou fazendo eh, pega o 'codigo', *{codigo}, que esta vindo, aqui, desse objeto, ${titulo},
+
+<form class="form-horizontal" method="POST" action="/titulos" 
+    >>> th:object="${titulo} <<< ">
+
+, e coloca, aqui, nesse campo,
+
+<input type="hidden" th:field="*{codigo}" />
+
+81. Quando for um Novo, esse cara, aqui, vai estar null,
+
+<input type="hidden" th:field="*{codigo}" />
+
+, esse cara ta null, beleza, entao, nao tem problema, ele vai submeter null, eu salvo null.
+
+82. Quando eu estiver editando, esse cara, aqui,
+
+<input type="hidden" th:field="*{codigo}" />
+
+, vem preenchido o codigo.
+
+83. Se veio preenchido o codigo, quando eu mandar salvar, ele vai enviar o codigo e, ai, o Hibernate, aqui, o Repositorio, aqui, do JPA, no metodo save(), ele vai ver, 'Ah, ja tem o codigo? Ja, entao, vamos atualizar. Nao tem o codigo? Ai, a gente salva um novo.'
+
+84. Essa eh a ideia.
+
+85. Entao, vamos voltar, aqui, para a Pagina de Pesquisa, vamos editar, aqui, mais uma vez, outro registro. Vamos voltar, aqui, para a Pagina de Pesquisa, apos editar, agora, sim, para o registro editado, nao foi adicionado um novo registro, e editou o registro, conforme o esperado.
+
+86. Perceberam, entao, a importancia, do codigo, para o JPA, para o Hibernate saber que esse objeto 'titulo' ja existe, e eh so para ele atualizar com o resto dos campos que vieram.
+
+87. Entao, quando chegar, aqui, no 'titulo',
+
+@RequestMapping(method = RequestMethod.POST)
+public String salvar(@Validated Titulo >>> titulo <<<, Errors errors, RedirectAttributes attributes) {
+
+    ...
+}
+
+, no metodo salvar, o codigo ja esta preenchido. Como o codigo ja esta preenchido, ele so atualiza, aqui,
+
+    ...
+    this.titulos.save(titulo);
+    ...
+
+88. Okay? E, ai, so para a gente melhorar, ainda, um pouquinho mais, deixar o nosso codigo um pouco mais arrumado, vamos fazer o seguinte, oh, o Spring sabe que isso aqui,
+
+	@RequestMapping("{codigo}")
+	public ModelAndView edicao(@PathVariable Long codigo) {			
+			
+            >>> Titulo titulo = titulos.findOne(codigo); <<<
+            
+            ...
+    }
+
+, eh algo bem comum, e ele faz o seguinte, 'Olha, voce nao precisa fazer esse findOne(), aqui, se voce estiver usando o JPA Repository e recebendo, aqui, o {codigo},'
+
+	@RequestMapping("{codigo}")
+
+, porque o Spring consegue fazer essa conversao para voce automaticamente.
+
+89. Como que ele vai fazer isso?
+
+90. Olha so, eu posso, ao inves de receber o codigo, ali, eu receber o Titulo direto,
+
+	@RequestMapping("{codigo}")
+	public ModelAndView edicao(@PathVariable >>> Titulo titulo <<<) {
+
+        ...
+
+    }
+
+, ai, eu tiro esse titulo, aqui,
+
+	@RequestMapping("{codigo}")
+	public ModelAndView edicao(@PathVariable Long codigo) {
+			
+			/** Titulo titulo = titulos.findOne(codigo); **/
+
+            ...
+    }
+
+91. Ta, Normandes, perai, eu estou mandando o {codigo}, @RequestMapping("{codigo}").
+
+92. Sim, eu estou mandando o codigo, mas, ai, o Spring vai perceber, "Ah, esse {codigo} eh para ele buscar um objeto do tipo Titulo", e, ai, aqui, 
+
+public ModelAndView edicao(@PathVariable(" >>> codigo <<< ") Long codigo) {
+    ...
+}
+
+eu preciso so, falar, para ele, o nome desse parametro que eu coloquei aqui,
+
+@RequestMapping(" >>> {codigo} <<<")
+public ModelAndView edicao(@PathVariable Long codigo) {
+    /** Titulo titulo = titulos.findOne(codigo); **/
+    ModelAndView mv = new ModelAndView(CADASTRO_VIEW);
+    mv.addObject(titulo);
+    return mv;
+}
+
+93. Entao, usando o codigo que veio, aqui, ele vai fazer, por tras dos panos, para a gente, o findOne(), e ja me entregar, aqui, um Titulo pronto.
+
+94. Ou seja, eu economizei uma linha de codigo, ali, nao eh?
+
+95. Ja fica mais facil, nao eh?, fica um pouquinho mais facil, tambem, para eu fazer isso daqui.
+
+96. Entao, vamos reiniciar o servidor, vamos ver se esta tudo funcionando?
+
+97. Vamos editar, entao, um registro, ao inves de Apto 102, vamos mudar para Apto 401, por exemplo.
+
+98. Okay, a edicao para todos os campos do registro funcionou, conforme o esperado.
+
+99. So revisando o que que a gente fez.
+
+100. Eu adicionei, na Pagina de Pesquisa, o link, com o iconezinho, aqui, do Bootstrap, 
+
+<a class="btn btn-link btn-xs" th:href="@{/titulos/{codigo}(codigo=${titulo.codigo})}">
+    <span class="glyphicon glyphicon-pencil"></span>
+</a>
+
+, para ficar aquele lapezinho, bonitinho, nao eh?
+
+101. Adicionei, aqui, o link e, ai, eu ja te expliquei um pouco, aqui, uma das funcoes do @, desse cara do Thymeleaf, para ele montar o link para a gente dinamicamente, o instrutor, ainda, vai nos mostrar mais coisas sobre esse @, aqui, que eh legal, e eu consigo, entao, montar links dinamicos, oh, usando os parametros, nao eh?, as variaveis que estao vindo, aqui, okay?
+
+102. Eu, aqui, em TituloController, eu mapeei, aqui, recebendo um parametro,
+
+	@RequestMapping(" >>> {codigo} <<<")
+	public ModelAndView edicao(@PathVariable("codigo") Titulo titulo) {
+			ModelAndView mv = new ModelAndView(CADASTRO_VIEW);
+			mv.addObject(titulo);
+			return mv;
+	}
+
+, variavel, tambem.
+
+103. Okay? E a gente ja usou, aqui, 
+
+public ModelAndView edicao(>>> @PathVariable("codigo")<<< Titulo titulo) { 
+    
+    ...
+
+}
+
+, o Spring convertendo, automaticamente, do parametro, aqui, para a gente, para uma Entidade,
+
+public ModelAndView edicao(@PathVariable("codigo") >>> Titulo titulo <<< ) { 
+    
+    ...
+
+}
+
+, ele faz isso porque eu estou usando o JPA Repository, eh so por conta disso.
+
+104. Okay? Eu tenho que usar ele. E, ai, eu adiciono esse objeto, que ele fez a busca, aqui, para mim, no ModelAndView,
+
+	public ModelAndView edicao(@PathVariable("codigo") Titulo titulo) {
+			ModelAndView mv = new ModelAndView(CADASTRO_VIEW);
+			
+            >>> mv.addObject(titulo); <<<
+
+            ...
+    }
+
+, que vai chegar no CadastroTitulo.html, aqui, 
+
+<form class="form-horizontal" method="POST" action="/titulos" 
+        >>> th:object="${titulo}" <<< >
+    
+, esse objeto ja preenchido.
+
+105. Por isso que tudo, aqui, fica preenchido.
+
+106. E, ai, importante. Para a atualizacao funcionar, eu preciso mandar o codigo de volta,
+
+    <input type="hidden" th:field="*{codigo}" />
+
+, e, ai, eu consigo editar aquela Entidade.
+
+107. Beleza?
+
+108. Fim da Aula 02.015. Implementando a Edicao.
+
+
+-->

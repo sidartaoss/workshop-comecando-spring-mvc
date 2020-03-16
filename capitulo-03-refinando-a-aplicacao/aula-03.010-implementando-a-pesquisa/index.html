@@ -1,0 +1,528 @@
+<!-- 
+
+Aula 03.010. Implementando a Pesquisa
+
+1. Vamos, agora, de fato, implementar a Pesquisa.
+
+2. Okay? Entao, quando eu colocar, aqui, alguma string, no Campo de Pesquisa, clicar em Pesquisar, ou dar um <Enter> aqui, ele fazer a pesquisa para a gente.
+
+3. Vamos la. Eu preciso receber, aqui, no metodo de pesquisar(), em TituloController, a String 'descricao'. Certo? Eu preciso receber aquela String la que vai passar.
+
+4. Depois, eu vou mudar isso dai para ficar um filtro mais profissional, mais facil de voce adicionar outros atributos para pesquisa, okay?
+
+5. Eu vou comecar simples assim.
+
+6. Entao, para eu comecar simples, eu vou colocar, aqui, apenas assim, oh, em PesquisaTitulos.html, name = "descricao",
+
+    <div class="input-group">
+        <input class="form-control" placeholder="Qual titulo voce esta procurando?"
+            autofocus="autofocus"
+            name="descricao"></input>
+    </div>
+
+, e, depois, para o valor ficar na tela tambem. Entao, eu vou colocar, aqui, name="descricao", para quando eu submeter, ser facil, nao eh?, eu conseguir recuperar esse valor, aqui, no meu Controller, no metodo pesquisar().
+
+7. Entao, 
+
+    @RequestMapping
+    public ModelAndView pesquisar( >>> String descricao <<< ) {
+        ...
+    }
+
+, facil assim.
+
+8. Beleza? Eu ja vou conseguir receber essa descricao. Bom, aqui, eu estou fazendo o findAll(), nao eh?, 
+
+    @RequestMapping
+    public ModelAndView pesquisar(String descricao) {
+        List<Titulo> todosTitulos = >>> this.titulos.findAll(); <<<
+        ModelAndView mv = new ModelAndView("PesquisaTitulos");
+        mv.addObject("titulos", todosTitulos);
+        return mv;
+    }    
+
+, eu nao vou fazer mais o findAll(), eu preciso fazer um find usando essa 'descricao',
+
+    @RequestMapping
+    public ModelAndView pesquisar(String >>> descricao <<< ) {
+        ...
+    }
+
+9. Okay? Como que eu posso fazer isso daqui?
+
+10. Bom, veja bem.
+
+11. No Spring Data JPA, existe um recurso bem interessante, que eh o seguinte, eu posso criar pesquisas, quer ver?, deixa eu te mostrar, aqui, na documentacao dele, https://spring.io, eu vou te mostrar aqui, para voce ver todas as possibilidades, em '/projects', e em '/spring-data', ou seja, https://spring.io/projects/spring-data, vamos procurar, aqui, o Spring Data JPA, https://spring.io/projects/spring-data-jpa, e a gente vai, aqui, na documentacao de Referencia, https://docs.spring.io/spring-data/jpa/docs/2.1.3.RELEASE/reference/html/
+
+12. Aqui, na documentacao de Referencia, Query Methods, https://docs.spring.io/spring-data/jpa/docs/2.1.3.RELEASE/reference/html/#jpa.query-methods, isso mesmo, olha so, onde eu cheguei, aqui, oh.
+
+13. Eu posso criar, la na nossa interface, que representa o Repositorio, aqui, chamou UserRepository, eu prefiro colocar Users, nao eh?, nao colocar esse Repository, aqui, no nome, 
+
+public interface UserRepository extends Repository<User, Long> {
+    
+}
+
+, mas o seguinte. Olha so, ele colocou apenas a descricao desse metodo, aqui, oh,
+
+public interface UserRepository extends Repository<User, Long> {
+
+    List<User> findByEmailAddressAndLastName(String emailAddress, String lastName);    
+}
+
+, findByEmailAddressAndLastName(), e, ai, ele passou, aqui, oh, o String emailAddress, e lastName.
+
+14. Ele, sozinho, o Spring Data JPA, vai conseguir criar o metodo, a implementacao la, ele vai conseguir montar a consulta, filtrando pelo emailAddress e pelo lastName. Ele ja vai conseguir, ele vai montar algo assim la para voce, oh,
+
+    select u from User u where u.emailAddress = ?1 and u.lastName = ?2
+
+, ele ja vai saber fazer isso daqui. Eh o que ele constroi eh isso. So de voce escrever isso,
+
+    findByEmailAddressAndLastName();
+
+, voce seguir esse padraozinho aqui.
+
+15. E, aqui, na documentacao, ele mostra, oh, formas que ele tem para fazer isso, oh, se voce quiser And, se voce quiser Or, findByEmailAddressOrLastName(), ele vai montar alguma coisa assim, oh, ... where x.lastName = ?1 or x.firtName = ?2.
+
+16. Voce pode fazer findByFirstname, ele ja faz 1, nao precisa colocar o And, ... where x.firstname = ?1. 
+
+17. findByStartDateBetween, entao, voce coloca, la, as duas datas, ele vai fazer o between, para voce, ... where x.startDate between 1? and ?2
+
+18. E voce nao precisa escrever o pjql, ou a criteria, ele ja faz a pesquisa para voce.
+
+19. Entao, tem varios padroes, aqui, que, se voce seguir, voce ja tem as consultas prontas, ou seja, voce vai ganhar muita, muita produtividade para essas consultas desse estilo.
+
+20. Beleza? E nos vamos fazer uma dessas, nos vamos usar uma dessas consultas, aqui, no sistema.
+
+21. Nos vamos fazer o seguinte. Ao inves de eu usar o findAll(), aqui, 
+
+	public ModelAndView pesquisar(String descricao) {
+		List<Titulo> todosTitulos = titulos. >>> findAll() <<< ;
+
+		ModelAndView mv = new ModelAndView("PesquisaTitulos");
+		mv.addObject("titulos", todosTitulos);
+		return mv;
+	}    
+
+, eu vou usar o find,..., oh, mas, ai, eu tenho que criar la, primeiro, nao eh?, nao eh assim, tambem, automatico, nao eh?
+
+22. Eu tenho que vir aqui em Titulos.java, e, ai, eu vou criar a interface assim, oh,
+
+    List<Titulo> findByDescricao(String descricao);
+
+, findBy, e, ai, eu coloco o atributo, aqui, no caso, oh, descricao, o nome 'descricao', usando camelCase, entao, o 'D' vai ser maiusculo, nao eh?, entao, findByDescricao(). Se eu quiser fazer findByDescricao(), ele vai tentar fazer um 'equals', la, ou seja, eu tenho que informar exatamente a mesma descricao, ou seja, se eu quiser retornar 'Condominio Apto 301', eu tenho que colocar exatamente isso daqui.
+
+23. Se eu quiser colocar apenas 301, ou so Apto, um pedaco, aqui, dessa String, eh so eu colocar essa ultima palavra aqui no final, oh, findByDescricaoContaining(), e passo a 'descricao',
+
+    List<Titulo> findByDescricaoContaining(String descricao);
+
+24. Entao, essa consulta aqui que ele vai criar significa: Procure pela descricao em qualquer lugar, o Containing faz um 'like' para a gente.
+
+25. Beleza? Entao, eu vou colocar, aqui, agora, agora que eu ja tenho la, eu posso vir aqui,
+
+    @RequestMapping
+    public ModelAndView pesquisar(String descricao) {
+        List<Titulo> todosTitulos = titulos.findByDescricaoContaining(descricao);
+
+            ...
+    }
+
+, beleza?
+
+26. Eu, ainda vou mudar isso daqui para deixar mais profissional, mas vamos ver, ja, funcionando isso daqui.
+
+27. Ele deu uma excecao,
+
+java.lang.IllegalArgumentException: [Assertion failed] - this argument is required; it must not be null
+
+28. Olha a excecao que ele deu, vamos dar uma olhada aqui.
+
+29. Entao, ele me diz que a descricao, ali, nao pode ser nula,
+
+    @RequestMapping
+    public ModelAndView pesquisar(String >>> descricao <<<) {
+        List<Titulo> todosTitulos = titulos.findByDescricaoContaining(descricao);
+
+            ...
+    }
+
+30. Entao, eu vou colocar o seguinte, oh, @RequestParam, porque o default, aqui, eh, se eu nao colocar nada do @RequestParam, eh ser obrigatorio,
+
+    @RequestMapping
+    public ModelAndView pesquisar(>>> @RequestParam <<< String descricao) {
+        List<Titulo> todosTitulos = titulos.findByDescricaoContaining(descricao);
+
+            ...
+    }
+
+31. Entao, eu posso colocar required = false, ou eu posso colocar, aqui, que o default value eh um '%',
+
+import org.spring framework.web.bind.annotation.RequestParam;
+
+    @RequestMapping
+    public ModelAndView pesquisar(@RequestParam(defaultValue = "%") String descricao) {
+        ...
+    }
+
+32. Entao, o que eu estou falando eh, "Se eu nao informar a descricao, o default fica sendo percentual, %", ai, ele vai conseguir fazer um select like la com '%', e eu acredito que vai dar certo.
+
+33. Vamos ver.
+
+34. Recarregar a Pagina Html de Pesquisa de Titulos.
+
+35. Quando eu nao coloquei nada, ele vai considerar o default como percentual, e, ai, eu vou colocar, aqui, agora, algum valor.
+
+36. Como, por exemplo, 301.
+
+37. Okay? Vamos colocar 301, ele buscou apenas o Apto 301.
+
+38. Se eu pesquisar aqui sem nada, oh, ele vai mostrar todos, se eu colocar, vamos cadastrar um novo, aqui, 'Receber emprestimo Joao', '14/01/2016', 200,00, 'Pendente', Salvar.
+
+39. Voltar para pesquisa. Entao, olha so, se eu colocar emprestimo, no Campo de Pesquisa, entao, vai aparecer, aqui, o emprestimo do Joao.
+
+40. Se eu colocar Apto, ele trouxe os dois apartamentos. Se eu pesquisar sem nada, ele trouxe todas as informacoes, aqui.
+
+41. Mas, desse jeito, aqui, nao ta legal. Nao sei se voce percebeu. Toda vez que eu pesquiso, aqui, ele some, nao eh?
+
+42. Se eu colocar aqui Apto, e der um <Enter>, olha la, ele vai e some, aqui, da tela, do Campo de Pesquisa.
+
+43. Entao, desse jeito, eu nao gostei.
+
+44. Eu quero que a informacao, nao eh?, o que eu pesquisar aqui, depois do filtro feito, eh que continue na tela.
+
+45. E a ideia eh bem parecida com a ideia que a gente ja fez para o cadastro, okay?, com o Cadastro de um Titulo, que eh, eu ter aqui,
+
+    <div class="panel-body">
+        <form method="GET" class="form-horizontal" action="/titulos" >>> <<< >
+            
+            ...
+        </form>
+    </div>
+
+, um objeto que chega aqui tambem. Entao, eu preciso ter aqui um 'th:object', okay?, e eu vou colocar, aqui, um objeto, um filtro, um objeto que vai se chamar 'filtro',
+
+    <div class="panel-body">
+        <form method="GET" class="form-horizontal" action="/titulos" 
+                th:object="${filtro}">
+
+            ...
+        </form>
+    </div>
+
+, e, nesse filtro, eh que eu vou pegar a descricao. Ao inves de eu ter aquele name="descricao", eu vou ter um 'th:field', porque, ai, o objeto, eu vou pegar a descricao dentro desse objeto ${filtro} aqui, e, ai, a *{descricao} vai ser ser sempre mantida na tela,
+
+    <div class="panel-body">
+        <form method="GET" class="form-horizontal" action="/titulos" 
+                th:object="${filtro}">
+            <div class="form-group">
+                <div class="col-sm-4">
+                    <div class="input-group">
+                        <input class="form-control" placeholder="Qual titulo voce esta procurando?"
+                            autofocus="autofocus" >>> th:field="*{descricao}" <<<
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+, da mesma forma como ficou na parte de Cadastro de Titulo.
+
+46. Okay? Entao, vamos trabalhar, aqui, um pouquinho mais nesse filtro, em TituloController.java, nao eh so a gente adicionar aquilo ali, nao.
+
+47. Entao, ao inves de eu receber, aqui, um @RequestParam, nao eh?, foi bom que a gente ja viu como eu faco para receber um parametro de requisicao, aqui, 
+
+    @RequestMapping
+    public ModelAndView pesquisar(>>> @RequestParam(defaultValue = "%") <<< String descricao) {
+
+        ...
+    }
+
+, nao eh?, eh so usar essa anotacao @RequestParam. Mas, aqui, eu vou fazer diferente. Eu vou criar um objeto, que eu vou receber aqui. Esse objeto vai se chamar TituloFilter, ele ainda nao existe, eu vou chamar ele de filtro,
+
+    @RequestMapping
+    public ModelAndView pesquisar(TituloFilter filtro) {
+
+        ...
+    }
+
+48. Okay? Entao, vamos criar esse cara, aqui, TituloFilter.
+
+49. Vamos criar essa classe, ela nao vai ficar no pacote controller, eu vou colocar dentro de repository.filter, e a classe chamada TituloFilter.
+
+50. Entao, TituloFilter esta aqui, oh, dentro de repository.filter.
+
+public class TituloFilter {
+
+    private String descricao;
+
+
+}
+
+, vamos gerar os Getters And Setters. Okay.
+
+51. Entao, eu tenho um objeto. Eh a mesma ideia, aqui, do Titulo.java. Eu tenho um objeto, so que nao eh uma Entidade, obviamente, porque eu nao estou persistindo, aqui, oh, mas eu tenho, aqui, os campos e esses campos esta associados a um elemento aqui na tela. Okay?
+
+52. Entao, eh isso. Okay? Entao, eh a mesma ideia aqui.
+
+53. Vamos voltar em TituloController.java. Vamos corrigir para filtro.getDescricao(),
+
+    @RequestMapping
+    public ModelAndView pesquisar(TituloFilter filtro) {
+        List<Titulo> todosTitulos = this.titulos.findByDescricaoContaining(filtro.getDescricao());
+
+            ...
+    }
+
+54. Se eu ja fizer isso daqui, vai ver que alguns errinhos vao acontecer aqui.
+
+55. Ao acessar http://localhost:8080/titulos, deu um erro. Por que que deu esse erro, aqui,
+
+java.lang.IllegalArgumentException: [Assertion failed] - this argument is required; it must not be null
+
+56. Vamos ver, vamos analisar, aqui. Oh, ele ta falando que o argumento tambem eh requerido, ele nao pode ser nulo.
+
+57. Ou seja, eu estou chegando aqui, na Requisicao, e esse objeto, 
+
+    @RequestMapping
+    public ModelAndView pesquisar(>>> TituloFilter filtro <<< ) {
+        ...
+    }
+
+, nao pode ser nulo. Entao, como que eu posso fazer para criar um objeto desse aqui, TituloFilter, se eu estou acessando essa pagina, aqui, logo de primeira?
+
+58. Eu posso mandar com que esse objeto seja criado, eu posso falar que o Spring crie esse objeto para mim automaticamente.
+
+59. A ideia eh, basicamente, a mesma desse @ModelAttribute, aqui, oh,
+
+    >>> @ModelAttribute <<< ("todosStatusTitulo")
+    public List<StatusTitulo> todosStatusTitulo() {
+        return Arrays.asList<StatusTitulo.values());
+    }
+
+, quando ele acessou esse cara,
+
+    @ModelAttribute(" >>> todosStatusTitulo <<< ")
+    public List<StatusTitulo> todosStatusTitulo() {
+        return Arrays.asList<StatusTitulo.values());
+    }
+
+, ele veio aqui e chamou todosStatusTitulo(), para retornar esse cara, 
+
+        return Arrays.asList<StatusTitulo.values());
+
+, so que, aqui, a gente criou.
+
+60. Como esse eh um objeto simples, eu posso, simplesmente, vir aqui, oh, e colocar @ModelAttribute, e o nome dele eh 'filtro',
+
+    @RequestMapping
+    public ModelAndView pesquisar(@ModelAttribute("filtro") TituloFilter filtro) {
+        ...
+    }
+
+61. Eu vou colocar entre parenteses o nome, 
+
+    @RequestMapping
+    public ModelAndView pesquisar(@ModelAttribute(" >>> filtro <<< ") TituloFilter filtro) {
+        ...
+    }
+
+, porque o nome da classe eh TituloFilter, 
+
+    @RequestMapping
+    public ModelAndView pesquisar(@ModelAttribute("filtro") >>> TituloFilter <<< filtro) {
+        ...
+    }
+
+, e eu quero que o nome seja filtro,
+
+    @RequestMapping
+    public ModelAndView pesquisar(@ModelAttribute(" >>> filtro <<<< ") TituloFilter >>> filtro <<< ) {
+        ...
+    }
+
+, okay?
+
+62. So coloquei isso daqui. Vamos ver? Salvei, ele vai dar uma recarregada ai. Ainda esta com erro, vamos ver qual que eh o erro, aqui, ainda,
+
+java.lang.IllegalArgumentException: [Assertion failed] - this argument is required; it must not be null
+
+, ele ainda esta reclamando disso.
+
+63. Esta dando erro, na verdade, vamos retirar, aqui,
+
+    @RequestMapping
+    public ModelAndView pesquisar(TituloFilter filtro) {
+        ...
+    }
+
+, eu deveria ter lido a excecao. A excecao esta me dizendo, aqui, que eh no JPA, 
+
+	at org.springframework.data.jpa.repository.query.ParameterMetadataProvider$ParameterMetadata.prepare(ParameterMetadataProvider.java:225) ~[spring-data-jpa-1.9.2.RELEASE.jar:na]
+
+, ta vendo?
+
+64. Entao, na preparacao da query, la, eu nao posso passar null no Containing la, nao posso passar null.
+
+65. Entao, aqui, eu vou fazer o seguinte, vamos fazer na aula, aqui, e, depois, a gente melhora isso. Eu vou colocar assim, oh, se a descricao for null, eu vou passar um "%", senao, eu vou mandar o filtro.getDescricao(),
+
+    @RequestMapping
+    public ModelAndView pesquisar(TituloFilter filtro) {
+        String descricao = filtro.getDescricao() == null ? "%" : filtro.getDescricao();
+
+        List<Titulo> todosTitulos = this.titulos.findByDescricaoContaining();
+    }
+
+66. Vamos ver, aqui, agora. Recarregar a Pagina Html de Pesquisa de Titulos,
+
+java.lang.IllegalStateException: Neither BindingResult nor plain target object for bean name 'filtro' available as request attribute
+
+67. Agora, sim, o erro que eu estava esperando. Entao, olha so, eu tinha, eu li aquele erro, ali, e tinha imaginado que era uma coisa, mas eh porque eu nao tinha terminado de ler a excecao.
+
+68. Aquela hora, ele estava reclamando, vamos voltar la na excecao para a gente ver, ele estava reclamando, falando que o argumento eh obrigatorio, ele nao pode ser null, onde? La na criacao do metodo, na hora que ele esta tentando, porque, na hora que ele tenta acessar aqui,
+
+	@RequestMapping
+	>>> public ModelAndView pesquisar(TituloFilter filtro) { <<<
+		String descricao = filtro.getDescricao() == null ? "%" : filtro.getDescricao();
+		List<Titulo> todosTitulos = this.titulos.findByDescricaoContaining(descricao);
+		ModelAndView mv = new ModelAndView("PesquisaTitulos");
+		mv.addObject("titulos", todosTitulos);
+		return mv;
+	}
+
+, ele ja vai chamar esse metodo this.findByDescricaoContaining(), nao eh? Ele acessa essa Pagina e ja chama.
+
+69. Se eu mandar null, aqui,
+
+	@RequestMapping
+	public ModelAndView pesquisar(TituloFilter filtro) {
+		String descricao = filtro.getDescricao() == null ? "%" : filtro.getDescricao();
+		List<Titulo> todosTitulos = this.titulos.findByDescricaoContaining(>>> descricao <<<);
+		ModelAndView mv = new ModelAndView("PesquisaTitulos");
+		mv.addObject("titulos", todosTitulos);
+		return mv;
+	}
+
+, ele nao vai aceitar. Ele nao aceita null. Entao, foi por isso aqui, quando eu vi, aqui, oh, na excecao, data.jpa, preparacao da query, oh, createQuery, eu falei, 'Ah, entao eh isso'. 
+
+70. Agora, olha so qual eh o erro que ele esta dando,
+
+java.lang.IllegalStateException: Neither BindingResult nor plain target object for bean name 'filtro' available as request attribute
+
+, ele nao tem o Binder para um objeto chamado 'filtro', eu nao mandei esse objeto 'filtro' para ele.
+
+71. Entao, se eu nao mandei esse objeto 'filtro', ele vai reclamar, vai falar, 'Mas o que que eh esse objeto filtro'?
+
+72. Eu estou acessando a pagina e ele nao existe. Entao, ai que eu estava falando, aqui, eu posso usar esse mesmo conceito do @ModelAttribute, aqui, 
+
+    public ModelAndView pesquisar(@ModelAttribute("filtro") TituloFilter filtro) {
+
+    }
+
+, eu falo para ele, "Olha, mas esse eh um atributo @ModelAtribute, significa, aqui, "filtro", eh o nome do parametro que esta la no 'th:object', em PesquisaTitulos.html,
+
+<form method="GET" class="form-horizontal" action="/titulos" th:object="${filtro}">
+    ...
+</form>
+
+73. Eu estou falando para ele, 
+
+public ModelAndView pesquisar(@ModelAttribute(">>> filtro <<<") TituloFilter filtro) {
+
+}
+
+, mas, entao, eu quero que voce crie esse objeto, "filtro", para mim. Eh um objeto simples, 
+
+public ModelAndView pesquisar(@ModelAttribute("filtro") >>> TituloFilter filtro <<<) {
+
+}
+
+, entao, o Spring vai conseguir dar um new nesse objeto, ai, para mim.
+
+74. Que ver?
+
+75. Vamos reiniciar, aqui, agora, o Servidor.
+
+76. Ai, ja subiu, ja deve ter, ate, recarregado a Pagina, e, agora, ja esta no ar a minha Pagininha.
+
+77. Perceberam, entao, a ideia?
+
+78. Eh eu conseguir falar para o Spring criar esse TituloFilter, aqui, 
+
+public ModelAndView pesquisar(@ModelAttribute("filtro") >>> TituloFilter filtro <<<) {
+
+}
+
+, para mim, usando o @ModelAttribute. Beleza?
+
+79. E ai, vamos ver, aqui, se eu consigo fazer a pesquisa. Ai, a pesquisa ja esta funcionando.
+
+80. Entao, agora, ele esta mantendo os dados no formulario, porque eu usei esse cara como um @ModelAttribute,
+
+public ModelAndView pesquisar(>>> @ModelAttribute("filtro") <<< TituloFilter filtro) {
+
+}
+
+81. Eu posso fazer isso aqui, nesse caso, porque eh um objeto bem simples, ele ja cria, ai, para mim.
+
+82. E, aqui, 
+
+public ModelAndView pesquisar(@ModelAttribute("filtro") TituloFilter filtro) {
+
+    String descricao = filtro.getDescricao() == null ? "%" : filtro.getDescricao();
+    List<Titulo> todosTitulos = this.titulos.findByDescricaoContaining(>>> descricao <<<);
+}
+
+, eu tenho que passar algum valor, eu nao posso passar null. Se eu nao posso passar null, ai, eu faco essa verificacao aqui,
+
+    String descricao = filtro.getDescricao() == null ? "%" : filtro.getDescricao();
+
+83. Beleza? E, ai, se eu tivesse mais campos para filtrar, ja esta pronto, nao eh? Eh so eu adicionar no TituloFilter, receber, colocar, aqui,
+
+    List<Titulo> todosTitulos = this.titulos.findByDescricaoAndCliente(descricao);
+
+, alguma coisa assim. Ele ja montaria essas consultas para mim, aqui, de uma forma bem facil.
+
+84. Vamos passar esse cara para a camada de Servico, tambem?
+
+85. Entao, vamos la, vamos vir aqui na Service, ou seja, CadastroTituloService, e vamos colocar aqui, oh, 
+
+    public List<Titulo> filtrar(TituloFilter filtro) {
+    
+    }
+
+, okay? E, ai, deixa eu pegar, aqui, do Controller, esse carinha, aqui,
+
+String descricao = filtro.getDescricao() == null ? "%" : filtro.getDescricao();
+List<Titulo> todosTitulos = this.titulos.findByDescricaoContaining(descricao);
+
+, e eu vou colocar aqui,
+
+public List<Titulo> filtrar(TituloFilter filtro) {
+    String descricao = filtro.getDescricao() == null ? "%" : filtro.getDescricao();
+    return this.titulos.findByDescricaoContaining(descricao);    
+}
+
+, aqui, eu ja posso retornar direto, certo? Entao, eu pego a descricao, se ela for nula, eu adiciono "%", senao, eh a descricao. Okay. 
+
+84. E, aqui, em TituloController, List<Titulo> todosTitulos = this.cadastroTituloService.filtrar(filtro);
+
+    @RequestMapping
+    public ModelAndView pesquisar(@ModelAttribute("filtro") TituloFilter filtro) {
+        List<Titulo> todosTitulos = this.cadastroTituloService.filtrar(filtro);
+            ...
+    }
+
+85. Pode remover a injecao de Titulos em TituloController,
+
+    @Autowired
+    private Titulos titulos;
+
+, porque nao estou usando em metodo nenhum mais, na classe TituloController, entao, posso tirar ele daqui, so estou usando, agora, na Camada de Servico.
+
+86. Agora, Recarregar a Pagina Html e Re-testar se a Pesquisa esta funcionando.
+
+87. Esta tudo funcionando, esta mantendo o valor no formulario, e a gente consegue pesquisar, editar, excluir, e por ai vai.
+
+88. Fim da Aula 03.010. Implementando a Pesquisa.
+
+
+-->

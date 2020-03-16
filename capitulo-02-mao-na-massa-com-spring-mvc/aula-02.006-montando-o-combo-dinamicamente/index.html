@@ -1,0 +1,435 @@
+<!-- 
+
+Aula 02.006. Montando o Combo Dinamicamente
+
+1. Agora que a gente ja esta trabalhando com Thymeleaf, ja vamos modificar um negocio, aqui, que eh mostrar ou como criar esse combo aqui, oh, 
+
+    <div class="col-sm-2">
+        <select class="form-control" name="status">
+            <option value="PENDENTE">Pendente</option>
+            <option value="RECEBIDO">Recebido</option>
+        </select>
+    </div>
+
+, dinamicamente. Como assim criar esse cara dinamicamente?
+
+2. Imagina que eu adicionei um novo Status, aqui. Eu teria que vir, aqui, em CadastroTitulo.html, nao eh?, e colocar mais uma opcao, nao eh?, vamos supor que tivesse a opcao CANCELADO, aqui, ai, eu teria que vir aqui e escrever 'Cancelado',
+
+    <select class="form-control" name="status">
+        <option value="PENDENTE">Pendente</option>
+        <option value="RECEBIDO">Recebido</option>
+        <option value="CANCELADO">Cancelado</option>
+    </select>
+
+, alguma coisa assim.
+
+3. E, ai, imagina que eu tivesse 10 telas que usassem esse campo Status, nao eh?, eu teria que alterar em 10 telas. Entao, isso nao eh legal, nao eh?, essa ideia, aqui, nao eh muito boa.
+
+4. Entao, o Thymeleaf nos ajuda a gente iterar sobre uma colecao para montar esse combo aqui.
+
+5. Beleza? Bom, para ele iterar sobre uma colecao, eu preciso dessa colecao disponivel, aqui, na Pagina. Assim como a gente colocou a mensagem disponivel, aqui, na Pagina, eu tambem vou precisar de um objeto aqui para mim poder iterar aqui nessa Pagina.
+
+6. Bom, se a gente pensar bem, aqui, em que momento que eu preciso desse combo preenchido, dessa lista de objetos preenchidos?
+
+7. Vamos ver aqui, vamos dar uma analisada? Eu vou precisar, aqui, oh, quando eu estiver acessando, aqui, a pagina '/novo', eu preciso deixar disponivel esse objeto la para a pagina.
+
+8. Certo? Entao, eu vou colocar aqui, vamos comecar a colocar aqui, e a gente vai vendo as implicacoes disso,
+
+    @RequestMapping("/novo")
+    public String novo() {
+
+        return "CadastroTitulo";
+    }
+
+9. Entao, olha so, ao inves de eu retornar uma String, a gente ja viu que eu posso retornar um ModelAndView, eu posso vir aqui e instanciar ModelAndView mv = new ModelAndView(), passando, aqui, a View que eu quero, e retorno o mv, 
+
+    @RequestMapping("/novo")
+    public ModelAndView novo() {        
+        ModelAndView mv = new ModelAndView("CadastroTitulo");
+        return mv;
+    }
+
+10. Beleza? E, aqui, eu posso vir aqui e fazer, addObject(), dou um nome para o primeiro parametro, entao, vamos colocar aqui, oh, "todosStatusTitulo",
+
+    ModelAndView mv = new ModelAndView("CadastroTitulo");
+    mv.addObject("todosStatusTitulo", attributeValue);
+    return mv;
+
+, entao, esse que vai ser o nome do objeto que eu vou iterar la na minha View, la no HTML.
+
+11. E qual vai ser o valor, aqui, em attributeValue? O que que eu vou colocar aqui?
+
+12. Eu vou colocar, oh, StatusTitulo.values(),
+
+    ModelAndView mv = new ModelAndView("CadastroTitulo");
+    mv.addObject("todosStatusTitulo", StatusTitulo.values());
+    return mv;
+
+, okay? Entao, o que que eu estou retornando? O array, eu estou retornando, aqui, um array, com todos os StatusTitulo's, esse cara, aqui, um array com todos os enum's que estiverem em StatusTitulo.
+
+13. Okay? Eh isso que ele vai fazer para mim.
+
+14. Entao, esse cara, aqui,
+
+    ModelAndView mv = new ModelAndView("CadastroTitulo");
+    mv.addObject(">>>todosStatusTitulo<<<", attributeValue);
+    return mv;
+
+, esta indo ficar disponivel aqui nessa telinha, CadastroTitulo.html.
+
+15. Entao, vamos la, vamos ver como eh que eu faco para iterar, aqui,
+
+    <select class="form-control" name="status">
+        <option value="PENDENTE">Pendente</option>
+        <option value="RECEBIDO">Recebido</option>
+    </select>
+
+, ao inves de deixar esses caras, aqui, fixo, eu vou fazer uma iteracao.
+
+16. Okay? Na verdade, eu ate posso deixar um aqui para a gente pegar de modelo aqui,
+
+    <select class="form-control" name="status">
+        <option value="PENDENTE">Pendente</option>
+    </select>
+
+17. Entao, vamos, olha so, eh aqui, oh, no <option>. Entao, no <option>, nos vamos fazer o seguinte, deixar o <option> aqui, oh,
+
+    <select class="form-control" name="status">
+        <option></option>
+    </select>    
+
+18. Eu preciso percorrer uma lista de valores e ir adicionando varios <options>
+
+19. Para isso, existe, aqui, o Thymeleaf, a tagzinha 'each', 
+
+    <select class="form-control" name="status">
+        <option th:each>=""</option>
+    </select>    
+
+20. Entao, eu vou fazer o seguinte, oh, Para Cada Item da Colecao, eu vou fazer alguma coisa, eh isso que o 'each' esta dizendo. Entao, eu vou fazer o seguinte, oh, Para Cada Item da Colecao, vou colocar aqui, oh, 'todosStatusTitulo', Para cada Um desse objeto que esta sendo disponibilizado aqui, eu vou entregar nessa variavel 'status',
+
+    <select class="form-control" name="status">
+        <option th:each="status : ${todosStatusTitulo}"></option>
+    </select>
+
+, aqui, eu estou criando uma variavel 'status', eu posso chamar, aqui, o nome que eu quiser, 'abacaxi', se eu quiser, eu posso colocar,
+
+    <select class="form-control" name="status">
+        <option th:each="abacaxi : ${todosStatusTitulo}"></option>
+    </select>
+
+, mas eu vou chamar de 'status'.
+
+21. Entao, Para Cada Um desses caras que eu adicionei aqui, oh, 
+
+    ...
+
+    mv.addObject("todosStatusTitulo", >>>StatusTitulo.values()<<<);
+
+    ...
+
+, entao, sao um array de Enum, do array de enum StatusTitulo, ele vai percorrer e vai adicionando esses options aqui, 
+
+    <option th:each="status : ${todosStatusTitulo}"></option>
+
+, essa tag option, entao, ele ja faz isso automaticamente.
+
+22. E o que que eu quero colocar no value? Lembra como eh que estava o option, aqui? O option, aqui, estava assim, nao eh?,
+
+    <option value="PENDENTE">Pendente</option>
+
+23. Entao, oh, para o 'value', aqui, eu quero colocar a variavel 'status', que eh essa variavel aqui,
+
+
+    <option th:each=">>>status<<< : ${todosStatusTitulo}" value="status"></option>
+
+24. Para eu usar uma variavel do Thymeleaf, eu preciso coloca-la entre chaves, 
+
+    <option th:each="status : ${todosStatusTitulo}" value="${status}"></option>
+
+25. So que, para o Thymeleaf trabalhar com esse atributo value aqui,
+
+    <option th:each="status : ${todosStatusTitulo}" >>>>value<<<="${status}"></option>
+
+, eu preciso colocar um 'th' na frente,
+
+    <option th:each="status : ${todosStatusTitulo}" th:value="${status}"></option>
+
+26. Entao, na verdade, o value, aqui, 
+
+    <option th:each="status : ${todosStatusTitulo}" th:>>>value<<<="${status}"></option>
+
+, nao eh o value do HTML, esse atributo value existe no Thymeleaf, coincidentemente, tem o mesmo nome.
+
+27. Entao, 'th:value' vai adicionar um 'value' aqui no <option>.
+
+28. E o que vai aparecer na tela? 
+
+29. Tem jeito de eu colocar algo diferente?
+
+30. Tem, eu vou usar o atributo th:text. Entao, o atributo th:text me permite adicionar alguma coisa aqui, oh,
+
+    <option th:each="status : ${todosStatusTitulo}" th:value="${status}" th:text=""></option>
+
+, como se fosse esse 'Pendente', aqui,
+
+    <option value="PENDENTE">>>>Pendente<<<</option>
+
+31. Entao, o que eu vou adicionar sera '${status.descricao}', ele vai chamar o 'getDescricao()' em StatusTitulo, e vai mostrar a String mais bonitinha la, que a gente deixou formatada,
+
+    <option th:each="status : ${todosStatusTitulo}" th:value="${status}" th:text="${status.descricao}"></option>
+
+32. Entao, a gente pode tirar isso daqui,
+
+    <option value="PENDENTE">Pendente</option>
+
+
+33. So dessa forma aqui,
+
+    <option th:each="status : ${todosStatusTitulo}" th:value="${status}" th:text="${status.descricao}"></option>
+
+, eh so fazer isso.
+
+34. Vamos iniciar aqui, para a gente dar uma olhada, ver se vai funcionar.
+
+35. E, ai, a gente adiciona um novo Enum aqui,
+
+public enum StatusTitulo {
+
+    PENDENTE("Pendente"),
+    RECEBIDO("RECEBIDO");
+
+    ...
+
+}
+
+, so para a gente ter testar, ver se vai funcionar, realmente.
+
+36. Entao, vamos vir aqui, '/titulos/novo', oh, esta, aqui, mostrando o combo Status, com Pendente e Recebido.
+
+37. Mas, sera que eu nao estou fazendo alguma coisa errada?
+
+38. Vamos adicionar aqui, para a gente ter certeza,
+
+public enum StatusTitulo {
+
+    PENDENTE("Pendente"),
+    RECEBIDO("RECEBIDO"),
+
+    CANCELADO("Cancelado");
+    ...
+
+}
+
+, vamos testar. Vamos recarregar a Pagina Html. E apareceu a opcao 'Cancelado'.
+
+39. Ta vendo? Vamos retirar, mais uma vez, porque a gente nao vai implementar isso.
+
+40. Beleza, tirei, recarreguei a Pagina e sumiu o 'Cancelado'.
+
+41. Entao, esta vendo? Agora, o combo esta sendo montado dinamicamente, usando o que? Usando o 'th:each', aqui.
+
+42. Bom, vamos ver se esta tudo funcionando, mesmo?
+
+43. Vamos salvar, aqui um novo registro, Descricao 'Novo Titulo', Data de Vencimento '20/01/2016', Valor '100', Status 'Recebido', vamos Salvar e ver o que que vai acontecer.
+
+44. Salvei. Olha, agora, o que que aconteceu. Cade os valores aqui, oh, do Status? Ele salvou no banco de dados corretamente, no Console do H2, 'select * from titulo', o Novo Titulo foi salvo e tal, foi tudo com sucesso, mas, aqui, sumiu os valores do campo Status.
+
+45. Por que que sumiu o Status, aqui? Vamos analisar?
+
+46. Bom, olha so. Quando eu acessei a pagina, la, URL 'novo', que eu cai aqui,
+
+    @RequestMapping("/novo")
+    public ModelAndView novo() {
+
+        ...
+
+    }
+
+, e eu coloquei esse objeto, aqui, 'todosStatusTitulo'
+
+    @RequestMapping("/novo")
+    public ModelAndView novo() {
+
+        ModelAndView mv = new ModelAndView("CadastroTitulo");
+        mv.addObject(">>>todosStatusTitulo<<<", StatusTitulo.values());
+        return mv;
+
+    }    
+
+, la disponivel para essa View 'CadastroTitulo',
+
+    @RequestMapping("/novo")
+    public ModelAndView novo() {
+
+        ModelAndView mv = new ModelAndView(">>>CadastroTitulo<<<");
+        mv.addObject("todosStatusTitulo", StatusTitulo.values());
+        return mv;
+
+    }    
+
+, e, ai, mostrou a mensagem 'Titulo salvo com sucesso!'
+
+47. Quando eu submeti, aqui, no POST,
+
+    @RequestMapping(method = RequestMethod.POST)
+    public ModelAndView salvar(Titulo titulo) {
+        titulos.save(titulo);
+        ModelAndView mv = new ModelAndView("CadastroTitulo");
+        mv.addObject("mensagem", "Titulo salvo com sucesso!");
+        return mv; 
+
+    }
+
+, nao eh, ele salvou, eu retornei um outro aqui, eu adicionei essa mensagem, 
+
+    mv.addObject("mensagem", "Titulo salvo com sucesso!");
+
+, mas, e, ai, o StatusTitulo?
+
+48. Nao adicionei. Entao, o que que eu precisaria fazer?
+
+49. Duplicar codigo? 
+
+    @RequestMapping(method = RequestMethod.POST)
+    public ModelAndView salvar(Titulo titulo) {
+        titulos.save(titulo);
+        ModelAndView mv = new ModelAndView("CadastroTitulo");
+
+        mv.addObject("mensagem", "Titulo salvo com sucesso!");
+        mv.addObject("todosStatusTitulo", StatusTitulo.values());
+
+        return mv; 
+    }
+
+50. Bom, vamos ver, vai funcionar. Recarregar a Pagina Html. Na teoria, vai funcionar, mas, a gente vai ver como eh que a gente melhora isso aqui, na duplica esse codigo, nao eh?
+
+51. Vamos salvar um novo registro aqui, oh, Descricao 'Outro teste', Data de Vencimento '10/01/2016', Valor '100', Status 'Recebido', e Salvar.
+
+52. Agora, sim, voltou para ca, para o combo Status, os valores, depois de Salvar, eu consegui adicionar novamente esse objeto para ele iterar,
+
+    mv.addObject("todosStatusTitulo", StatusTitulo.values());
+
+53. Bom, mais ai eu tenho que ficar, olha ai, que coisa chata, nao eh?, eu tenho que ficar duplicando esse codigo aqui. E, ai, como eh que eu posso fazer isso aqui? Eh possivel melhorar isso daqui?
+
+54. Totalmente possivel.
+
+55. Eu vou adicionar aqui, oh, uma anotacao @ModelAttribute, para o metodo 'public List<StatusTitulo> todosStatusTitulo() {}', e, ai, eu retorno Arrays.asList(StatusTitulo.values());
+
+    @ModelAttribute
+    public List<StatusTitulo> todosStatusTitulo() {
+        return Arrays.asList(StatusTitulo.values());
+    }
+
+56. Isso aqui vai funcionar?
+
+57. Ainda nao.
+
+58. E vamos remover o codigo duplicado, aqui, agora, nao eh?, senao, nao adianta,
+
+	@RequestMapping("/novo")
+	public ModelAndView novo() {
+		ModelAndView mv = new ModelAndView("CadastroTitulo");
+		/** mv.addObject("todosStatusTitulo", StatusTitulo.values()); **/
+		return mv;
+	}
+
+	@RequestMapping(method = RequestMethod.POST)
+	public ModelAndView salvar(Titulo titulo) {
+		this.titulos.save(titulo);		
+		ModelAndView mv = new ModelAndView("CadastroTitulo");
+		mv.addObject("mensagem", "Título salvo com sucesso!");		
+		/** mv.addObject("todosStatusTitulo", StatusTitulo.values()); **/		
+		return mv;
+	}
+	
+	@ModelAttribute
+	public List<StatusTitulo> todosStatusTitulo() {
+		return Arrays.asList(StatusTitulo.values());
+	}
+
+59. Tirei, aqui, a duplicacao, beleza? Vamos subir, novamente, a Aplicacao. Vamos Recarregar a Pagina Html.
+
+60. E, ai, oh, sumiu tudo aqui, do combo Status, nao funcionou.
+
+61. Por que nao funcionou?
+
+62. Porque nao eh o nome do metodo, aqui, que vai definir o nome que a gente vai conseguir usar aqui, oh,
+
+    <option th:each="status : ${>>>todosStatusTitulo<<<}" th:value="${status}" th:text="${status.descricao}"></option>
+
+63. Ele vai usar baseado, aqui, pelo nome do objeto, desse que eu estou retornando,
+
+	@ModelAttribute
+	public List<>>>StatusTitulo<<<> todosStatusTitulo() {
+		return Arrays.asList(StatusTitulo.values());
+	}
+
+64. Entao, eh StatusTituloList. Ele colocaria assim, oh, 
+
+    <option th:each="status : ${StatusTituloList}" th:value="${status}" th:text="${status.descricao}"></option>
+
+65. Beleza? Se eu vier dar, aqui, dar um Refresh, ainda nao.
+
+66. Nao eh com letra maiuscula, 'statusTituloList'. Eh isso mesmo,
+
+    <option th:each="status : ${statusTituloList}" th:value="${status}" th:text="${status.descricao}"></option>
+
+, ao Recarregar a Pagina Html, carregou os valores no combo Status.
+
+67. Ou seja, eu tenho que colocar, se eu estou retornando um ArrayList, entao, ele vai concatenar, aqui, 
+
+
+	@ModelAttribute
+	public List<>>>StatusTitulo<<<> todosStatusTitulo() {
+		return Arrays.asList(StatusTitulo.values());
+	}
+
+, um List, para eu usar la em CadastroTitulo.html.
+
+68. So que eu nao quero chamar esse cara aqui,
+
+    <option th:each="status : ${>>>statusTituloList<<<}" th:value="${status}" th:text="${status.descricao}"></option>
+
+, de 'statusTituloList', eu quero do jeito que estava, 'todosStatusTitulo'.
+
+69. Entao, eu posso vir aqui, oh, 
+
+	@ModelAttribute("todosStatusTitulo")
+	public List<StatusTitulo> todosStatusTitulo() {
+		return Arrays.asList(StatusTitulo.values());
+	}
+
+70. Vamos recarregar a Pagina Html, e o combo esta sendo populado com os valores.
+
+71. Se eu colocar, aqui, um novo registro, Descricao 'Novo teste', Data de Vencimento '10/01/2016', Valor '100', Status 'Recebido', e Salvar.
+
+72. Beleza, exibiu a mensagem de sucesso. E o combo Status voltou, aqui, com a lista preenchida, tambem.
+
+73. Bom, era isso que o instrutor queria nos mostrar nesta aula, nos mostrar que a gente pode deixar disponivel um atributo, aqui, 
+
+	>>>@ModelAttribute("todosStatusTitulo")<<<
+	public List<StatusTitulo> todosStatusTitulo() {
+		return Arrays.asList(StatusTitulo.values());
+	}
+
+
+, para todas as paginas, nao eh?, quando eu for para a View, aqui, ou seja, a Pagina CadastroTitulo.html, esse cara, esse cara esta disponivel aqui,
+
+   <option th:each="status : ${>>>statusTituloList<<<}" th:value="${status}" th:text="${status.descricao}"></option>
+
+, e tambem nos mostrar a respeito da tag 'th:each', da tag 'th:value', e da tag 'th:text'.
+
+74. Eu uso a th:text quando eu quero colocar um texto aqui no elemento html, span, por exemplo,
+
+		<div class="alert alert-success" th:if="${!#strings.isEmpty(mensagem)}">
+			<span >>>th:text<<<="${mensagem}"></span>
+		</div>
+
+75. E a tag th:value eu uso quando eu quero colocar um valor, um value mesmo, no elemento html, por exemplo, o option,
+
+ <option th:each="status : ${todosStatusTitulo}" >>>th:value<<<="${status}" th:text="${status.descricao}"></option>
+
+76. Fim da Aula 02.006. Montando o Combo Dinamicamente.
+
+-->

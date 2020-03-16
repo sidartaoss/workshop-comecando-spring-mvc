@@ -1,0 +1,840 @@
+<!-- 
+
+Aula 03.007. Recebendo o Titulo com Ajax - Parte 2
+
+1. Agora, a gente vai continuar a implementacao, aqui, do Ajax. Agora, nos vamos entrar mesmo no jQuery, com Ajax, para fazer essa Requisicao la no Servidor, okay? Chegar, aqui, no Controller.
+
+2. Bom, eu ja tenho a URL para receber, okay? Nos vamos usar, aqui, uma funcao do jQuery, que eh a funcao $.ajax(). Eh assim que ela funciona, coloco aqui, abro, aqui, parenteses, fecho aqui, coloco um ponto e virgula,
+
+$.ajax();
+
+, e eu posso colocar opcoes, aqui, entre chaves,
+
+$.ajax({
+
+});
+
+3. Okay?
+
+4. Essa funcao, ela me devolve um carinha, que eu vou chamar, aqui, de response. E esse response eh um objeto que eu consigo, depois, adicionar outras funcoes, se der sucesso ou se der falha,
+
+var response = $ajax({
+
+});
+
+5. Okay? Essa eh a ideia.
+
+6. Entao, eu vou fazer a Requisicao, aqui, para uma URL. Se der sucesso, eu vou adicionar uma funcao, aqui, de sucesso. Se der falha, eu vou adicionar outra funcao para tratar a falha.
+
+7. Okay? entao, vamos la.
+
+8. O que que eu preciso configurar, aqui, no Ajax? Eu preciso configurar onde que ele vai enviar essa Requisicao.
+
+9. E eu faco isso, atraves, aqui, oh, do parametro url. E, aqui, eu coloco a URL que eu quero fazer a Requisicao. E qual que eh essa URL? A gente ja tem ela aqui, oh,
+
+    $('.js-atualizar-status').on('click', function(event) {
+
+        ...
+        var urlReceber = botaoReceber.attr('href');
+
+        var response = $.ajax({
+            url: urlReceber
+        }) 
+    });
+
+, okay? Separo por virgula, e, aqui, eu coloco qual que eh o tipo dessa Requisicao, 
+
+
+    var response = $.ajax({
+        url: urlReceber,
+        type: 'PUT'
+    });
+
+quero fazer via GET, via POST, etc. No caso, uma atualizacao eu vou fazer via PUT. Entao, o que que o jQuery vai fazer aqui, para mim? Ele vai submter uma Requisicao 'PUT' nessa URL: urlReceber.
+
+10. Qual URL que eh essa? Vai estar la '/titulos', o codigo, por exemplo, 10, '/receber', 
+
+<a class="btn btn-link btn-xs js-atualizar-status" th:if="${titulo.pendente}" 
+    title="Receber" rel="tooltip" data-placement="top"
+    th:href="@{>>> /titulos/{codigo}/receber(codigo=${titulo.codigo})} <<< ">
+...
+</a>
+
+, okay?
+
+11. Eh isso que o jQuery vai fazer, aqui, nessa Requisicao,
+
+			var response = $.ajax({
+				url: urlReceber,
+				type: 'PUT'
+			});
+
+12. E ai, como que eu vou tratar isso aqui no Controller?
+
+13. Eu vou adicionar um novo metodo, aqui, com @RequestMapping, ai, voce ja sabe que o value sera '/{codigo}',
+
+    @RequestMapping(value = "/{codigo}")
+
+14. Por que voce nao coloca '/titulos', Normandes?
+
+15. Porque ele ja esta aqui, em cima, oh, 
+
+@Controller
+>>> @RequestMapping("/titulos") <<<
+public class TituloController {
+
+...
+
+}
+
+, lembra disso? Entao, '/titulos', estou acrescentando, a frente, '/{codigo}/receber',
+
+    @RequestMapping(value = "/{codigo}/receber")
+
+, via GET?
+
+16. Nao.
+
+17. RequestMethod.PUT, um outro verbo, ai, HTTP,
+
+    @RequestMapping(value = "/{codigo}/receber", method = RequestMethod.PUT)
+
+18. E, ai, eu vou colocar, aqui, o metodo. Ele vai retornar uma String, o metodo, aqui, chamado receber(). Eu vou receber o que? O codigo. E ele esta onde? No Path,
+
+    @RequestMapping(value = '/{codigo}/receber', method = RequestMethod.PUT)
+    public String receber(@PathVariable Long codigo)
+
+19. Assim, eu consigo pegar, esse codigo,
+
+    public String receber(@PathVariable Long >>> codigo <<<)
+
+, vai ser esse codigo, 
+
+    @RequestMapping(value = '/>>> {codigo} <<</receber', method = RequestMethod.PUT)
+
+20. Okay?
+
+21. Vamos imprimir aqui esse codigo chegando antes de a gente implemenar a atualizacao no banco de dados,
+
+        @RequestMapping(value = '/{codigo}/receber', method = RequestMethod.PUT)
+        public String receber(@PathVariable Long codigo) {
+            System.out.println(">>>>> codigo: " + codigo);
+        }
+    
+, so para a gente ver se esta tudo certo. E, aqui, eu vou retornar um String, por exemplo, so um "Ok", so isso daqui por enquanto,
+
+        @RequestMapping(value = '/{codigo}/receber', method = RequestMethod.PUT)
+        public String receber(@PathVariable Long codigo) {
+            System.out.println(">>>>> codigo: " + codigo);
+            return "OK";
+        }
+
+, daqui a pouco, a gente vai modificar isso bem, so para a gente ver se aparece aqui,
+            ...
+
+            System.out.println(">>>>> codigo: " + codigo);
+
+            ...
+
+, e se vai retornar esse "OK" la no Browser.
+
+22. Nao. Isso daqui vai dar um erro. Deixa eu fazer assim, e ja vou te mostrar que vai dar um problema, na verdade, nao vai dar um erro la, mas vai dar um problema, vamos ver aqui, e a gente ja resolve.
+
+23. Esta fazendo aqui Requisicao, em cobranca.js,
+
+    $(function () {
+
+        ...
+
+        var response = $.ajax({
+            url: urlReceber,
+            type: 'PUT'
+        });
+
+    });
+
+, okay, vamos ver, vamos ver o que que vai acontecer com isso aqui que eu implementei ate agora.
+
+24. Vamos fazer um Refreshzinho aqui, na Pagina de Pesquisa de Titulos. Okay, e vou clicar, agora, aqui, para ele receber, ou seja, no icone Receber, no registro de Codigo 2.
+
+25. Eu vou abrir, aqui, o Console do Chrome DevTools, e, se eu clicar, aqui, em Network, a gente vai ver a Requisicao que ele vai fazer no Servidor.
+
+26. Okay? Que o Browser vai fazer aqui, no Servidor. Entao, eu vou clicar aqui e vamos ver acontecendo.
+
+27. Eh, deu um erro mesmo que eu imaginava que ia acontecer. Olha so, se eu clicar, aqui, vai dar a gente ver, na Guia Headers, que eu fiz um PUT, oh, Request Method PUT, nessa URL, http://localhost:8080/titulos/2/receber, que era o que eu queria, mesmo.
+
+28. Okay? Mas vamos ver o que que deu errado, aqui, no Servidor.
+
+29. Olha so. Primeiro, apareceu, aqui, o codigo 2, 
+
+>>>>> codigo: 2
+
+, entao, deu certo eu receber aquele codigo la, entao, ele chegou no Servidor, aqui, no Controller.
+
+30. Era onde eu queria, entao, ele chegou aqui, em TituloController, e executou esse cara, aqui,
+
+	@RequestMapping(value = "/{codigo}/receber", method = RequestMethod.PUT)
+	public String receber(@PathVariable Long codigo) {
+		>>> System.out.println(">>>>> codigo: " + codigo); <<<
+		return "OK";
+	}
+
+31. O que deu errado foi retornar esse "OK" aqui,
+
+	@RequestMapping(value = "/{codigo}/receber", method = RequestMethod.PUT)
+	public String receber(@PathVariable Long codigo) {
+		System.out.println(">>>>> codigo: " + codigo);
+		>>> return "OK"; <<<
+	}
+
+32. Por que que ele deu erro retornando esse "OK"?
+
+33. Veja bem, vou olhar, aqui, a mensagem de log, agora,
+
+org.thymeleaf.exceptions.TemplateInputException: Error resolving template "OK", template might not exist or might not be accessible by any of the configured Template Resolvers
+
+, mas, antes de eu olhar a mensagem de log, eu vou deduzir aqui. Eu estou retornando uma String "OK", aqui, para um metodo,
+
+	@RequestMapping(value = "/{codigo}/receber", method = RequestMethod.PUT)
+	public String receber(@PathVariable Long codigo) {
+		System.out.println(">>>>> codigo: " + codigo);
+		return "OK";
+	}
+
+34. A gente ja fez retornar uma String aqui, oh, por exemplo, o metodo salvar(), eu estou retornando uma String,
+
+	@RequestMapping(method = RequestMethod.POST)
+	public String salvar(@Validated Titulo titulo, Errors errors, RedirectAttributes attributes) {
+		if (errors.hasErrors()) {
+			>>> return CADASTRO_VIEW; <<<
+		}
+
+        ...
+	}
+
+, e esse CADASTRO_VIEW eh uma String.
+
+35. Por que que, aqui, deu certo, no metodo salvar() e, la embaixo, no metodo receber(), nao?
+
+36. O que que essa String, aqui, CADASTRO_VIEW, representa?
+
+37. Ela nao representa uma View?
+
+38. Olha aqui o nome, eh CADASTRO_VIEW, ou seja, eh a View do Cadastro, nao eh?
+
+39. Eu preciso que exista uma View com esse nome. Existe uma View com o nome "OK"? Nao existe uma View com esse nome "OK".
+
+40. Entao, aqui, provavelmente, ele vai estar falando, olha la, 
+
+Error resolving template "OK",
+
+, ele fala, "Olha, pode ser que esse cara, ai, nao exista".
+
+41. Entao, esse cara nao existe ou nao eh acessivel.
+
+42. Entao, nao tem, esse "OK" nao tem. Por isso, que deu errado. Mas, ai, Normandes, voce vai mandar isso para outra View? Eu nao vou mandar para uma outra View, eu nao estou mandando isso para uma outra tela. Ah, entao, voce vai mandar a mesma tela, '/titulos'?
+
+43. Nao, eu estou fazendo uma Requisicao via Ajax. Entao, o que eu quero receber, de volta, aqui, na verdade, eh uma mensagem assim, que deu certo. Ou alguma informacao que eu queira atualizar na tela. E, aqui, eu vou colocar, para eu, entao, nao procurar uma View, e retornar apenas uma String que eu consiga trabalhar com essa String no Javascript, existe uma anotacao, aqui, oh, @ResponseBody.
+
+44. Se eu adicionar a anotacao @ResponseBody na frente, aqui, do parametro de retorno,
+
+import org.springframework.web.bind.annotation.ResponseBody;
+
+    @RequestMapping(value = "/{codigo}/receber", method = RequestMethod.PUT)
+    public >>> @ResponseBody<<< String receber(@PathVariable Long codigo) {
+
+        ...
+    }
+
+, o Spring vai pensar o seguinte, 'Opa, ele nao esta querendo retornar uma View. Ele quer retornar a Resposta ja como o Corpo da Resposta, nao eh uma View nova.'.
+
+45. Eh simplesmente essa String "OK" que ele quer retornar.
+
+46. Eh so isso.
+
+47. Eh so isso que esse cara, ai, esta fazendo.
+
+48. Beleza? Vamos esperar ele recarregar, aqui, a Tela de Pesquisa de Titulos e vamos ver agora, a Requisicao acontecendo novamente.
+
+49. Vou clicar, aqui, no cara de codigo 2 novamente. Beleza. Nao deu erro. Aqui, se eu clicar, olha la, eu fiz um PUT, e vamos ver aqui, se eu clicar na Guia Response, eu vejo a Resposta.
+
+50. Olha a Resposta que voltou. O 'OK', que eu coloquei la no Controller.
+
+51. Okay? Entao, e vamos ver se apareceu o Codigo 2 la no Console do Servidor?
+
+52. Apareceu, oh, 
+
+>>>>> codigo: 2
+
+53. Entao, o que que significou isso daqui que eu fiz?,
+
+	@RequestMapping(value = "/{codigo}/receber", method = RequestMethod.PUT)
+	public @ResponseBody String receber(@PathVariable Long codigo) {
+		System.out.println(">>>>> codigo: " + codigo);
+		return "OK";
+	}
+
+54. Significa que eu recebi uma Requisicao via PUT, conforme em cobranca.js,
+
+    ...
+
+    var response = $.ajax({
+        url: urlReceber,
+        type: 'PUT'
+    });
+
+    ...
+
+, eu recebi o codigo, aqui,
+
+	@RequestMapping(value = "/{codigo}/receber", method = RequestMethod.PUT)
+	public @ResponseBody String receber(@PathVariable >>> Long codigo <<<) {
+		System.out.println(">>>>> codigo: " + codigo);
+		return "OK";
+	}
+
+, imprimi ele na tela, e retornei uma String qualquer, aqui. Eu posso retornar uma String que tenha mais utilidade para mim, tambem, retornar mais parametros que eu queira, ai, tambem.
+
+55. Okay?
+
+56. Entao, vamos fazer o que agora? Atualizar. Eh, a gente ja pode atualizar, no banco de dados, esse Titulo.
+
+57. Okay? Vamos fazer isso? Eu nao vou colocar essa Regra aqui, no Controller. Eu vou colocar essa regra no Servico.
+
+58. Entao, eu vou colocar aqui, no CadastroTituloService.receber(), passando o codigo,
+
+	@RequestMapping(value = "/{codigo}/receber", method = RequestMethod.PUT)
+	public @ResponseBody String receber(@PathVariable Long codigo) {
+		/** System.out.println(">>>>> codigo: " + codigo); **/
+        cadastroTituloService.receber(codigo);
+		return "OK";
+	}
+
+59. Vamos la, em CadastroTituloService, e vamos criar esse metodo aqui, 
+
+public void receber(Long codigo) {
+
+}
+
+, oh, criei esse metodo aqui, e o que que eu vou colocar, aqui, na implementacao dele, oh?
+
+60. O que que eu preciso fazer, aqui? Eu preciso recuperar o Titulo que tem esse codigo,
+
+public void receber(>>> Long codigo <<<) {
+
+}
+
+, faz sentido? Para eu poder atualizar o Status dele.
+
+61. Entao, 
+
+        Titulo titulo = titulos.findOne(codigo);
+
+, vou alterar o Status dele para StatusTitulo.RECEBIDO e vou mandar salvar esse cara, 
+
+        Titutlo titulo = titulos.findOne(codigo);
+        titulo.setStatus(StatusTitulo.RECEBIDO);
+        titulos.save(titulo;)
+
+62. Okay? Por enquanto, vamos deixar assim
+
+63. Entao, recebi o codigo, atualizei o status, mandei salvar o Titulo.
+
+64. Fechou? Vamos ver, agora, se vai atualizar esse cara no banco de dados.
+
+65. Vou clicar aqui, em Receber. Se der tudo certo, ele vai atualizar no banco de dados, la, mas nao vai sumir o botao Receber e nao vai atualizar o Status na Tela de Pesquisa de Titulos, ainda, porque eu nao implementei ainda isso.
+
+66. Entao, eu vou clicar, vamos dar um Refresh na Tela, e, ai, assim, no Registro 2, o Status tem que ir para Recebido e o botao Receber tem que sumir, porque eu estou recarregando tudo novamente.
+
+67. Mas eu nao vou fazer isso. Eu vou atualizar isso via Ajax. Eh so para a gente ver se deu certo.
+
+68. Vou deixar, aqui, o Console do Google Chrome DevTools, aparecendo, vou clicar em Receber, aqui, em Network, foi la, voltou e deu certo a Requisicao.
+
+69. Vamos dar um Refresh, aqui, na tela, e ver se atualizou de verdade?
+
+70. Ai, no Registro 2, esta com o Status 'Recebido' e sumiu o botao Receber.
+
+71. Entao, quer dizer que eu consegui, realmente, ir no banco de dados e atualizar.
+
+72. Okay? Vamos, entao, implementar, agora, a atualizacao desses caras, aqui, na tela.
+
+73. Ou seja, quando eu clicar em Receber, eu quero que o Javascript atualize a telinha para mim. Ou seja, troque o Status para Recebido e suma com o botao Receber.
+
+74. Vamos implementar isso aqui?
+
+75. Vamos la. 
+
+76. Vamos la para o JavaScript, em cobranca.js. Entao, aquilo que eu te disse. Se deu certo, esse response aqui,
+
+    var >>> response <<< = $.ajax({
+        url: urlReceber,
+        type: 'PUT'
+    });
+
+, eu posso adicionar uma funcao quando da certo. Para eu fazer isso, eu faco assim, oh, 
+
+    response.done
+
+, e, aqui, eu posso passar uma funcao,
+
+    response.done(function())
+
+, que recebe o que voltou la do Servidor,
+
+    response.done(function(e) {
+
+    });
+
+77. Okay? Se deu falha, 
+
+    response.fail(function(e) {
+
+    });
+
+, eu faco a mesma coisa, oh. Se deu falha, ele vai cair aqui nessa funcao,
+
+    response.fail(function(e) {
+
+    });
+
+, se deu sucesso, ele cai aqui,
+
+    response.done(function(e) {
+
+    });
+
+78. Na falha, eu vou fazer o seguinte, oh, console.log(e), so para ele mostrar la no Console do Chrome DevTools,
+
+    response.fail(function(e) {
+        console.log(e);
+    });
+
+, e dar um alerta, aqui, para o Usuario,
+
+    response.fail(function(e) {
+        console.log(e);
+        alert('Erro recebendo cobranca');
+    });
+
+, so para falar para o Usuario que deu um erro, la, que ele nao conseguiu receber.
+
+79. Se deu sucesso, o que eu preciso faze aqui eh atualizar o Status, tirar Pendente e colocar Recebido e sumir com esse icone de Receber.
+
+80. Okay? 
+
+81. Entao, vamos la. O que que eu preciso? Aqui,
+
+    response.done(function(e) {
+
+    });
+
+, vamos fazer aquele botao Receber sumir, porque vai ser o mais facil. Fazer aquele cara, ali, sumir, eu ja tenho o botao, que eh esse botaoReceber, aqui,
+
+   	$('.js-atualizar-status').on('click', function(event) {
+		
+			event.preventDefault();			
+			>>> var botaoReceber = $(event.currentTarget); <<<
+			var urlReceber = botaoReceber.attr('href');
+			
+			var response = $.ajax({
+				url: urlReceber,
+				type: 'PUT'
+			});
+			
+			response.done(function (e) {
+				
+			});
+			
+			response.fail(function(e) {
+				console.log(e);
+				alert('Erro recebendo cobranca');
+			})
+	});
+    
+, entao, eu posso usar ele aqui, oh, 
+
+    response.done(function(e) {
+        botaoReceber
+    });
+
+, e existe um metodo, no jQuery, que eu posso usar, que eh esse aqui, oh, hide(), eu sumo com ele, eh so fazer isso daqui,
+
+    response.done(function(e) {
+        botaoReceber.hide();
+    });
+
+82. O jQuery ja vai sumir com aquele botao, ali, da tela. Vamos ver se vai funcionar?
+
+83. Eu vou clicar, aqui, no Registro 3, ele vai receber esse Titulo, o Status nao vai trocar de Pendente ainda, mas, aqui, o botao Receber vai sumir.
+
+84. Vamos ver?
+
+85. Oh, sumiu. Mas ele ja foi Recebido, se eu der uma atualizada na Tela, o Status foi para Recebido.
+
+86. Tem um probleminha acontecendo. Quando eu clico, aqui, em Editar, nao esta atualizando, aqui, o combo, para o Status correspondente, ou seja, o Registro deveria estar como Recebido, e nao esta.
+
+87. Em aula futura, nos corrigimos isso.
+
+88. Vamos, entao, fazer ser atualizado, na tela, para Recebido.
+
+89. Para eu fazer esse cara ser atualizdo, eu preciso recuperar ele. Ou seja, aqui, na Pesquisa de Titulos, eu preciso desse span aqui,
+
+<td class="text-center">
+    >>> <span class="label" th:text="${titulo.status.descricao}"
+        th:classappend="${titulo.pendente ? 'label-danger' : 'label-success'}"></span> <<<	 			 			
+</td>
+
+90. Na verdade, eu posso pegar esse <td>,
+
+>>> <td class="text-center"> <<<
+    <span class="label" th:text="${titulo.status.descricao}"
+        th:classappend="${titulo.pendente ? 'label-danger' : 'label-success'}"></span>	
+</td>
+
+, aqui, que tem esse label, aqui, e trocar esse span. Eh, a gente pode trocar esse span inteiro, aqui,
+
+<td class="text-center">
+    >>> <span class="label" th:text="${titulo.status.descricao}"
+        th:classappend="${titulo.pendente ? 'label-danger' : 'label-success'}"></span> <<<
+</td>
+
+, vamos fazer assim.
+
+91. Entao, eu vou fazer o seguinte, oh, eu vou colocar, aqui, um atributo 'th:attr',
+
+                <td class="text-center" th:attr="">
+                    ...
+                </td>
+
+, para eu selecionar ele. Que atributo que eu vou colocar? Eu vou colocar um 'data-', aqui, para eu usar o codigo, por exemplo, para eu recuperar ele. Por que? Eu tenho varios registros, nao eh? Entao, eu tenho que ter uma forma de identificar um por um desses registros. Entao, a forma que eu identifico essa linha pode ser pelo codigo. Entao, se eu colocar esse codigo aqui, nesse Status, eu vou conseguir recuperar ele facilmente.
+
+92. Por que? Porque la, no Javascript, eu ja tenho o codigo, nao eh? Entao, eu vou fazer o seguinte, eu vou colocar, aqui, um data-role,
+
+                <td class="text-center" th:attr="data-role">
+
+                    ...
+                </td>
+
+, ou seja, a regra de eu escolher esse cara vai ser pelo ${titulo.codigo},
+
+                <td class="text-center" th:attr="data-role=${titulo.codigo}">
+
+                    ...
+                </td>
+
+93. Entao, o Codigo do Titulo do Titulo vai aparecer, aqui, como 'data' nesse 'td'.
+
+94. Vamos dar uma olhada aqui, oh?
+
+95. Se eu inspecionar esse cara, Status, olha la, data-role="2",
+
+<td class="text-center" data-role="2">
+    <span class="label label-danger">Pendente</span>		 			 			
+</td>
+
+96. Okay? Entao, eu vou usar esse cara,
+
+<td class="text-center" >>> data-role="2" <<<>
+    <span class="label label-danger">Pendente</span>		 			 			
+</td>
+
+, para selecionar ele la no JavaScript.
+
+97. Vamos voltar aqui, no Javascript, para a gente poder trocar, nao eh?, atualizar o HTML.
+
+98. Entao, vou selecionar ele aqui, oh, posso colocar aqui, dentro, 
+
+        reponse.done(function(e) {
+
+            >>> <<<
+
+            botaoReceber.hide();
+        });
+
+, mesmo, so vai selecionar se acontecer isso mesmo, oh.
+
+99. Entao, para eu selecionar, eu coloco, aqui, $('[data-role=' + );,
+
+
+    response.done(function(e) {
+
+        $('[data-role=' + );
+        botaoReceber.hide();
+    });
+
+, na verdade, eu nao tenho o codigo, aqui, o codigo ja esta na URL, em urlReceber, nao eh?
+
+100. Entao, eu posso fazer o seguinte. Ao inves de eu quebrar a URL, aqui, eu vou fazer o seguinte, eu vou colocar esse codigo aqui tambem, oh, igual esta aqui, oh, em PesquisaTitulos.html,
+
+<a class="btn btn-link btn-xs" data-toggle="modal" data-target="#confirmacaoExclusaoModal"
+        >>> th:attr="data-codigo=${titulo.codigo} <<<, data-descricao=${titulo.descricao}"
+        title="Excluir" rel="tooltip" data-placement="top">
+...
+</a>
+
+, eu vou colocar aqui tambem, oh, no ultimo link,
+
+<a class="btn btn-link btn-xs js-atualizar-status" th:if="${titulo.pendente}" 
+    title="Receber" rel="tooltip" data-placement="top"
+    th:href="@{/titulos/{codigo}/receber(codigo=${titulo.codigo})}"
+    th:attr="data-codigo=${titulo.codigo}">    
+...
+</a>
+
+101. Isso, vou adicionar, aqui, no link, o codigo que eu quero recuperar, ou seja, th:attr="data-codigo=${titulo.codigo}.
+
+102. So para nao ter que fazer parser, aqui, dessa string, oh,
+
+    th:href="@{/titulos/>>> {codigo} <<</receber(codigo=${titulo.codigo})}"
+
+, para eu recuperar, eu coloco ele aqui, tambem,
+
+    th:attr="data-codigo=${titulo.codigo}"
+
+103. Okay? Entao, ele esta ali. Entao, aqui, em cobranca.js, 
+
+    response.done(function (e) {
+        ...
+    });
+
+, eu posso buscar do botaoReceber,
+
+    response.done(function (e) {
+        var codigoTitulo = botaoReceber.data('codigo');
+        
+        $('[data-role=' + codigoTitulo + ']');
+        botaoReceber.hide();
+    });
+
+, onde $('[data-role=' + codigoTitulo + ']'); eh o seletor.
+
+104. Entao, o seletor por um nome seria assim, nao eh?, 'data-role=', vou colocar o codigo, e fecho com colchete.
+
+105. Esse codigo, aqui, 
+
+        var codigoTitulo = botaoReceber.data('>>> codigo <<<');
+
+, veio la do codigo que eu acabei de adicionar, aqui, no botao Receber,
+
+<a class="btn btn-link btn-xs js-atualizar-status" th:if="${titulo.pendente}" 
+    title="Receber" rel="tooltip" data-placement="top"
+    th:href="@{/titulos/{codigo}/receber(codigo=${titulo.codigo})}"
+    >>> th:attr="data-codigo=${titulo.codigo}" <<< >
+...
+</a>
+
+106. Okay, eu ja tenho o Codigo, selecionei, entao, esse cara aqui, 
+
+    $('[data-role=' + codgioTitulo + ']');
+
+, que eh esse 'td', em PesquisaTitulos.html,
+
+<td class="text-center" th:attr="data-role=${titulo.codigo}">
+
+...
+</td>
+
+107. Entao, eu vou substituir esse span, aqui,
+
+<td class="text-center" th:attr="data-role=${titulo.codigo}">
+    >>> <span class="label" th:text="${titulo.status.descricao}"
+        th:classappend="${titulo.pendente ? 'label-danger' : 'label-success'}"></span> <<<	 			 			
+</td>
+
+, por um span que ja tem a mensagem Recebido.
+
+108. Entao, para eu substituir ele, eu uso a funcao html(), e eu posso colocar aqui assim, oh, '<span class="label label-success>Recebido"></span>', eu vou pegar esse valor, nao vai ficar legal assim. Nos vamos recuperar esse Recebido, aqui, la do Java, ele vai vir aqui nesse 'e',
+
+    response.done(function (>>> e <<<)) {
+        
+        ...
+    }
+
+109. Mas vamos ver so se isso aqui esta funcionando. Vamos la na telinha, aqui, '/titulos', agora, quando eu clicar em Receber, tem que trocar o Status para 'Recebido'.
+
+110. Okay, passou o Status para 'Recebido'.
+
+111. E, ai, ao inves de eu deixar aqui, 
+
+
+response.done(function (e) {
+    var codigoTitulo = botaoReceber.data('codigo');
+    $('[data-role=' + codigoTitulo + ']').html('<span class="label label-success">Recebido</span>');
+    botaoReceber.hide();
+});
+
+, 'Recebido' fixo, por que que eu nao vou deixar esse 'Recebido' fixo? Vamos supor que eu altere esse valor aqui, la no Enum, nao eh?, nao eh Recebido mais, eh pago, alguma coisa assim, troquei o nome. Entao, vou receber esse cara, aqui, do 'e',
+
+response.done(function (>>> e <<<) {
+    var codigoTitulo = botaoReceber.data('codigo');
+    $('[data-role=' + codigoTitulo + ']').html('<span class="label label-success">Recebido</span>');
+    botaoReceber.hide();
+});
+
+112. Lembra daquele 'OK' que eu estou recebendo la do Ajax?, quando a gente tava olhando, aqui, no Console do Chrome DevTools, vou abrir, aqui, Network, clicar, aqui, no icone Receber, vai ver que, na URL, na Resposta, oh, ta vindo um 'OK'. Eu vou colocar, ao inves desse 'OK', voltar o nome do Enum. Ao inves, entao, de colocar isso daqui,
+
+$('[data-role=' + codigoTitulo + ']').html('<span class="label label-success">Recebido</span>');
+
+, eu vou concatenar, aqui, com 'e', 
+
+$('[data-role=' + codigoTitulo + ']').html('<span class="label label-success">' + e + '</span>');
+
+para eu receber esse cara, aqui, 
+
+response.done(function (>>> e <<<) {
+ 
+ ...
+});
+
+, la do Java.
+
+113. Entao, vamos voltar aqui em TituloController, metodo receber() e, ao inves de eu retornar "OK", eu vou fazer o seguinte, eu vou retornar aqui, oh,
+
+	@RequestMapping(value = "/{codigo}/receber", method = RequestMethod.PUT)
+	public @ResponseBody String receber(@PathVariable Long codigo) {
+		
+        
+        >>> return this.cadastroTituloService.receber(codigo); <<<
+
+	}    
+
+, esse metodo receber(), em CadastroTituloService.java, vai retornar uma String,
+
+public String receber(Long codigo) {
+    Titulo titulo = this.titulos.findOne(codigo);
+    titulo.setStatus(StatusTitulo.RECEBIDO);
+    this.titulos.save(titulo);
+
+
+}
+
+, e eu vou retornar, aqui, StatusTitulo.RECEBIDO.getDescricao(), que eh a descricao do Titulo recebido,
+
+public String receber(Long codigo) {
+    Titulo titulo = this.titulos.findOne(codigo);
+    titulo.setStatus(StatusTitulo.RECEBIDO);
+    this.titulos.save(titulo);
+
+    return StatusTitulo.RECEBIDO.getDescricao();
+
+}
+
+114. Okay? Entao, se ele chegou aqui, e ele conseguiu salvar, eu retorno aquela descricao,
+
+public String receber(Long codigo) {
+    Titulo titulo = this.titulos.findOne(codigo);
+    titulo.setStatus(StatusTitulo.RECEBIDO);
+    this.titulos.save(titulo);
+
+    >>> return StatusTitulo.RECEBIDO.getDescricao(); <<<
+
+}
+
+, eh esse cara, aqui, 
+
+public enum StatusTitulo {
+	
+	PENDENTE("Pendente"),
+	RECEBIDO(">>> Recebido <<<");
+
+...
+
+115. Se eu vier aqui, um dia, 
+
+public enum StatusTitulo {
+	
+	PENDENTE("Pendente"),
+	RECEBIDO(">>> Recebido <<<");
+
+...
+
+, e trocar, nao quero Recebido mais, eh outro nome, eu so troco aqui e ja vai estar funcionando na tela tambem.
+
+116. Okay?
+
+117. Entao, eu posso salvar todo mundo e vamos ver, dar uma Recarregada na Pagina de Pesquisa de Titulos, e vamos ver se isso daqui vai funcionar.
+
+118. Clicar no botao Receber, atualizou o Status para Recebido, e sumiu o iconezinho de 
+Receber.
+
+119. Beleza? Entao, so dando uma revisao do que a gente fez nesta aula, aqui, sobre o Ajax. Bom, o que que a gente fez?
+
+120. A gente identificou esse 'td', aqui, em PesquisaTitulos.html, 
+
+<td class="text-center" th:attr="data-role=${titulo.codigo}">
+    <span class="label" th:text="${titulo.status.descricao}"
+        th:classappend="${titulo.pendente ? 'label-danger' : 'label-success'}"></span>		 			 			
+</td>
+
+, com o codigo, por que? Eu preciso, quando clicar no iconezinho, aqui, de Receber, na Pagina de Pesquisa, eu preciso pegar o Status da linha atual, de alguma forma. Eu acho que a forma mais facil eh eu recuperar via codigo, porque eu posso colocar o codigo no botao, que foi o que eu fiz, coloquei o codigo, aqui, no botao, tambem,
+
+<a class="btn btn-link btn-xs js-atualizar-status" th:if="${titulo.pendente}" 
+    title="Receber" rel="tooltip" data-placement="top"
+    th:href="@{/titulos/{codigo}/receber(codigo=${titulo.codigo})}"
+    >>> th:attr="data-codigo=${titulo.codigo}" <<< >
+...
+</a>
+
+120. Entao, na hora de eu recuperar ele, eu uso o codigo para recuperar esse 'td'.
+
+121. E, quando voltar os dados, eu simplesmente substituo esse span, aqui,
+
+<td class="text-center" th:attr="data-role=${titulo.codigo}">
+    <span class="label" th:text="${titulo.status.descricao}"
+        th:classappend="${titulo.pendente ? 'label-danger' : 'label-success'}"></span>		 			 			
+</td>
+
+, via Javascript. Oh, foi essa parte final que a gente fez, ai,
+
+response.done(function (e) {
+    var codigoTitulo = botaoReceber.data('codigo');
+    $('[data-role=' + codigoTitulo + ']').html('<span class="label label-success">' + e + '</span>');
+    botaoReceber.hide();
+});
+
+122. A gente fez a requisicao via Ajax,
+
+			var response = $.ajax({
+				url: urlReceber,
+				type: 'PUT'
+			});
+
+, com a URL que ja estava la no botao, via PUT.
+
+123. Essa URL cai, aqui, no nosso Controller, que a gente mapeou aqui, oh,
+
+	@RequestMapping(value = ">>> /{codigo}/receber <<<", method = RequestMethod.PUT)
+	public @ResponseBody String receber(@PathVariable Long codigo) {
+		return this.cadastroTituloService.receber(codigo);
+	}
+
+, eu coloquei o @ResponseBody para retornar a String direto, nao eh?, um valor direto, ao inves de retornar uma View. Eu nao quero retornar uma View, eu quero retornar esse valor fixo, que foi definido, aqui, no metodo receber(),
+
+	public String receber(Long codigo) {
+		Titulo titulo = this.titulos.findOne(codigo);
+		titulo.setStatus(StatusTitulo.RECEBIDO);
+		this.titulos.save(titulo);
+		
+		return StatusTitulo.RECEBIDO.getDescricao();
+	}
+
+, ou seja, primeiro, eu recupero 1 Titulo, altero o Status e salvo ele, e retorno a descricao desse status, aqui, okay?
+
+124. Entao, essa Requisicao via Ajax, oh, seu eu criar um novo Titulo, aqui, 'Receber emprestimo Maria', dia 26/01/2016, 200,00, Pendente. Quero receber esse cara, posso vir aqui, simplesmente clicar em 'Receber', que ele ja atualiza no banco de dados, nao eh?, nao preciso ficar toda hora indo la em Editar. Se eh uma coisa rapida, eu posso fazer assim, via Ajax.
+
+125. Fim da Aula 03.007. Recebendo o Titulo com Ajax - Parte 2.
+
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+
